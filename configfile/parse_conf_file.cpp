@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:49:02 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/24 10:17:27 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/24 10:19:24 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 void	exit_mode(std::string str)
 {
 	std::cout << "\033[31m" << "ERROR : " << str << std::endl;
+	exit(1);
 }
 
 std::string		abstract_brackets(std::string str)
