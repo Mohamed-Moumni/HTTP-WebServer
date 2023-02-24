@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   configfile.cpp                                     :+:      :+:    :+:   */
+/*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/23 17:54:45 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/24 09:02:43 by mkarim           ###   ########.fr       */
+/*   Created: 2023/02/24 08:39:08 by mkarim            #+#    #+#             */
+/*   Updated: 2023/02/24 08:43:21 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "configfile.hpp"
+#include "server.hpp"
 
-void	check_syntax(std::string config_file)
+Server::Server()
 {
-    check_brackets(config_file);
+	std::cout << "Server Default Constructor" << std::endl;
+	_max_body_size = 1;
 }
 
-void    start_parse_config_file(std::string config_file)
+Server::~Server()
 {
-	check_syntax(config_file);
+	std::cout << "Server Destrucotr" << std::endl;
 }

@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   configfile.cpp                                     :+:      :+:    :+:   */
+/*   parse_conf_file.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/23 17:54:45 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/24 09:02:43 by mkarim           ###   ########.fr       */
+/*   Created: 2023/02/24 08:49:02 by mkarim            #+#    #+#             */
+/*   Updated: 2023/02/24 09:54:54 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "configfile.hpp"
+#include <stack>
 
-void	check_syntax(std::string config_file)
+std::string		abstract_brackets(std::string str)
 {
-    check_brackets(config_file);
+	std::stack<char>	st;
+	std::string			brackets = "";
 }
 
-void    start_parse_config_file(std::string config_file)
+void	check_brackets(std::string std)
 {
-	check_syntax(config_file);
+	std::string brackerts = abstract_brackets(std);
 }

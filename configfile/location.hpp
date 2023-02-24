@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   configfile.cpp                                     :+:      :+:    :+:   */
+/*   location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/23 17:54:45 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/24 09:02:43 by mkarim           ###   ########.fr       */
+/*   Created: 2023/02/23 17:51:55 by mkarim            #+#    #+#             */
+/*   Updated: 2023/02/24 08:55:09 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "configfile.hpp"
+#pragma once
 
-void	check_syntax(std::string config_file)
-{
-    check_brackets(config_file);
-}
+#include <map>
 
-void    start_parse_config_file(std::string config_file)
+class location
 {
-	check_syntax(config_file);
-}
+	private:
+		std::map<std::string, std::string>		_location_attr;
+};

@@ -1,22 +1,45 @@
-NAME = webserv
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
+#    Updated: 2023/02/24 09:06:58 by mkarim           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
+NAME = webserv
 
 CPP = c++
 
 FLAGS = -Wall -Wextra -Werror --std=c++98
 
-HEADERS = ./Headers/
+#####		CONFIG FILES		#####
+CONFIG_HEADERS = configfile.hpp server.hpp location.hpp 
 
-SRCS = ./Sockets/
+CONFIG_SRCS = configfile.cpp server.cpp location.cpp parse_conf_file.cpp
+#####		CONFIG FILES		####
 
-OBJS =
+HEADERS = $(CONFIG_HEADERS)
 
-all: $(NAME)
+SRCS = main.cpp $(CONFIG_SRCS)
 
-$(NAME):
+OBJ = $(SRCS:.cpp=.o)
 
-clean:
+all : $(NAME)
 
-fclean:
+$(NAME) : $(OBJ)
+	$(CC) $(FLAGS) $^ -o $(NAME)
 
-re:
+%.o : %.cpp $(HEADERS)
+	$(CC) $(FLAGS) -c $< -o $@
+
+clean :
+	rm -rf $(OBJ)
+
+fclean : clean
+	rm -rf $(NAME)
+
+re : fclean all
