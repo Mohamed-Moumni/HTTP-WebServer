@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_conf_file.cpp                                :+:      :+:    :+:   */
+/*   check_errors.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:49:02 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/24 10:19:24 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/25 10:36:44 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,61 @@ void	check_brackets(std::string str)
 	std::string brackets = abstract_brackets(str);
 	valid_brackets(brackets);
 	std::cout << "Brackets valid" << std::endl;
+}
+
+// void	check_scope(std::string str)
+// {
+// 	std::string			buff;
+// 	size_t				i;
+
+// 	buff = "";
+// 	i = 0;
+// 	while (str[i])
+// 	{
+		
+// 	}
+// }
+
+bool	has_bracket(std::string s)
+{
+	for (size_t i = 0; i < s.length(); i++)
+	{
+		if (s[i] == '}' || s[i] == '{')
+			return true;
+	}
+	return false;
+}
+
+size_t	num_of_semicolon(std::string s)
+{
+	size_t	count;
+
+	count = 0;
+	for (size_t i = 0; i < s.length(); i++)
+	{
+		if (s[i] == ';')
+			count++;
+	}
+	return count;
+}
+
+void	check_semicolon(std::string config_file)
+{
+	std::vector<std::string> v = str_split(config_file, '\n');
+	for (size_t i = 0; i < v.size(); i++)
+	{
+		if (has_bracket(v[i]) && num_of_semicolon(v[i]))
+			exit_mode("SEMICOLON ISSUE, EXTRA SEMICOLON");
+		else if (!has_bracket(v[i]) && num_of_semicolon(v[i]) != 1)
+			exit_mode("SEMICOLON ISSUE, EXTRA SEMICOLON, SHOULD BE ONE PER LINE");
+		else if (!has_bracket(v[i]) && v[i][v[i].size() - 1] != ';')
+			exit_mode("SEMICOLON ISSUE, SHOULD BE THE LAST CHARACTER");
+	}
+}
+
+void	check_syntax(std::string config_file)
+{
+    check_brackets(config_file);
+	check_semicolon(config_file);
+	// check_scope(config_file);
 }
