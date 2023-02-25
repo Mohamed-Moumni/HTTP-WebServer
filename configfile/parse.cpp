@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/25 16:21:41 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/25 17:53:58 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ void	fill_server(Server& serv, std::string str)
 	}
 }
 
+/* ########  EDIT ON CHECK VARIABLE IN "DATA OF LOCATIONS" FUNCTION TO DETERMINE THE LOCATION SCOPE ######## */
 void	edit_check_var(std::string s, int& check)
 {
 	for (size_t i = 0; i < s.length(); i++)
@@ -149,6 +150,7 @@ void	edit_check_var(std::string s, int& check)
 	}
 }
 
+/* ########  GET THE DATA FROM POS UNTIL END OF STR ######## */
 std::string		data_from_pos(std::string s, size_t pos)
 {
 	std::string res = "";
@@ -160,14 +162,19 @@ std::string		data_from_pos(std::string s, size_t pos)
 	return res;
 }
 
+/* ########  GET THE ALL THE DATA INSIDE THE SCOPE IN POS ######## */
 // std::string		get_data_of_scope(std::string str, size_t pos)
 // {
 // 	std::vector<std::string>	vec = str_split(data_from_pos(str, pos), '\n');
 // 	std::string		res;
 // 	int				check;
 // 	int				prev;
+
+// 	check = 0;
+// 	for (size_t i = 0; i < )
 // }
 
+/* ########  GET THE DATA OF ALL LOCATIONS INSIDE THE STR ######## */
 std::vector<std::string>	data_of_locations(std::string str)
 {
 	std::vector<std::string>	vec = str_split(str, '\n');
@@ -178,14 +185,14 @@ std::vector<std::string>	data_of_locations(std::string str)
 
 	check = 0;
 	s = "";
-	std::cout << "------------------" << std::endl;
+	// std::cout << "------------------" << std::endl;
 	for (size_t i = 0; i < vec.size(); i++)
 	{
 		// std::cout << vec[i] << std::endl;
 		prev = check;
 		if (is_has_bracket(vec[i]))
 			edit_check_var(vec[i], check);
-		std::cout << i << " " << check << std::endl;
+		// std::cout << i << " " << check << std::endl;
 		if (prev == check && check == 2)
 		{
 			s += vec[i];
@@ -199,7 +206,7 @@ std::vector<std::string>	data_of_locations(std::string str)
 			s = "";
 		}
 	}
-	std::cout << "------------------" << std::endl;
+	// std::cout << "------------------" << std::endl;
 	return data;
 }
 
@@ -233,7 +240,7 @@ std::vector<Server>	parse_servers(std::string str)
 		_vec_serv.push_back(parse_one_server(str, offset));
 		offset = str.find("server{", offset + 1);
 	}
-	// print_servers(_vec_serv);
+	print_servers(_vec_serv);
 	return _vec_serv;
 }
 
