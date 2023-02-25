@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/25 10:07:20 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/25 16:21:41 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,9 @@ void	fill_server_name(Server& serv, std::vector<std::string>& vec)
 
 void	fill_listen(Server& serv, std::vector<std::string>& vec)
 {
-	// std::cout << "fill listen" << std::endl;
 	for (size_t i = 1; i < vec.size(); i++)
 	{
 		std::vector<std::string> host_port = str_split(vec[i], ':');
-		// std::cout << "----------------" << std::endl;
-		// std::cout << "|" << host_port[0] << "|" << std::endl;
-		// std::cout << "|" << host_port[1] << "|" << std::endl;
-		// std::cout << "----------------" << std::endl;
 		if (host_port.size() != 2)
 			exit_mode("INVALID LISTEN ARGS");
 		if (serv._listen.count(host_port[0]))
@@ -135,23 +130,94 @@ void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 void	fill_server(Server& serv, std::string str)
 {
 	std::vector<std::string> vec = str_split(str, '\n');
-	// std::cout << "-------------" << std::endl;
+	for (size_t i = 0; i < vec.size(); i++)
+	{
+		std::vector<std::string> test = str_split(vec[i], ' ');
+		fill_server_attr(serv, test);
+	}
+}
+
+void	edit_check_var(std::string s, int& check)
+{
+	for (size_t i = 0; i < s.length(); i++)
+	{
+		if (s[i] == '{' || s[i] == '}')
+		{
+			(s[i] == '{' ? ++check : --check);
+			return ;
+		}
+	}
+}
+
+std::string		data_from_pos(std::string s, size_t pos)
+{
+	std::string res = "";
+
+	for (size_t i = pos; i < s.length(); i++)
+	{
+		res += s[i];
+	}
+	return res;
+}
+
+// std::string		get_data_of_scope(std::string str, size_t pos)
+// {
+// 	std::vector<std::string>	vec = str_split(data_from_pos(str, pos), '\n');
+// 	std::string		res;
+// 	int				check;
+// 	int				prev;
+// }
+
+std::vector<std::string>	data_of_locations(std::string str)
+{
+	std::vector<std::string>	vec = str_split(str, '\n');
+	std::vector<std::string>	data;
+	std::string					s;
+	int							check;
+	int							prev;
+
+	check = 0;
+	s = "";
+	std::cout << "------------------" << std::endl;
 	for (size_t i = 0; i < vec.size(); i++)
 	{
 		// std::cout << vec[i] << std::endl;
-		std::vector<std::string> test = str_split(vec[i], ' ');
-		// std::cout << str << std::endl;
-		fill_server_attr(serv, test);
+		prev = check;
+		if (is_has_bracket(vec[i]))
+			edit_check_var(vec[i], check);
+		std::cout << i << " " << check << std::endl;
+		if (prev == check && check == 2)
+		{
+			s += vec[i];
+			s += '\n';
+		}  
+		if (check == 0)
+		{
+			// std::cout << "I WILL PUSH" << std::endl;
+			// std::cout << s << std::endl;
+			data.push_back(s);
+			s = "";
+		}
 	}
-	// std::cout << "-------------" << std::endl;
+	std::cout << "------------------" << std::endl;
+	return data;
 }
 
 Server		parse_one_server(std::string str, size_t pos)
 {
-	Server	serv;
-
-	str = data_of_server(str, pos);
-	fill_server(serv, str);
+	Server			serv;
+	std::string		serv_data;
+	location		loc;
+	std::vector<std::string>		loc_data;
+	
+	serv_data = data_of_server(str, pos);
+	fill_server(serv, serv_data);
+	loc_data = data_of_locations(data_from_pos(str, pos));
+	for (size_t i = 0; i < loc_data.size(); i++)
+	{
+		// std::cout << loc_data[i] << std::endl;
+	}
+	// serv._locations = fill_location(loc_data);
 	return serv;
 }
 
@@ -167,7 +233,7 @@ std::vector<Server>	parse_servers(std::string str)
 		_vec_serv.push_back(parse_one_server(str, offset));
 		offset = str.find("server{", offset + 1);
 	}
-	print_servers(_vec_serv);
+	// print_servers(_vec_serv);
 	return _vec_serv;
 }
 

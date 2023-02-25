@@ -6,25 +6,29 @@
 #    By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
-#    Updated: 2023/02/24 09:06:58 by mkarim           ###   ########.fr        #
+#    Updated: 2023/02/25 16:53:09 by mkarim           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = webserv
 
-CPP = c++
+CC = c++
 
 FLAGS = -Wall -Wextra -Werror --std=c++98
 
 #####		CONFIG FILES		#####
-CONFIG_HEADERS = configfile.hpp server.hpp location.hpp 
+CONFIG_HEADERS = ./configfile/configfile.hpp ./configfile/server.hpp ./configfile/location.hpp 
 
-CONFIG_SRCS = configfile.cpp server.cpp location.cpp parse_conf_file.cpp
-#####		CONFIG FILES		####
+CONFIG_SRCS = ./configfile/configfile.cpp ./configfile/server.cpp ./configfile/location.cpp ./configfile/parse.cpp ./configfile/print_servers.cpp ./configfile/check_errors.cpp
+#####		CONFIG FILES		#####
+
+#####		UTILS FILES			#####
+
+UTILS_SRC = ./utils/str_trim.cpp ./utils/str_split.cpp
 
 HEADERS = $(CONFIG_HEADERS)
 
-SRCS = main.cpp $(CONFIG_SRCS)
+SRCS = main.cpp $(CONFIG_SRCS) $(UTILS_SRC)
 
 OBJ = $(SRCS:.cpp=.o)
 

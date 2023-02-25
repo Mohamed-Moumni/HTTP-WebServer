@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:53:14 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/25 10:43:24 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/25 13:23:31 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	print_index(Server& vec)
 
 void	print_error_pages(Server& vec)
 {
+	std::cout << "####### ERROR PAGES #######" << std::endl;
 	std::map<std::string, std::string>::iterator it = vec._error_pages.begin();
 
 	for (; it != vec._error_pages.end(); it++)

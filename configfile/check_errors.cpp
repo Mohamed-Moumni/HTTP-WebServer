@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:49:02 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/25 10:36:44 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/25 13:39:20 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	check_brackets(std::string str)
 {
 	std::string brackets = abstract_brackets(str);
 	valid_brackets(brackets);
-	std::cout << "Brackets valid" << std::endl;
 }
 
 // void	check_scope(std::string str)
@@ -77,7 +76,7 @@ void	check_brackets(std::string str)
 // 	}
 // }
 
-bool	has_bracket(std::string s)
+bool	is_has_bracket(std::string s)
 {
 	for (size_t i = 0; i < s.length(); i++)
 	{
@@ -105,11 +104,11 @@ void	check_semicolon(std::string config_file)
 	std::vector<std::string> v = str_split(config_file, '\n');
 	for (size_t i = 0; i < v.size(); i++)
 	{
-		if (has_bracket(v[i]) && num_of_semicolon(v[i]))
+		if (is_has_bracket(v[i]) && num_of_semicolon(v[i]))
 			exit_mode("SEMICOLON ISSUE, EXTRA SEMICOLON");
-		else if (!has_bracket(v[i]) && num_of_semicolon(v[i]) != 1)
+		else if (!is_has_bracket(v[i]) && num_of_semicolon(v[i]) != 1)
 			exit_mode("SEMICOLON ISSUE, EXTRA SEMICOLON, SHOULD BE ONE PER LINE");
-		else if (!has_bracket(v[i]) && v[i][v[i].size() - 1] != ';')
+		else if (!is_has_bracket(v[i]) && v[i][v[i].size() - 1] != ';')
 			exit_mode("SEMICOLON ISSUE, SHOULD BE THE LAST CHARACTER");
 	}
 }

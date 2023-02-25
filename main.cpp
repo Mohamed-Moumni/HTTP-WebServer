@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/24 10:50:27 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/25 16:53:46 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ std::string		read_file(std::string file_name)
 	}
 	return data;
 }
+
 
 int main(int argc, char **argv)
 {
