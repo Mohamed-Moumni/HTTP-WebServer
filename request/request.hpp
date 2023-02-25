@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 10:39:03 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/19 17:15:30 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/19 21:00:24 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class Request {
 		std::string												_path_component;
 		std::string												_http_version;
 		
-		std::map<std::string, std::vector<std::string> >		_request_headers;
+		std::map<std::string, std::vector<std::str ders;
 };
 
 void	start_request(std::string request);

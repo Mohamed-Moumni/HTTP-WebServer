@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 16:56:44 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/19 17:05:53 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/19 18:45:23 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ std::string str_trim(std::string s)
 	int			end_ind;
 
 	i = 0;
+	if (s[s.length() - 1] == ',')
+		s[s.length() - 1] = ' ';
 	end_ind = get_end_index(s);
 	while (isspace(s[i]))
 		i++;
