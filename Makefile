@@ -9,7 +9,7 @@ HEADERS = ./Headers/
 
 SRCS = ./Sockets/
 
-OBJS =
+OBJS = $(SRCS:.cpp=.o)
 
 all: $(NAME)
 
