@@ -6,12 +6,32 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/02/25 16:05:15 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/02/26 16:33:29 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "socket.hpp"
+
+Socket::Socket()
+{
+    
+}
+
+Socket::~Socket()
+{
+    
+}
+
+Socket::Socket(std::string hostname, std::string port)
+{
+    addrinfo    *hints;
+
+    Host = hostname;
+    Port = port;
+    hints = this->getinfostruct(hostname, port);
+    socketId = getSockId(hints);
+}
 
 addrinfo    *Socket::getinfostruct(std::string hostname, std::string port)
 {
@@ -29,10 +49,10 @@ addrinfo    *Socket::getinfostruct(std::string hostname, std::string port)
     return (res);
 }
 
-int Socket::getSockId(addrinfo *hints)
+int Socket::getSockId(addrinfo  *hints)
 {
-    addrinfo *p;
-    int sockId, var;
+    addrinfo    *p;
+    int         sockId, var;
 
     p = hints;
     for (;p != NULL; p = p->ai_next)
@@ -47,9 +67,10 @@ int Socket::getSockId(addrinfo *hints)
             break ;
         close(sockId);
     }
+    freeaddrinfo(hints);
     if (p == NULL)
     {
-        std::cout << "invalid Ip address or port" << std::endl;
+        std::cout << "Can't create the socket : invalid Ip address or port" << std::endl;
         exit(EXIT_FAILURE);
     }
     return (sockId);
