@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:53:14 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/25 13:23:31 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/25 18:14:41 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 void	print_listen(Server& vec)
 {
 	std::map<std::string, std::vector<std::string> >::iterator it = vec._listen.begin();
-	std::cout << "size in listen " << vec._listen.size() << std::endl;
+	std::cout << "####### HOSTS #######" << std::endl;
+	std::cout << "Number of hosts : " << vec._listen.size() << std::endl;
 	for (; it != vec._listen.end(); it++)
 	{
 		std::cout << "Host : " << it->first << "   Ports : ";
@@ -50,7 +51,6 @@ void	print_index(Server& vec)
 
 void	print_error_pages(Server& vec)
 {
-	std::cout << "####### ERROR PAGES #######" << std::endl;
 	std::map<std::string, std::string>::iterator it = vec._error_pages.begin();
 
 	for (; it != vec._error_pages.end(); it++)
@@ -63,7 +63,10 @@ void	print_servers(std::vector<Server>& vec)
 {
 	for (size_t i = 0; i < vec.size(); i++)
 	{
+		if (i) std::cout << std::endl;
+		std::cout << "######## ####### ####### ######## " << std::endl;
 		std::cout << "######## SERVER NUMBER " << i + 1 << " ########" << std::endl;
+		std::cout << "######## ####### ####### ######## " << std::endl << std::endl;
 		print_listen(vec[i]);
 		print_server_names(vec[i]);
 		print_index(vec[i]);

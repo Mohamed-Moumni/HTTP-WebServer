@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/25 17:53:58 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/26 12:00:21 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,16 +163,115 @@ std::string		data_from_pos(std::string s, size_t pos)
 }
 
 /* ########  GET THE ALL THE DATA INSIDE THE SCOPE IN POS ######## */
-// std::string		get_data_of_scope(std::string str, size_t pos)
+// std::vector<std::string>		get_data_of_scope(std::string str)
 // {
-// 	std::vector<std::string>	vec = str_split(data_from_pos(str, pos), '\n');
-// 	std::string		res;
+// 	std::vector<std::string>	vec = str_split(str, '\n');
+// 	std::vector<std::string>	res;
+// 	std::string		s;
 // 	int				check;
 // 	int				prev;
 
 // 	check = 0;
-// 	for (size_t i = 0; i < )
+// 	// std::cout << "------------------" << std::endl;
+// 	// std::cout << str << std::endl;
+// 	// std::cout << "------------------" << std::endl;
+// 	for (size_t i = 0; i < vec.size(); i++)
+// 	{
+// 		prev = check;
+// 		if (is_has_bracket(vec[i]))
+// 			edit_check_var(vec[i], check);
+// 		if (prev == check && check == 2)
+// 			s = s + vec[i] + '\n';
+// 		else if (s.length())
+// 		{
+// 			// std::cout << s << std::endl;
+// 			res.push_back(s);
+// 		}
+// 		std::cout << "Len is : " << s.length() << " " << s << std::endl;
+// 		if (check == 0)
+// 			break;
+// 	}
+// 	return res;
 // }
+
+std::string		net_data_of_scope(std::string str)
+{
+	std::string		res = "server{";
+	size_t			i = 0;
+	size_t			check = 1;
+	while (str[i] != '{')
+		i++;
+	while (str[++i])
+	{
+		if (str[i] == '{')
+			check++;
+		else if (str[i] == '}')
+			check--;
+		res += str[i];
+		if (!check)
+			break;
+	}
+	return res;
+}
+
+bool	has_open_brack(std::string str)
+{
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		if (str[i] == '{')
+			return true;
+	}
+	return false;
+}
+
+bool	has_closed_brack(std::string str)
+{
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		if (str[i] == '}')
+			return true;
+	}
+	return false;
+}
+
+std::vector<std::string>	locations_data(std::string str)
+{
+	std::vector<std::string> res;
+	std::vector<std::string> vec = str_split(str, '\n');
+	std::string loc = "";
+	size_t		add = 0;
+	for (size_t i = 0; i < vec.size(); i++)
+	{
+		if (has_open_brack(vec[i]))
+			add++;
+		if (add == 2)
+		{
+			loc += vec[i];
+			loc += '\n';
+		}
+		if (has_closed_brack(vec[i]))
+		{
+			add--;
+			res.push_back(loc);
+			loc = "";
+		}
+	}
+	return res;
+}
+
+void		get_data_of_scope(std::string str)
+{
+	std::cout << "-----Another---------" << std::endl;
+	str = net_data_of_scope(str);
+	std::vector<std::string> loc = locations_data(str);
+	for (size_t i = 0; i < loc.size(); i++)
+	{
+		std::cout << "----loc----" << std::endl;
+		std::cout << loc[i] << std::endl;
+		std::cout << "----loc----" << std::endl;
+	}
+	std::cout << "--------------" << std::endl;
+}
 
 /* ########  GET THE DATA OF ALL LOCATIONS INSIDE THE STR ######## */
 std::vector<std::string>	data_of_locations(std::string str)
@@ -217,14 +316,20 @@ Server		parse_one_server(std::string str, size_t pos)
 	location		loc;
 	std::vector<std::string>		loc_data;
 	
-	serv_data = data_of_server(str, pos);
-	fill_server(serv, serv_data);
-	loc_data = data_of_locations(data_from_pos(str, pos));
+	// serv_data = data_of_server(str, pos);
+	// fill_server(serv, serv_data);
+	// std::cout << "-------------" << pos << std::endl;
+	// std::cout << data_from_pos(str, pos) << std::endl;
+	// std::cout << "-------------" << std::endl;
+	// loc_data = get_data_of_scope(data_from_pos(str, pos));
+	get_data_of_scope(data_from_pos(str, pos));
 	for (size_t i = 0; i < loc_data.size(); i++)
 	{
+		// std::cout << "-------------" << std::endl;
 		// std::cout << loc_data[i] << std::endl;
+		// std::cout << "-------------" << std::endl;
 	}
-	// serv._locations = fill_location(loc_data);
+	// // serv._locations = fill_location(loc_data);
 	return serv;
 }
 
@@ -240,7 +345,7 @@ std::vector<Server>	parse_servers(std::string str)
 		_vec_serv.push_back(parse_one_server(str, offset));
 		offset = str.find("server{", offset + 1);
 	}
-	print_servers(_vec_serv);
+	// print_servers(_vec_serv);
 	return _vec_serv;
 }
 
