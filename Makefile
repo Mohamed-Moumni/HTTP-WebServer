@@ -6,7 +6,7 @@
 #    By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
-#    Updated: 2023/02/28 08:14:30 by mkarim           ###   ########.fr        #
+#    Updated: 2023/02/28 11:05:59 by mkarim           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,9 @@ FLAGS = -Wall -Wextra -Werror --std=c++98 -g
 #####		CONFIG FILES		#####
 CONFIG_HEADERS = ./configfile/configfile.hpp ./configfile/server.hpp ./configfile/location.hpp 
 
-CONFIG_SRCS = ./configfile/configfile.cpp ./configfile/server.cpp ./configfile/location.cpp ./configfile/parse.cpp ./configfile/print_servers.cpp ./configfile/check_errors.cpp
+CONFIG_SRCS = ./configfile/configfile.cpp ./configfile/server.cpp ./configfile/location.cpp \
+			./configfile/parse.cpp ./configfile/print_servers.cpp ./configfile/check_errors.cpp \
+			./configfile/preprocessing.cpp
 #####		CONFIG FILES		#####
 
 #####		UTILS FILES			#####

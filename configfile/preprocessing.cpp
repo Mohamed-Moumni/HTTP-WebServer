@@ -1,20 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   configfile.cpp                                     :+:      :+:    :+:   */
+/*   preprocessing.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/23 17:54:45 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/28 11:13:09 by mkarim           ###   ########.fr       */
+/*   Created: 2023/02/28 11:02:35 by mkarim            #+#    #+#             */
+/*   Updated: 2023/02/28 11:15:10 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "configfile.hpp"
 
-void    start_parse_config_file(std::string config_file)
+bool	is_comment(std::string line)
 {
-	config_file = preprocessing(config_file);
-	check_syntax(config_file);
-	start_parse(config_file);
+	size_t i;
+
+	for (i = 0; i < line.length(); i++)
+		if (!isspace(line[i]))
+			break;
+	return (line[i] == '#' ? true : false);
+}
+
+std::string	preprocessing(std::string str)
+{
+	std::string	s = "";
+	std::vector<std::string> v = str_split(str, '\n');
+
+	for (size_t i = 0; i < v.size(); i++)
+	{
+		if (!is_comment(v[i]))
+		{
+			s += v[i];
+			s += '\n';
+		}
+	}
+	std::cout << s << std::endl;
+	exit(0);
 }
