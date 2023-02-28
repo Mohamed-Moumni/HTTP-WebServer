@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/25 16:53:46 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/27 18:09:40 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 {
 	if (argc > 2)
 		return (std::cout << "INVALID ARGUMENTS" << std::endl, 1);
-	std::string config_file = (argc == 2 ? argv[1] : "./tests/test.conf");
+	std::string config_file = (argc == 2 ? argv[1] : "./tests/def.conf");
 
 	config_file = read_file(config_file);
 	start_parse_config_file(config_file);
