@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:53:14 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/25 13:23:31 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/28 08:53:30 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 void	print_listen(Server& vec)
 {
 	std::map<std::string, std::vector<std::string> >::iterator it = vec._listen.begin();
-	std::cout << "size in listen " << vec._listen.size() << std::endl;
+	std::cout << "####### HOSTS #######" << std::endl;
+	std::cout << "Number of hosts : " << vec._listen.size() << std::endl;
 	for (; it != vec._listen.end(); it++)
 	{
 		std::cout << "Host : " << it->first << "   Ports : ";
@@ -59,15 +60,40 @@ void	print_error_pages(Server& vec)
 	}
 }
 
+void	print_locations(Server& serv)
+{
+	std::vector<location> loc = serv._locations;
+	
+	std::cout << "####### LOCATIONS #######" << std::endl;
+	std::cout << "THIS SERVER HAS " << loc.size() << (loc.size() > 1 ? " LOCATIONS" : " LOCATION") << std::endl;
+	for (size_t i = 0; i < loc.size(); i++)
+	{
+		location tmp = loc[i];
+		std::cout << " -------------------------- " << std::endl;
+		std::cout << "location number " << i+1 << std::endl;
+		std::cout << "PATH " << tmp.path << std::endl;
+		std::map<std::string, std::vector<std::string> >::iterator it = tmp._location_attr.begin();
+		for (; it != tmp._location_attr.end(); it++)
+		{
+			std::cout << it->first << " ";
+			print_vector(it->second);
+		}
+		std::cout << " -------------------------- " << std::endl;
+	}
+}
+
 void	print_servers(std::vector<Server>& vec)
 {
 	for (size_t i = 0; i < vec.size(); i++)
 	{
+		if (i) std::cout << std::endl;
+		std::cout << "######## ####### ####### ######## " << std::endl;
 		std::cout << "######## SERVER NUMBER " << i + 1 << " ########" << std::endl;
+		std::cout << "######## ####### ####### ######## " << std::endl << std::endl;
 		print_listen(vec[i]);
 		print_server_names(vec[i]);
 		print_index(vec[i]);
-		// print_location(vec[i]);
 		print_error_pages(vec[i]);
+		print_locations(vec[i]);
 	}
 }
