@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/02/26 16:33:29 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/02/26 17:56:41 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,22 @@ Socket::Socket(std::string hostname, std::string port)
     Host = hostname;
     Port = port;
     hints = this->getinfostruct(hostname, port);
-    socketId = getSockId(hints);
+    socketId = createSocketId(hints);
+}
+
+int Socket::getSocketId(void)
+{
+    return (this->socketId);
+}
+
+std::string Socket::getHost(void)
+{
+    return (this->Host);
+}
+
+std::string Socket::getPort(void)
+{
+    return (this->Port);
 }
 
 addrinfo    *Socket::getinfostruct(std::string hostname, std::string port)
@@ -49,7 +64,7 @@ addrinfo    *Socket::getinfostruct(std::string hostname, std::string port)
     return (res);
 }
 
-int Socket::getSockId(addrinfo  *hints)
+int Socket::createSocketId(addrinfo  *hints)
 {
     addrinfo    *p;
     int         sockId, var;
