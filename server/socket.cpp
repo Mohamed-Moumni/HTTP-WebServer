@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/03 22:35:03 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/04 20:59:39 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,20 @@ int Socket::createSocketId(addrinfo  *hints)
         sockId = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
         if (sockId == -1)
             continue;
-        fcntl(sockId, F_SETFL, O_NONBLOCK);
-        if ((setsockopt(sockId, SOL_SOCKET, SO_REUSEADDR, &var, sizeof(var))) < 0)
+        if (fcntl(sockId, F_SETFL, O_NONBLOCK) < 0)
+        {
+            std::cout << "fcntl Error: " << std::endl;
+        }
+        if ((setsockopt(sockId, SOL_SOCKET, SO_REUSEADDR,&var, sizeof(var))) < 0)
+        {
+            std::cout << "setsockopt Error: " << std::endl;
             continue;
-        if ((bind(sockId, p->ai_addr, p->ai_addrlen)) == 0)
+        }
+        if ((bind(sockId, p->ai_addr, p->ai_addrlen)) < 0)
+        {
+            std::cout << strerror(errno) << std::endl;
+        }
+        else
             break ;
         close(sockId);
     }
@@ -93,12 +103,15 @@ int Socket::createSocketId(addrinfo  *hints)
 
 std::string recv_request(int sockId)
 {
-    char        buff[3000];
+    char        buff[3500];
     std::string request("");
+    int         receved;
 
-    while (recv(sockId, buff, 3000, 0) > 0)
+    receved = recv(sockId, buff, 3500, 0);
+    while (receved > 0)
     {
         request += std::string(buff);
+        receved = recv(sockId, buff, 3500, 0);
     }
     return (request);
 }
@@ -106,10 +119,7 @@ std::string recv_request(int sockId)
 void        send_response(int sockId, std::string response)
 {
     const char *buffer;
-
+    
     buffer = response.c_str();
-    while (send(sockId, buffer, 3000, 0) > 0)
-    {
-        buffer = response.c_str();
-    }
+    send(sockId, buffer, strlen(buffer), 0);
 }

@@ -2,9 +2,9 @@ NAME = main
 
 CPP = c++
 
-FLAGS = -Wall -Wextra -Werror 
+FLAGS = -Wall -Wextra -Werror -fsanitize=address
 
-SRCS = ./socket.cpp ../configfile/server.cpp ./main.cpp
+SRCS = ./socket.cpp ../configfile/server.cpp ./main.cpp 
 
 OBJS = $(SRCS:.cpp=.o)
 
