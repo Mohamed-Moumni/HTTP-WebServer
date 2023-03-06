@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:52 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/04 20:58:51 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/06 14:17:35 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@
 #include <vector>
 #include <errno.h>
 #include "../configfile/server.hpp"
+#include "./ConnectSocket.hpp"
 
 typedef struct addrinfo addrinfo;
 typedef struct pollfd   pfd;
 typedef struct sockaddr_storage sockStorage; 
 typedef struct sockaddr         sockaddr;
+
 class Socket
 {
     private:
@@ -42,7 +44,7 @@ class Socket
         ~Socket();
         Socket(std::string hostname, std::string port);
 
-        std::vector<int>    connectionId;
+        std::map<int, ConnectSocket>  Connection;
         int                 getSocketId(void);
         std::string         getHost(void);
         std::string         getPort(void);

@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/04 20:59:39 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/05 20:41:52 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,3 +123,5 @@ void        send_response(int sockId, std::string response)
     buffer = response.c_str();
     send(sockId, buffer, strlen(buffer), 0);
 }
+
+// void    check_
