@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:52 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/06 14:17:35 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/06 15:28:34 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ class Socket
         ~Socket();
         Socket(std::string hostname, std::string port);
 
-        std::map<int, ConnectSocket>  Connection;
         int                 getSocketId(void);
         std::string         getHost(void);
         std::string         getPort(void);

@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/05 20:41:52 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/06 16:56:20 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int Socket::createSocketId(addrinfo  *hints)
     int         sockId, var;
 
     p = hints;
+    var = 1;
     for (;p != NULL; p = p->ai_next)
     {
         sockId = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
@@ -79,7 +80,7 @@ int Socket::createSocketId(addrinfo  *hints)
         {
             std::cout << "fcntl Error: " << std::endl;
         }
-        if ((setsockopt(sockId, SOL_SOCKET, SO_REUSEADDR,&var, sizeof(var))) < 0)
+        if ((setsockopt(sockId, SOL_SOCKET, SO_REUSEADDR, &var, sizeof(var))) < 0)
         {
             std::cout << "setsockopt Error: " << std::endl;
             continue;
@@ -95,7 +96,7 @@ int Socket::createSocketId(addrinfo  *hints)
     freeaddrinfo(hints);
     if (p == NULL)
     {
-        std::cout << "Can't create the socket : invalid Ip address or port" << std::endl;
+        std::cout << "Can't create the socket: invalid Ip address or port" << std::endl;
         exit(EXIT_FAILURE);
     }
     return (sockId);
@@ -123,5 +124,3 @@ void        send_response(int sockId, std::string response)
     buffer = response.c_str();
     send(sockId, buffer, strlen(buffer), 0);
 }
-
-// void    check_
