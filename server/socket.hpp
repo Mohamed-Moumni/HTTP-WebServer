@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:52 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/09 11:34:51 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/09 20:59:32 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,3 @@ class Socket
         addrinfo            *getinfostruct(std::string hostname, std::string port);
         int                 createSocketId(addrinfo  *hints);
 };
-
-std::string recv_request(int sockId);
-void        send_response(int sockId, std::string response);

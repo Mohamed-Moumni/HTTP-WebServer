@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/06 16:56:20 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/09 20:59:21 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,27 +100,4 @@ int Socket::createSocketId(addrinfo  *hints)
         exit(EXIT_FAILURE);
     }
     return (sockId);
-}
-
-std::string recv_request(int sockId)
-{
-    char        buff[3500];
-    std::string request("");
-    int         receved;
-
-    receved = recv(sockId, buff, 3500, 0);
-    while (receved > 0)
-    {
-        request += std::string(buff);
-        receved = recv(sockId, buff, 3500, 0);
-    }
-    return (request);
-}
-
-void        send_response(int sockId, std::string response)
-{
-    const char *buffer;
-    
-    buffer = response.c_str();
-    send(sockId, buffer, strlen(buffer), 0);
 }
