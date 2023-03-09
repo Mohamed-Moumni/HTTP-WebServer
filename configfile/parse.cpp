@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/28 08:50:52 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/09 14:53:45 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -381,7 +381,6 @@ std::vector<Server>	parse_servers(std::string str)
 		_vec_serv.push_back(parse_one_server(str, offset));
 		offset = str.find("server{", offset + 1);
 	}
-	print_servers(_vec_serv);
 	return _vec_serv;
 }
 
@@ -391,4 +390,6 @@ void	start_parse(std::string config_file)
 	std::string		serv;
 
 	conf._servers = parse_servers(config_file);
+	// print_servers(conf._servers);
+	errors_handling(conf._servers);
 }

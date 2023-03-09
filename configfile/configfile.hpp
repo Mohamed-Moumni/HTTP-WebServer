@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 21:09:49 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/28 11:14:24 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/09 14:52:04 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 class ConfigFile
 {
 	public:
-		std::map<std::string, std::vector<std::string> >		_values;
 		std::vector<Server>										_servers;
 };
 
@@ -35,5 +34,6 @@ void			print_servers(std::vector<Server>& vec);
 bool			is_has_bracket(std::string s);
 void			print_vector(std::vector<std::string>& v);
 std::string		preprocessing(std::string str);
+void			errors_handling(std::vector<Server>& servers);
 
 #endif
