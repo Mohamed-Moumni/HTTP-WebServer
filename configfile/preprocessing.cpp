@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 11:02:35 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/28 11:15:10 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/02/28 12:12:25 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,5 @@ std::string	preprocessing(std::string str)
 			s += '\n';
 		}
 	}
-	std::cout << s << std::endl;
-	exit(0);
+	return s;
 }
