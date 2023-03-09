@@ -6,13 +6,12 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:52 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/06 15:28:34 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/09 11:34:51 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#ifndef __SOCKET_HPP__
-#define __SOCKET_HPP__
+#pragma once
 
 #include <iostream>
 #include <sys/types.h>
@@ -49,9 +48,7 @@ class Socket
         std::string         getPort(void);
         addrinfo            *getinfostruct(std::string hostname, std::string port);
         int                 createSocketId(addrinfo  *hints);
-        // std::string recv_request(int sockId);
 };
 
 std::string recv_request(int sockId);
 void        send_response(int sockId, std::string response);
-#endif
