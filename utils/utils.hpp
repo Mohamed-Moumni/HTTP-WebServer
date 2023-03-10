@@ -19,5 +19,6 @@
 std::string					str_trim(std::string s);
 std::vector<std::string>	str_split(std::string s, char c);
 std::vector<std::string> str_split_spaces(std::string s);
+std::vector<std::string> header_spliter(std::string header_line);
 
 #endif

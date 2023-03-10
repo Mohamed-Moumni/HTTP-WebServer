@@ -1,16 +1,12 @@
 #include <iostream>
+#include <map>
 
 class request
 {
     public:
-        //request line
+        std::string request_string;
         std::string method;
         std::string http_version;
         std::string request_target;
-        //headers
-        std::string host;
-        unsigned int content_lenght;
-        
-
-        
+        std::map<std::string , std::string> headers_map;
 };
