@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/09 18:08:12 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/10 19:04:33 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void    ConnectSocket::read_request(void)
     char *      buffer;
     int         readLength;
     static int  _contentLength;
-
     buffer = new char[BUFFER];
+
     if (ReadAvailble)
     {
         if (Request.empty())
@@ -60,7 +60,7 @@ void    ConnectSocket::read_request(void)
             readLength = recv(ConnectSocketId, buffer, BUFFER, 0);
             std::string str =  std::string(buffer, readLength);
             Request.append(str);
-            get_content_length(std::string(buffer));
+            get_content_length(Request);
         }
         else
         {
@@ -76,6 +76,7 @@ void    ConnectSocket::read_request(void)
                 {
                     ReadAvailble = false;
                     SendAvailble = true;
+                    _contentLength = 0;
                 }
             }
         }
@@ -83,26 +84,34 @@ void    ConnectSocket::read_request(void)
     delete [] buffer;
 }
 
-void    ConnectSocket::send_response(std::string response)
+void    ConnectSocket::send_response(std::string &response)
 {
-    const char  *buffer;
-    static  int CharSent;
-    int         SentLen;
+    static  unsigned long   CharSent;
+    int                     SentLen;
 
-    if (CharSent < ResponseLength)
+    SentLen = 0;
+    if (SendAvailble)
     {
-        buffer = response.substr(CharSent, BUFFER).c_str();
-    }
-    if (SendAvailble && CharSent < ResponseLength)
-    {
-        SentLen = send(ConnectSocketId, buffer, BUFFER, 0);
-        CharSent += SentLen;
-        if (CharSent >= ResponseLength)
-            reset_data();
+        SentLen = send(ConnectSocketId, response.c_str() + CharSent, this->ResponseLength, 0);
+        if (SentLen >= 0)
+        {
+            CharSent += SentLen;
+            this->ResponseLength -= SentLen;
+        }
+        if (CharSent == response.size())
+        {
+            Request.clear();
+            ContentLength = 0;
+            this->ResponseLength = 0;
+            SendAvailble = false;
+            ReadAvailble = true;
+            CharSent = 0;
+        }
     }
 }
 
-void    ConnectSocket::setResponseLength(int length)
+
+void    ConnectSocket::setResponseLength(unsigned long  length)
 {
     ResponseLength = length;
 }
