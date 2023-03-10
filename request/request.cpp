@@ -21,9 +21,9 @@ int pars_request(std::string request_string, request & request)
 {
     if(!get_request_line(request_string, request))
         return -1;
-    std::cout << request.method << std::endl;
-    std::cout << request.request_target << std::endl;
-    std::cout << request.http_version << std::endl;
+    std::cout << "method :" << request.method <<'.'<< std::endl;
+    std::cout << "request_trarget :" << request.request_target<<'.' << std::endl;
+    std::cout << "http_version :" << request.http_version<<'.' << std::endl;
     return 1;
 }
 
