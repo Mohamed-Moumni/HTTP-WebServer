@@ -4,16 +4,16 @@ CPP = c++
 
 FLAGS = -Wall -Wextra -Werror -fsanitize=address
 
-SRCS = ./socket.cpp ../configfile/server.cpp ./main.cpp 
+SRCS = ./socket.cpp ../configfile/server.cpp ./main.cpp ./ConnectSocket.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
-all: $(NAME)
+all: $(NAME) 
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) 
 	$(CPP) $(FLAGS) $^ -o $(NAME)
 
-%.o: %.cpp
+%.o: %.cpp ConnectSocket.hpp socket.hpp
 	$(CPP) $(FLAGS) -c $< -o $@
 
 clean:
