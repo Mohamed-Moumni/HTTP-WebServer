@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/10 18:53:24 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/11 10:25:35 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class ConnectSocket
         unsigned long   ResponseLength;
         bool            ReadAvailble;
         bool            SendAvailble;
+        bool            ConnectionClosed;
         std::string     Request;
         ConnectSocket();
         ~ConnectSocket();
@@ -42,4 +43,5 @@ class ConnectSocket
         void        get_content_length(std::string request);
         void        send_response(std::string &response);
         void        reset_data(void);
+        void        ConnectionType(std::string _request);
 };
