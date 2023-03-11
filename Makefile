@@ -6,7 +6,7 @@
 #    By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
-#    Updated: 2023/02/28 11:21:41 by mkarim           ###   ########.fr        #
+#    Updated: 2023/03/09 14:53:19 by mkarim           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ CONFIG_HEADERS = ./configfile/configfile.hpp ./configfile/server.hpp ./configfil
 
 CONFIG_SRCS = ./configfile/configfile.cpp ./configfile/server.cpp ./configfile/location.cpp \
 			./configfile/parse.cpp ./configfile/print_servers.cpp ./configfile/check_errors.cpp \
-			./configfile/preprocessing.cpp
+			./configfile/preprocessing.cpp ./configfile/errors_handling.cpp
 #####		CONFIG FILES		#####
 
 #####		UTILS FILES			#####

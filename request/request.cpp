@@ -1,65 +1,43 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   request.cpp                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/19 11:54:14 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/19 18:44:18 by mkarim           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include <iostream>
+#include "request.class.hpp"
+#include "../utils/utils.hpp"
 
-#include "request.hpp"
-#include <sstream>
-
-void    fill_request_line(Request &req, std::string& data)
+int get_request_line(std::string request_string, request &request)
 {
-	req._request_line = data;
-	std::vector<std::string> v = str_split(data, ' ');
-	req._request_method = v[0];
-	req._path_component = v[1];
-	req._http_version   = v[2];
+    int i = 0;
+    std::vector<std::string> start_line;
+
+    while(request_string[i] != '\n')
+        i++;
+    start_line = str_split_spaces(request_string.substr(0, i));
+    if(start_line.size() != 3)
+        return -1;
+    request.method = start_line[0];
+    request.request_target = start_line[1];
+    request.http_version = start_line[2];
+    return 1;
+}
+int pars_request(std::string request_string, request & request)
+{
+    if(!get_request_line(request_string, request))
+        return -1;
+    std::cout << "method :" << request.method <<'.'<< std::endl;
+    std::cout << "request_trarget :" << request.request_target<<'.' << std::endl;
+    std::cout << "http_version :" << request.http_version<<'.' << std::endl;
+    return 1;
 }
 
-void	print(Request &req)
+int request_handler(std::string request_string)
 {
-	std::cout << "request method " << req._request_method << std::endl;
-	std::cout << "component      " << req._path_component << std::endl;
-	std::cout << "http version   " << req._http_version << std::endl;
-	
-	std::map<std::string, std::vector<std::string> >::iterator it;
+    request request;
 
-	it = req._request_headers.begin();
-	for (; it != req._request_headers.end(); it++)
-	{
-		std::cout << it->first << " ";
-		std::vector<std::string> v = it->second;
-		for (int i = 0; i < v.size(); i++)
-		{
-			std::cout << "|" << v[i] << "|";
-		}
-		std::cout << std::endl;
-	}
+    if(!pars_request(request_string, request))
+        return -1;
+    return 1;
 }
 
-void    start_request(std::string request)
+int main()
 {
-	Request			my_request;
-	std::string		data;
-
-	std::stringstream ss(request);
-
-	int i = 0;
-	getline(ss, data, '\n');
-	fill_request_line(my_request, data);
-	while (getline(ss, data, '\n'))
-	{
-		if (str_trim(data).length() > 0)
-		{
-			std::vector<std::string> line = str_split(data, ':');
-			my_request._request_headers.insert(std::make_pair(line[0], str_split(line[1], ',')));
-		}
-	}
-	print(my_request);
+    std::string request_string  = "GET /index.html HTTP/1.1\nHost: localhost:8080\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:94.0) Gecko/20100101 Firefox/94.0\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8\nAccept-Language: en-US,en;q=0.5\nAccept-Encoding: gzip, deflate \\ \nConnection: keep-alive\nUpgrade-Insecure-Requests: 1\nSec-Fetch-Dest: document\nSec-Fetch-Mode: navigate\nSec-Fetch-Site: none\nSec-Fetch-User: ?1\r\n\r\n";
+    request_handler(request_string);
 }
