@@ -4,7 +4,7 @@ CPP = c++
 
 FLAGS = -Wall -Wextra -Werror -fsanitize=address
 
-SRCS = ./socket.cpp ../configfile/server.cpp ./main.cpp ./ConnectSocket.cpp
+SRCS = ./socket.cpp ../configfile/server.cpp ./ServerRoutine.cpp ./ConnectSocket.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

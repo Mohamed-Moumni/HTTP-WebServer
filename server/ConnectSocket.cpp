@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/10 19:04:33 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/11 10:26:20 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,4 +123,12 @@ void    ConnectSocket::reset_data(void)
     ResponseLength = 0;
     SendAvailble = false;
     ReadAvailble = true;
+}
+
+void    ConnectSocket::ConnectionType(std::string _request)
+{
+    if (_request.find("Connection: keep-alive") != std::string::npos)
+        ConnectionClosed = false;
+    else
+        ConnectionClosed = true;
 }
