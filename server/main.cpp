@@ -48,7 +48,17 @@ int main(int ac, char *av[])
     response.append(std::to_string(length));
     response.append("\r\n\r\n");
     response.append(std::string (buffer, buffer + length));
-    
+
+    std::ifstream is2 ("image3.jpg", std::ifstream::binary);
+    is2.seekg(0, is2.end);
+    int length2 =is2.tellg();
+    is2.seekg(0, is2.beg);
+    char * buffer2 = new char [length2];
+    is2.read(buffer2, length2);
+    std::string response2 = "HTTP/1.1 200 OK\nContent-Type: image/jpg\nContent-Length: ";
+    response2.append(std::to_string(length2));
+    response2.append("\r\n\r\n");
+    response2.append(std::string (buffer2, buffer2 + length2));
     i = 0;
     while (1)
     {
@@ -65,12 +75,14 @@ int main(int ac, char *av[])
                     temp.events = POLLIN | POLLOUT;
                     pfds.push_back(temp);
                     Connections[connection] = ConnectSocket(connection);
-                    Connections[connection].setResponseLength(response.size());
+                    Connections[connection].setResponseLength(response2.size());
                 }
                 else
                 {
                     if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].ReadAvailble)
+                    {
                         Connections[pfds[i].fd].read_request();
+                    }
                 }
             }
 
@@ -78,7 +90,7 @@ int main(int ac, char *av[])
             {
                 if (Connections.find(pfds[i].fd) != Connections.end())
                 {
-                    Connections[pfds[i].fd].send_response(response);
+                    Connections[pfds[i].fd].send_response(response2);
                 }
             }
 

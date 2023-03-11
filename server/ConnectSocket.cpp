@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/10 19:04:33 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/11 09:52:14 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ void    ConnectSocket::read_request(void)
         if (Request.empty())
         {
             readLength = recv(ConnectSocketId, buffer, BUFFER, 0);
-            std::string str =  std::string(buffer, readLength);
-            Request.append(str);
+            Request.append(std::string(buffer, readLength));
             get_content_length(Request);
         }
         else
@@ -70,8 +69,7 @@ void    ConnectSocket::read_request(void)
             {
                 readLength = recv(ConnectSocketId, buffer, BUFFER, 0);
                 _contentLength += readLength;
-                std::string str =  std::string(buffer, readLength);
-                Request.append(str);
+                Request.append(std::string(buffer, readLength));
                 if (_contentLength >= ContentLength)
                 {
                     ReadAvailble = false;
