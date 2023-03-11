@@ -6,12 +6,47 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/02/25 16:05:15 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/09 20:59:21 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "socket.hpp"
+
+Socket::Socket()
+{
+    
+}
+
+Socket::~Socket()
+{
+       
+}
+
+Socket::Socket(std::string hostname, std::string port)
+{
+    addrinfo    *hints;
+
+    Host = hostname;
+    Port = port;
+    hints = this->getinfostruct(hostname, port);
+    socketId = createSocketId(hints);
+}
+
+int Socket::getSocketId(void)
+{
+    return (this->socketId);
+}
+
+std::string Socket::getHost(void)
+{
+    return (this->Host);
+}
+
+std::string Socket::getPort(void)
+{
+    return (this->Port);
+}
 
 addrinfo    *Socket::getinfostruct(std::string hostname, std::string port)
 {
@@ -29,27 +64,39 @@ addrinfo    *Socket::getinfostruct(std::string hostname, std::string port)
     return (res);
 }
 
-int Socket::getSockId(addrinfo *hints)
+int Socket::createSocketId(addrinfo  *hints)
 {
-    addrinfo *p;
-    int sockId, var;
+    addrinfo    *p;
+    int         sockId, var;
 
     p = hints;
+    var = 1;
     for (;p != NULL; p = p->ai_next)
     {
         sockId = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
         if (sockId == -1)
             continue;
-        fcntl(sockId, F_SETFL, O_NONBLOCK);
+        if (fcntl(sockId, F_SETFL, O_NONBLOCK) < 0)
+        {
+            std::cout << "fcntl Error: " << std::endl;
+        }
         if ((setsockopt(sockId, SOL_SOCKET, SO_REUSEADDR, &var, sizeof(var))) < 0)
+        {
+            std::cout << "setsockopt Error: " << std::endl;
             continue;
-        if ((bind(sockId, p->ai_addr, p->ai_addrlen)) == 0)
+        }
+        if ((bind(sockId, p->ai_addr, p->ai_addrlen)) < 0)
+        {
+            std::cout << strerror(errno) << std::endl;
+        }
+        else
             break ;
         close(sockId);
     }
+    freeaddrinfo(hints);
     if (p == NULL)
     {
-        std::cout << "invalid Ip address or port" << std::endl;
+        std::cout << "Can't create the socket: invalid Ip address or port" << std::endl;
         exit(EXIT_FAILURE);
     }
     return (sockId);
