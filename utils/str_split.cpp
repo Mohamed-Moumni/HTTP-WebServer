@@ -57,3 +57,33 @@ std::vector<std::string> str_split(std::string s, char c)
 	}
 	return v;
 }
+
+std::vector<std::string> str_split(std::string s, std::string c)
+{
+	std::vector<std::string> ret_vec;
+	int start = 0;
+	if(!s.size())
+		return ret_vec;
+	if(c.size() == 1)
+		return str_split(s, (char)c[0]);
+	for(int i = 0; i < (s.size() - c.size() + 1) ; i++)
+	{
+		if(s.substr(i, c.size()) == c)
+		{
+			ret_vec.push_back(s.substr(start, i - start));
+			start = i + c.size();
+		}
+	}
+	if(start <= s.size()-1)
+		ret_vec.push_back(s.substr(start, s.size() - start));
+	
+	return ret_vec;
+}
+// int main()
+// {
+// 	std::string str = "aaa;;bbb;;ccc;;ddd";
+// 	std::string split = ";";
+// 	std::vector<std::string> ret = str_split(str, ';');
+// 	for(int i = 0; i < ret.size(); i++)
+// 		std::cout << ret[i] << std::endl;
+// }
