@@ -82,11 +82,11 @@ std::vector<std::string> str_split(std::string s, std::string c)
 	return ret_vec;
 }
 
-int main()
-{
-	std::string str = "aa";
-	std::string split = ";;";
-	std::vector<std::string> ret = str_split(str, split);
-	for(int i = 0; i < ret.size(); i++)
-		std::cout << ret[i] << std::endl;
-}
+// int main()
+// {
+// 	std::string str = "aa";
+// 	std::string split = ";;";
+// 	std::vector<std::string> ret = str_split(str, split);
+// 	for(int i = 0; i < ret.size(); i++)
+// 		std::cout << ret[i] << std::endl;
+// }

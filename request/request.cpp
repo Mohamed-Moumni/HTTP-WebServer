@@ -13,7 +13,7 @@ int get_request_line(request &request)
     if(start_line.size() != 3)
         return 0;
     if(request.request_string[i+1])
-        request.request_string = request.request_string.substr(i + 1, request.request_string.size() - 1);
+        request.request_string = request.request_string.substr(i + 2, request.request_string.size() - 1);
     request.method = start_line[0];
     request.request_target = start_line[1];
     request.http_version = start_line[2];
@@ -25,20 +25,29 @@ int get_request_headers(request &request)
     std::vector<std::string> header_lines;
     std::vector<std::string> key_value;
 
-    std::string header_string = request.request_string.substr(request.request_string.find("\r\n") + 2, request.request_string.find("\r\n\r\n"));
-    // std::cout << ">>>" << header_string << "<<<" << std::endl;
+    std::string header_string = request.request_string.substr(0, request.request_string.find("\r\n\r\n"));
+    // std::cout << ">>>" << request.request_string << "<<<" <<std::endl;
     header_lines = str_split(header_string, "\r\n");
     for(int i = 0; i < header_lines.size(); i++)
-        std::cout << header_lines[i] << std::endl;
-        std::cout << "ENDHERE";
-    for(int i = 0; i < header_lines.size(); i++)
     {
+        key_value.clear();
+        // std::cout << "|||" << header_lines[i] << "|||" << std::endl;
         key_value = header_spliter(header_lines[i]);
+        // std::cout << ">>" << key_value[0] << "<----->" << key_value[1] << "<<" << std::endl;
         if(key_value.size() != 2)
             return 0;
         request.headers_map[key_value[0]] = key_value[1];    
     } 
     return 1;
+}
+
+int get_request_body(request &request)
+{
+    std::string request_body = request.request_string.substr(request.request_string.find("\r\n\r\n"));
+
+    if(request.request_string.size() && request.method != "POST")
+        return 0;
+    
 }
 
 int pars_request(request &request)
@@ -67,7 +76,7 @@ int request_handler(request &request)
 int main()
 {
     request request;
-    request.request_string  = "GET / HTTP/1.1\r\nHost:       localhost\r\nsec-ch-ua-mobile: ?0\r\nUpgrade-Insecure-Requests: 1\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\r\nSec-Fetch-Site: none\r\nSec-Fetch-Mode: navigate\r\nSec-Fetch-User: ?1\r\nSec-Fetch-Dest: document\r\nAccept-Encoding: gzip, deflate\r\nAccept-Language: en-US,en;q=0.9\r\nConnection: close\r\n\r\n";
+    request.request_string  = "GET / HTTP/1.1\r\nHost:localhost\nsec-ch-ua-mobile: ?0\r\nUpgrade-Insecure-Requests: 1\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\r\nSec-Fetch-Site: none\r\nSec-Fetch-Mode: navigate\r\nSec-Fetch-User: ?1\r\nSec-Fetch-Dest: document\r\nAccept-Encoding: gzip, deflate\r\nAccept-Language: en-US,en;q=0.9\r\nConnection: close\r\n\r\n";
     // std::cout << request.request_string << std::endl;
     // request.request_string  = "1 2 3\r\n";
     request_handler(request);
@@ -76,5 +85,10 @@ int main()
     // std::cout << "|||" << request.request_target <<"|||" << std::endl;
     // std::cout << "|||" << request.request_string <<"|||" << std::endl;
     // std::cout << request.http_version << std::endl;
+
+    std::cout << request.headers_map["Host"] << std::endl;
+    std::cout << request.headers_map["Connection"] << std::endl;
+    std::cout << request.headers_map["User-Agent"] << std::endl;
+
     
 }

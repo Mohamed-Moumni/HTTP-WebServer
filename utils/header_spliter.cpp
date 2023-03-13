@@ -10,7 +10,7 @@ std::vector<std::string> header_spliter(std::string header_line)
     while(header_line[i] && header_line[i] != ':')
         i++;
 
-    ret[0] = remove_side_spaces(header_line.substr(0, i));
+    ret[0] = header_line.substr(0, i);
     if(header_line[i+1])
         ret[1] = remove_side_spaces(header_line.substr(i + 1, header_line.size() - 1));
     return ret;
