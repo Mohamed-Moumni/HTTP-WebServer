@@ -6,7 +6,7 @@
 #    By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
-#    Updated: 2023/03/13 17:10:50 by mmoumni          ###   ########.fr        #
+#    Updated: 2023/03/13 17:17:38 by mmoumni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = webserv
 
 CC = c++
 
-FLAGS = -Wall -Wextra -Werror --std=c++98 -g 
+FLAGS = -Wall -Wextra -Werror --std=c++98 -g -fsanitize=address
 
 #####		CONFIG FILES		#####
 CONFIG_HEADERS = ./configfile/configfile.hpp ./configfile/server.hpp ./configfile/location.hpp 
