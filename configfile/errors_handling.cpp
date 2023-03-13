@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 14:41:48 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/09 15:15:38 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/13 17:35:24 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	listen_errors(Server& serv)
 {
-	std::map<std::string, std::vector<std::string> >::iterator it;
+	std::map<std::string, std::set<std::string> >::iterator it;
 
 	if (!serv._listen.size())
 		exit_mode("ADD HOST:PORT");
@@ -23,10 +23,10 @@ void	listen_errors(Server& serv)
 		std::vector<std::string> host = str_split(it->first, '.');
 		if (host.size() != 4)
 			exit_mode("INVALID HOST!");
-		std::vector<std::string> v = it->second;
-		for (size_t i = 0; i < v.size(); i++)
+		std::set<std::string> ports = it->second;
+		for (std::set<std::string>::iterator itr = ports.begin(); itr != ports.end(); itr++)
 		{
-			if (v[i].length() != 4)
+			if ((*itr).length() != 4)
 				exit_mode("INVALID PORT!");
 		}
 	}
