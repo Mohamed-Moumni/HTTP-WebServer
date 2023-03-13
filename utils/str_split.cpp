@@ -62,16 +62,18 @@ std::vector<std::string> str_split(std::string s, std::string c)
 {
 	std::vector<std::string> ret_vec;
 	int start = 0;
-	if(!s.size())
-		return ret_vec;
 	if(c.size() == 1)
 		return str_split(s, (char)c[0]);
+	if(!s.size() || c.size() >= s.size())
+		return ret_vec;
 	for(int i = 0; i < (s.size() - c.size() + 1) ; i++)
 	{
 		if(s.substr(i, c.size()) == c)
 		{
 			ret_vec.push_back(s.substr(start, i - start));
+			// std::cout << "this time we push: " << s.substr(start, i - start) << " when start = " << start << " and i = " << i << std::endl;
 			start = i + c.size();
+			i = start;
 		}
 	}
 	if(start <= s.size()-1)
@@ -79,11 +81,12 @@ std::vector<std::string> str_split(std::string s, std::string c)
 	
 	return ret_vec;
 }
-// int main()
-// {
-// 	std::string str = "aaa;;bbb;;ccc;;ddd";
-// 	std::string split = ";";
-// 	std::vector<std::string> ret = str_split(str, ';');
-// 	for(int i = 0; i < ret.size(); i++)
-// 		std::cout << ret[i] << std::endl;
-// }
+
+int main()
+{
+	std::string str = "aa";
+	std::string split = ";;";
+	std::vector<std::string> ret = str_split(str, split);
+	for(int i = 0; i < ret.size(); i++)
+		std::cout << ret[i] << std::endl;
+}
