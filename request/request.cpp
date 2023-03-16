@@ -33,14 +33,11 @@ int get_request_headers(request &request)
     }
     else
         return 0;
-    // std::cout << ">>>" << request.request_string << "<<<" <<std::endl;
     header_lines = str_split(header_string, "\r\n");
     for(int i = 0; i < header_lines.size(); i++)
     {
         key_value.clear();
-        // std::cout << "|||" << header_lines[i] << "|||" << std::endl;
         key_value = header_spliter(header_lines[i]);
-        // std::cout << ">>" << key_value[0] << "<----->" << key_value[1] << "<<" << std::endl;
         if(key_value.size() != 2)
             return 0;
         request.headers_map[key_value[0]] = key_value[1];    
@@ -87,6 +84,7 @@ int main()
     request request;
     request.request_string  = "GET / HTTP/1.1\r\nHost:localhost\r\nConnection: close\r\n\r\nhello everybody here is the body hahaha";
     request.request_string = "GET /index.html HTTP/1.1\r\nHost: localhost:8080\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:94.0) Gecko/20100101 Firefox/94.0\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8\r\nAccept-Language: en-US,en;q=0.5\r\nConnection: keep-alive\r\nUpgrade-Insecure-Requests: 1\r\nSec-Fetch-Dest: document\r\nSec-Fetch-Mode: navigate\r\nSec-Fetch-Site: none\r\nSec-Fetch-User:       ?1\r\n\r\nHEY EVERY BODY THE BODY IS HEREE";
+
     // std::cout << request.request_string << std::endl;
     // request.request_string  = "1 2 3\r\n";
     request_handler(request);
@@ -96,9 +94,10 @@ int main()
     // std::cout << "|||" << request.request_string <<"|||" << std::endl;
     // std::cout << request.http_version << std::endl;
 
-    std::cout << request.headers_map["Host"] << std::endl;
-    std::cout << request.headers_map["Connection"] << std::endl;
-    std::cout << request.headers_map["User-Agent"] << std::endl;
+    std::cout << "HOST:" << request.headers_map["Host"] << std::endl;
+    std::cout << "User-Agent:" << request.headers_map["User-Agent"] << std::endl;
+    std::cout << "Accept:" << request.headers_map["Accept"] << std::endl;
+    std::cout << "Connection:" << request.headers_map["Connection"] << std::endl;
     std::cout << "+++" << request.request_body << "+++" << std::endl;
 
     
