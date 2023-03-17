@@ -1,7 +1,7 @@
 #include <iostream>
 #include <map>
 
-std::string bad_request = "";
+std::string bad_request = "HTTP/1.1 400 Bad Request\r\nServer: 42_WEBSERVER\r\nContent-Type: text/html\r\nContent-Length: 141\r\nConnection: close\r\n\r\n<html><head><title>400 Bad Request</title></head><body><center><h1>400 Bad Request</h1></center><hr><center>42_WEBSERV</center></body></html>";
 std::string not_allowed = "";
 
 class request
