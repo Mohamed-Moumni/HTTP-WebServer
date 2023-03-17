@@ -1,6 +1,9 @@
 #include <iostream>
 #include <map>
 
+std::string bad_request = "";
+std::string not_allowed = "";
+
 class request
 {
     public:

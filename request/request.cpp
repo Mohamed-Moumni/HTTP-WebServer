@@ -7,7 +7,7 @@ int get_request_line(request &request)
     int i = 0;
     std::vector<std::string> start_line;
 
-    while(request.request_string[i] && request.request_string.substr(i, 2) != "\r\n")
+    while(request.request_string[i] && request.request_string.substr(i, 2) != "\n" && request.request_string[i] != '\n')
         i++;
     start_line = str_split_spaces(request.request_string.substr(0, i));
     if(start_line.size() != 3)
@@ -15,6 +15,8 @@ int get_request_line(request &request)
     if(request.request_string[i+1])
         request.request_string = request.request_string.substr(i + 2, request.request_string.size() - 1);
     request.method = start_line[0];
+    if(request.method != "GET" && request.method != "POST" && request.method != "DELETE")
+        std::cout << "501 not implomented error here!" << std::endl;
     request.request_target = start_line[1];
     request.http_version = start_line[2];
     return 1;
@@ -25,7 +27,7 @@ int get_request_headers(request &request)
     std::vector<std::string> header_lines;
     std::vector<std::string> key_value;
     std::string header_string;
-
+    //TODO: i have to search not only for \r\n but also for \n because the http message have to work with \n without \r
     if(request.request_string.find("\r\n\r\n") != std::string::npos)
     {
         header_string = request.request_string.substr(0, request.request_string.find("\r\n\r\n"));
@@ -82,7 +84,7 @@ int request_handler(request &request)
 int main()
 {
     request request;
-    request.request_string  = "GET / HTTP/1.1\r\nHost:localhost\r\nConnection: close\r\n\r\nhello everybody here is the body hahaha";
+    request.request_string  = "GET / HTTP/1.1\r\nHost:localhost\r\nConnection: close\r\n\r\nhello everybody here is the body";
     request.request_string = "GET /index.html HTTP/1.1\r\nHost: localhost:8080\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:94.0) Gecko/20100101 Firefox/94.0\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8\r\nAccept-Language: en-US,en;q=0.5\r\nConnection: keep-alive\r\nUpgrade-Insecure-Requests: 1\r\nSec-Fetch-Dest: document\r\nSec-Fetch-Mode: navigate\r\nSec-Fetch-Site: none\r\nSec-Fetch-User:       ?1\r\n\r\nHEY EVERY BODY THE BODY IS HEREE";
 
     // std::cout << request.request_string << std::endl;
