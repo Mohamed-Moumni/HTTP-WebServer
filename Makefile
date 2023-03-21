@@ -6,7 +6,7 @@
 #    By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
-#    Updated: 2023/02/28 11:05:59 by mkarim           ###   ########.fr        #
+#    Updated: 2023/03/13 17:37:06 by mkarim           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,14 @@ NAME = webserv
 
 CC = c++
 
-FLAGS = -Wall -Wextra -Werror --std=c++98 -g
+FLAGS = -Wall -Wextra -Werror --std=c++98 -g -fsanitize=address
 
 #####		CONFIG FILES		#####
 CONFIG_HEADERS = ./configfile/configfile.hpp ./configfile/server.hpp ./configfile/location.hpp 
 
 CONFIG_SRCS = ./configfile/configfile.cpp ./configfile/server.cpp ./configfile/location.cpp \
 			./configfile/parse.cpp ./configfile/print_servers.cpp ./configfile/check_errors.cpp \
-			./configfile/preprocessing.cpp
+			./configfile/preprocessing.cpp ./configfile/errors_handling.cpp
 #####		CONFIG FILES		#####
 
 #####		UTILS FILES			#####
