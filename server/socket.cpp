@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/09 20:59:21 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/14 10:24:21 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,16 @@ int Socket::createSocketId(addrinfo  *hints)
         exit(EXIT_FAILURE);
     }
     return (sockId);
+}
+
+std::vector<Socket> CreateSockets(const std::vector<Server> & _server)
+{
+    size_t              ServerCount;
+    std::vector<Socket> sockets;
+
+    ServerCount = _server.size();
+    for (size_t i = 0; i < ServerCount; i++)
+    {
+                   
+    }
 }
