@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:52 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/09 20:59:32 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/13 19:00:37 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ class Socket
         std::string         Host;
         std::string         Port;
         int                 socketId;
-        std::vector<Server> _servers;
     public:
         Socket();
         ~Socket();
@@ -47,5 +46,7 @@ class Socket
         std::string         getHost(void);
         std::string         getPort(void);
         addrinfo            *getinfostruct(std::string hostname, std::string port);
-        int                 createSocketId(addrinfo  *hints);
+        int                 createSocketId(addrinfo  *hints);      
 };
+
+std::vector<Socket> CreateSockets(const std::vector<Server> & _server);
