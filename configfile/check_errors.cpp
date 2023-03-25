@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 08:49:02 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/25 13:39:20 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/25 14:22:55 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,10 @@ void	check_semicolon(std::string config_file)
 	{
 		if (is_has_bracket(v[i]) && num_of_semicolon(v[i]))
 			exit_mode("SEMICOLON ISSUE, EXTRA SEMICOLON");
-		else if (!is_has_bracket(v[i]) && num_of_semicolon(v[i]) != 1)
-			exit_mode("SEMICOLON ISSUE, EXTRA SEMICOLON, SHOULD BE ONE PER LINE");
 		else if (!is_has_bracket(v[i]) && v[i][v[i].size() - 1] != ';')
 			exit_mode("SEMICOLON ISSUE, SHOULD BE THE LAST CHARACTER");
+		else if (!is_has_bracket(v[i]) && num_of_semicolon(v[i]) != 1)
+			exit_mode("SEMICOLON ISSUE, EXTRA SEMICOLON, SHOULD BE ONE PER LINE");
 	}
 }
 
