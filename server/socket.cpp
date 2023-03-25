@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/25 08:17:07 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/25 08:57:11 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "socket.hpp"
 #include "../configfile/configfile.hpp"
 #include "../configfile/server.hpp"
+#include "ConnectSocket.hpp"
 
 Socket::Socket()
 {
@@ -135,4 +136,35 @@ std::vector<Socket> create_sockets(ConfigFile & _configfile)
         }
     }
     return (_sockets);
+}
+
+void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map<int, ConnectSocket> & Connections, size_t i)
+{
+    pfd         tmp_pfd;
+    int         connection;
+    socklen_t   socket_len;
+    sockStorage so_storage;
+
+    if (i < _sockets.size() && pfds[i].fd = _sockets[i].getSocketId())
+    {
+        connection = accept(pfds[i].fd, (sockaddr *)&so_storage, &socket_len);
+        tmp_pfd.fd = connection;
+        tmp_pfd.events = POLLIN | POLLOUT;
+        pfds.push_back(tmp_pfd);
+        Connections[connection] = ConnectSocket(connection);
+    }
+    else
+    {
+        if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].ReadAvailble)
+        {
+            Connections[pfds[i].fd].read_request();
+        } 
+    }
+}
+
+void                pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+{
+    if (pfds[i].events & POLLOUT && Connections[pfds[i].fd].SendAvailble)
+    {
+    }
 }

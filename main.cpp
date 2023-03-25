@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/25 08:30:49 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/25 08:57:38 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int main(int argc, char **argv)
 	ConfigFile config;
 	std::vector<Socket> sockets;
 	std::vector<pfd>	pfds;
+	std::map<int, ConnectSocket>    Connections;
 
 	config_file = read_file(config_file);
 	config = start_parse_config_file(config_file);
@@ -48,18 +49,12 @@ int main(int argc, char **argv)
 	while (1)
 	{
 		poll(&pfds[0], pfds.size(), -1);
-		for (int i = 0; i < pfds.size(); i++)
+		for (size_t	i = 0; i < pfds.size(); i++)
 		{
 			if (pfds[i].revents & POLLIN)
-			{
-				
-			}
-
+				pollin(pfds, sockets, Connections, i);
 			if (pfds[i].revents & POLLOUT)
-			{
-				
-			}
-
+				pollout(pfds, Connections, i);
 			if (pfds[i].revents & (POLLERR | POLLHUP))
 			{
 				close(pfds[i].fd);
