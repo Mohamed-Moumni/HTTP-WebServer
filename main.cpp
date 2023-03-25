@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/25 08:57:38 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/25 14:27:12 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,26 +43,34 @@ int main(int argc, char **argv)
 
 	config_file = read_file(config_file);
 	config = start_parse_config_file(config_file);
-	sockets = create_sockets(config);
-	listenSocket(sockets);
-	pfds = create_pfd(sockets);
-	while (1)
-	{
-		poll(&pfds[0], pfds.size(), -1);
-		for (size_t	i = 0; i < pfds.size(); i++)
-		{
-			if (pfds[i].revents & POLLIN)
-				pollin(pfds, sockets, Connections, i);
-			if (pfds[i].revents & POLLOUT)
-				pollout(pfds, Connections, i);
-			if (pfds[i].revents & (POLLERR | POLLHUP))
-			{
-				close(pfds[i].fd);
-				pfds.erase(pfds.begin() + i);
-				i--;
-			}
-			i++;
-		}
-	}
+	print_servers(config._servers);
+	// std::cout << config._servers.size() << std::endl;
+	// sockets = create_sockets(config);
+	// listenSocket(sockets);
+	// pfds = create_pfd(sockets);
+	// while (1)
+	// {
+	// 	poll(&pfds[0], pfds.size(), -1);
+	// 	for (int i = 0; i < pfds.size(); i++)
+	// 	{
+	// 		if (pfds[i].revents & POLLIN)
+	// 		{
+				
+	// 		}
+
+	// 		if (pfds[i].revents & POLLOUT)
+	// 		{
+				
+	// 		}
+
+	// 		if (pfds[i].revents & (POLLERR | POLLHUP))
+	// 		{
+	// 			close(pfds[i].fd);
+	// 			pfds.erase(pfds.begin() + i);
+	// 			i--;
+	// 		}
+	// 		i++;
+	// 	}
+	// }
 	return (0);
 }
