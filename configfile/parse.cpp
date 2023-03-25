@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/03/13 17:35:51 by mkarim           ###   ########.fr       */
+=======
+/*   Updated: 2023/03/25 06:11:52 by mmoumni          ###   ########.fr       */
+>>>>>>> socket
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -385,12 +389,16 @@ std::vector<Server>	parse_servers(std::string str)
 	return _vec_serv;
 }
 
-void	start_parse(std::string config_file)
+ConfigFile	start_parse(std::string config_file)
 {
 	ConfigFile		conf;
 	std::string		serv;
 
 	conf._servers = parse_servers(config_file);
 	errors_handling(conf._servers);
+<<<<<<< HEAD
 	print_servers(conf._servers);
+=======
+	return (conf);
+>>>>>>> socket
 }
