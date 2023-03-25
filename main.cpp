@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/25 14:27:12 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/25 14:31:58 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,10 @@ int main(int argc, char **argv)
 
 	config_file = read_file(config_file);
 	config = start_parse_config_file(config_file);
-	print_servers(config._servers);
-	// std::cout << config._servers.size() << std::endl;
-	// sockets = create_sockets(config);
-	// listenSocket(sockets);
-	// pfds = create_pfd(sockets);
+	// print_servers(config._servers);
+	sockets = create_sockets(config);
+	listenSocket(sockets);
+	pfds = create_pfd(sockets);
 	// while (1)
 	// {
 	// 	poll(&pfds[0], pfds.size(), -1);
