@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/25 08:20:28 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/25 08:30:49 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,29 @@ int main(int argc, char **argv)
 	sockets = create_sockets(config);
 	listenSocket(sockets);
 	pfds = create_pfd(sockets);
+	while (1)
+	{
+		poll(&pfds[0], pfds.size(), -1);
+		for (int i = 0; i < pfds.size(); i++)
+		{
+			if (pfds[i].revents & POLLIN)
+			{
+				
+			}
+
+			if (pfds[i].revents & POLLOUT)
+			{
+				
+			}
+
+			if (pfds[i].revents & (POLLERR | POLLHUP))
+			{
+				close(pfds[i].fd);
+				pfds.erase(pfds.begin() + i);
+				i--;
+			}
+			i++;
+		}
+	}
 	return (0);
 }
