@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   configfile.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 21:09:49 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/09 14:52:04 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/25 06:24:08 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,17 @@
 # include "server.hpp"
 # include "../utils/utils.hpp"
 # include <utility>
+
 class ConfigFile
 {
 	public:
 		std::vector<Server>										_servers;
 };
 
-void    		start_parse_config_file(std::string config_file);
+ConfigFile    		start_parse_config_file(std::string config_file);
 void			check_syntax(std::string config_file);
 void			check_brackets(std::string std);
-void			start_parse(std::string config_file);
+ConfigFile			start_parse(std::string config_file);
 void			exit_mode(std::string str);
 void			print_servers(std::vector<Server>& vec);
 bool			is_has_bracket(std::string s);

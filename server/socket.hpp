@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:52 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/13 19:00:37 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/25 06:45:39 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <vector>
 #include <errno.h>
 #include "../configfile/server.hpp"
+#include "../configfile/configfile.hpp"
 #include "./ConnectSocket.hpp"
 
 typedef struct addrinfo addrinfo;
@@ -46,7 +47,9 @@ class Socket
         std::string         getHost(void);
         std::string         getPort(void);
         addrinfo            *getinfostruct(std::string hostname, std::string port);
-        int                 createSocketId(addrinfo  *hints);      
+        int                 createSocketId(addrinfo  *hints);
 };
 
-std::vector<Socket> CreateSockets(const std::vector<Server> & _server);
+void                listenSocket(std::vector<Socket> & _sockets);
+std::vector<Socket> create_sockets(ConfigFile & _configfile);
+std::vector<pfd>    create_pfd(std::vector<Socket> & _sockets);

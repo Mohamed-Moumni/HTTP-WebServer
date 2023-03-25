@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+         #
+#    By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
-#    Updated: 2023/03/09 14:53:19 by mkarim           ###   ########.fr        #
+#    Updated: 2023/03/25 06:38:20 by mmoumni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,11 +26,17 @@ CONFIG_SRCS = ./configfile/configfile.cpp ./configfile/server.cpp ./configfile/l
 
 #####		UTILS FILES			#####
 
+####		SERVER FILES		#####
+
+SERVER_SRCS = ./server/socket.cpp
+
+SERVER_HEADER = ./server/socket.hpp
+
 UTILS_SRC = ./utils/str_trim.cpp ./utils/str_split.cpp
 
-HEADERS = $(CONFIG_HEADERS)
+HEADERS = $(CONFIG_HEADERS) $(SERVER_HEADER)
 
-SRCS = main.cpp $(CONFIG_SRCS) $(UTILS_SRC)
+SRCS = main.cpp $(CONFIG_SRCS) $(UTILS_SRC) $(SERVER_SRCS)
 
 OBJ = $(SRCS:.cpp=.o)
 

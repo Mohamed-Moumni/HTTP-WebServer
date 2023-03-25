@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/09 14:53:45 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/25 06:11:52 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -384,7 +384,7 @@ std::vector<Server>	parse_servers(std::string str)
 	return _vec_serv;
 }
 
-void	start_parse(std::string config_file)
+ConfigFile	start_parse(std::string config_file)
 {
 	ConfigFile		conf;
 	std::string		serv;
@@ -392,4 +392,5 @@ void	start_parse(std::string config_file)
 	conf._servers = parse_servers(config_file);
 	// print_servers(conf._servers);
 	errors_handling(conf._servers);
+	return (conf);
 }
