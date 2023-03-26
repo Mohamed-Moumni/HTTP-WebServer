@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/25 14:51:08 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/26 13:38:35 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ std::vector<Socket> create_sockets(ConfigFile & _configfile)
             for (; setIter != listenIter->second.end(); setIter++)
             {
                 Socket s(host, *setIter);
+                std::cout << "listening on host: " << host << " port: " << *setIter << std::endl;
                 _sockets.push_back(s);
             }
         }
@@ -155,7 +156,7 @@ void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _socke
         connection = accept(pfds[i].fd, (sockaddr *)&so_storage, &socket_len);
         temp_pfd.fd = connection;
         temp_pfd.events = POLLIN | POLLOUT;
-        Connections[connection] = ConnectSocket(connection);
+        Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
     }
     else
     {
@@ -168,5 +169,9 @@ void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _socke
 
 void                pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
-    
+    std::string respo = "HTTP/1.1 200 OK\r\nContent-Type: text/plain-text\r\nConnection: Closed\r\n\r\nHello World";
+    if (Connections.find(pfds[i].fd) != Connections.end())
+    {
+        Connections[pfds[i].fd].send_response(respo);
+    }
 }

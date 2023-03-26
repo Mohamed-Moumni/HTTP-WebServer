@@ -74,7 +74,7 @@ int main(int ac, char *av[])
                     temp.fd = connection;
                     temp.events = POLLIN | POLLOUT;
                     pfds.push_back(temp);
-                    Connections[connection] = ConnectSocket(connection);
+                    Connections[connection] = ConnectSocket(connection, sockets[i].getHost(), sockets[i].getPort());
                     Connections[connection].setResponseLength(response2.size());
                 }
                 else

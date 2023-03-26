@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/11 10:35:15 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/26 13:38:42 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ ConnectSocket::~ConnectSocket()
     
 }
 
-ConnectSocket::ConnectSocket(int _ConnectionId)
+ConnectSocket::ConnectSocket(int ConnectionId, std::string _IpAdress, std::string _Port)
 {
-    ConnectSocketId = _ConnectionId;
+    IpAdress = _IpAdress;
+    Port = _Port;
+    ConnectSocketId = ConnectionId;
     ReadAvailble = true;
     SendAvailble = false;
     Request = "";
@@ -49,36 +51,12 @@ void    ConnectSocket::get_content_length(std::string request)
 void    ConnectSocket::read_request(void)
 {
     char *      buffer;
-    int         readLength;
-    static int  _contentLength;
-    buffer = new char[BUFFER];
+    // int         readLength;
+    // static int  _contentLength;
 
-    if (ReadAvailble)
-    {
-        if (Request.empty())
-        {
-            readLength = recv(ConnectSocketId, buffer, BUFFER, 0);
-            Request.append(std::string(buffer, readLength));
-            get_content_length(Request);
-        }
-        else
-        {
-            if (!_contentLength)
-                _contentLength += Request.substr(Request.find("\r\n\r\n") + 4).size();
-            if (_contentLength < ContentLength)
-            {
-                readLength = recv(ConnectSocketId, buffer, BUFFER, 0);
-                _contentLength += readLength;
-                Request.append(std::string(buffer, readLength));
-                if (_contentLength >= ContentLength)
-                {
-                    ReadAvailble = false;
-                    SendAvailble = true;
-                    _contentLength = 0;
-                }
-            }
-        }
-    }
+    buffer = new char[BUFFER];
+    recv(ConnectSocketId, buffer, BUFFER, 0);
+    std::cout << buffer << std::endl;
     delete [] buffer;
 }
 

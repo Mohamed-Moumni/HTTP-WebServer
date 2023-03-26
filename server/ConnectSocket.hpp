@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/11 10:25:35 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/26 13:34:34 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ class ConnectSocket
         bool            ReadAvailble;
         bool            SendAvailble;
         bool            ConnectionClosed;
+        std::string     IpAdress;
+        std::string     Port;
         std::string     Request;
         ConnectSocket();
         ~ConnectSocket();
-        ConnectSocket(int ConnectionId);
+        ConnectSocket(int ConnectionId, std::string _IpAdress, std::string _Port);
         std::string getRededRequest(void);
         std::string getSendedResponse(void);
         std::string getReadRest(void);
