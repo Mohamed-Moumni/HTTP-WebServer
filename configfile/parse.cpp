@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/09 14:53:45 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/25 14:21:24 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,13 @@ void	fill_listen(Server& serv, std::vector<std::string>& vec)
 		if (host_port.size() != 2)
 			exit_mode("INVALID LISTEN ARGS");
 		if (serv._listen.count(host_port[0]))
-			serv._listen[host_port[0]].push_back(host_port[1]);
-	
+		{
+			serv._listen[host_port[0]].insert(host_port[1]);
+		}
 		else
 		{
-			std::vector<std::string> v;
-			v.push_back(host_port[1]);
+			std::set<std::string> v;
+			v.insert(host_port[1]);
 			serv._listen.insert(std::make_pair(host_port[0], v));
 		}
 	}
@@ -375,21 +376,21 @@ std::vector<Server>	parse_servers(std::string str)
 	std::string				line;
 	size_t					offset;
 
-	offset = str.find("server{");
+	offset = str.find("server");
 	while (offset != std::string::npos)
 	{
 		_vec_serv.push_back(parse_one_server(str, offset));
-		offset = str.find("server{", offset + 1);
+		offset = str.find("server", offset + 1);
 	}
 	return _vec_serv;
 }
 
-void	start_parse(std::string config_file)
+ConfigFile	start_parse(std::string config_file)
 {
 	ConfigFile		conf;
 	std::string		serv;
 
 	conf._servers = parse_servers(config_file);
-	// print_servers(conf._servers);
 	errors_handling(conf._servers);
+	return (conf);
 }

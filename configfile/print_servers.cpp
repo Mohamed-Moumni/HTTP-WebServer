@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:53:14 by mkarim            #+#    #+#             */
-/*   Updated: 2023/02/28 08:53:30 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/13 17:40:21 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 void	print_listen(Server& vec)
 {
-	std::map<std::string, std::vector<std::string> >::iterator it = vec._listen.begin();
+	std::map<std::string, std::set<std::string> >::iterator it = vec._listen.begin();
 	std::cout << "####### HOSTS #######" << std::endl;
 	std::cout << "Number of hosts : " << vec._listen.size() << std::endl;
 	for (; it != vec._listen.end(); it++)
 	{
 		std::cout << "Host : " << it->first << "   Ports : ";
-		std::vector<std::string> v = it->second;
-		for (size_t i = 0; i < v.size(); i++)
+		std::set<std::string> ports = it->second;
+		for (std::set<std::string>::iterator itr = ports.begin(); itr != ports.end(); itr++)
 		{
-			std::cout << v[i] << " ";
+			std::cout << *itr << " ";
 		}
 		std::cout << std::endl;
 	}
