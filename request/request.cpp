@@ -1,11 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <deque>
-#include "request.class.hpp"
-#include "response.class.hpp"
+// #include "request.class.hpp"
+// #include "response.class.hpp"
 #include "../utils/utils.hpp"
 #include "../configfile/configfile.hpp"
-#include "../configfile/server.hpp"
 #include "../server/ConnectSocket.hpp"
 
 int get_request_line(request &request)
@@ -87,13 +86,30 @@ int find_server(ConnectSocket socket, ConfigFile configfile, Server & server)
         if(std::find(possible_servers[i]._server_names.begin(), possible_servers[i]._server_names.end(), socket._request.headers_map["Host"]) == possible_servers[i]._server_names.end())
             possible_servers.erase(possible_servers.begin() + i);
     }
+    if(!possible_servers.size())
+    {
+        if(!configfile._servers.size())
+            return 0;
+        else
+            server = configfile._servers[0];
+    }
+    else
+        server = possible_servers[0];
+    return 1;
+}
+int find_location(ConnectSocket socket)
+{
+    
+
+    return 1;
 }
 
 int respond(ConnectSocket &socket, ConfigFile configfile)
 {
     Server server;
 
-    find_server(configfile, server);
+
+    find_server(socket, configfile, server);
 }
 
 int request_handler(ConnectSocket & socket, ConfigFile configfile)
@@ -108,12 +124,29 @@ int request_handler(ConnectSocket & socket, ConfigFile configfile)
     return 1;
 }
 
+std::string		read_file(std::string file_name)
+{
+	std::string	data;
+	std::string	tmp;
+
+	std::ifstream	file(file_name);
+	while (getline(file, tmp))
+	{
+		data += tmp;
+		data += "\n";
+	}
+	return data;
+}
+
 int main()
 {
     ConnectSocket socket;
-    ConfigFile configfile = start_parse()
+    socket.IpAdress = "127.0.0.1";
+    socket.Port = "8080";
+    ConfigFile configfile = start_parse_config_file(read_file("../tests/def.conf"));
+    std::cout << configfile._servers[0]._index[0] << std::endl;
 
-    socket._request.request_string  = "GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\nhello everybody here is the body";
+    socket._request.request_string  = "GET / HTTP/1.1\r\nHost: myserver\r\nConnection: close\r\n\r\nhello everybody here is the body";
     std::fstream out_file;
 
     out_file.open("out.html");
@@ -129,6 +162,4 @@ int main()
     std::cout << "Accept:" << socket._request.headers_map["Accept"] << std::endl;
     std::cout << "Connection:" << socket._request.headers_map["Connection"] << std::endl;
     std::cout << "+++" << socket._request.request_body << "+++" << std::endl;
-
-    
 }
