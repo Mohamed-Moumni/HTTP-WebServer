@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/27 11:33:53 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/27 11:53:59 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,28 +35,36 @@ void	start_server(std::string & _config)
 	std::vector<Socket>				sockets;
 	std::vector<pfd>				pfds;
 	std::map<int, ConnectSocket>	Connections;
-
-	_config = read_file(_config);
-	configFile = start_parse_config_file(_config);
-	sockets = create_sockets(configFile);
-	listenSocket(sockets);
-	pfds = create_pfd(sockets);
+	try
+	{
+		_config = read_file(_config);
+		configFile = start_parse_config_file(_config);
+		sockets = create_sockets(configFile);
+		listenSocket(sockets);
+		pfds = create_pfd(sockets);
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+		exit(EXIT_FAILURE);
+	}
 	while (1)
 	{
 		poll(&pfds[0], pfds.size(), 0);
 		for (size_t i = 0; i < pfds.size(); i++)
 		{
-			if (pfds[i].fd & POLLIN)
+			if (pfds[i].revents & POLLIN)
 			{
 				pollin(pfds, sockets, Connections, i);	
 			}
-			if (pfds[i].fd & POLLOUT)
+			if (pfds[i].revents & POLLOUT)
 			{
 				pollout(pfds, Connections, i);	
 			}
-			if (pfds[i].fd & (POLLERR | POLLHUP))
+			if (pfds[i].revents & (POLLERR | POLLHUP))
 			{
 				pollErrHup(pfds, Connections, i);
+				i--;
 			}
 		}
 	}
