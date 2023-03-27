@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/11 10:25:35 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/27 08:25:03 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <map>
 #include <vector>
 #include <unistd.h>
+#include "../request/request.class.hpp"
+#include "../request/response.class.hpp"
 
 #define BUFFER 1024
 
@@ -30,18 +32,10 @@ class ConnectSocket
         bool            ReadAvailble;
         bool            SendAvailble;
         bool            ConnectionClosed;
-        std::string     Request;
+        std::string     IpAdress;
+        std::string     Port;
+        request         _request;
+        response        _response;
         ConnectSocket();
         ~ConnectSocket();
-        ConnectSocket(int ConnectionId);
-        std::string getRededRequest(void);
-        std::string getSendedResponse(void);
-        std::string getReadRest(void);
-        std::string getSendRest(void);
-        void        setResponseLength(unsigned long length);
-        void        read_request(void);
-        void        get_content_length(std::string request);
-        void        send_response(std::string &response);
-        void        reset_data(void);
-        void        ConnectionType(std::string _request);
 };
