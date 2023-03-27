@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/26 12:26:56 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/27 10:41:12 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,43 +42,6 @@ int main(int argc, char **argv)
 
 	config_file = read_file(config_file);
 	config = start_parse_config_file(config_file);
-	// print_servers(config._servers);
-	try
-	{
-		sockets = create_sockets(config);
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-		exit(EXIT_FAILURE);
-	}
-	listenSocket(sockets);
-	pfds = create_pfd(sockets);
-	while (1)
-	{
-		poll(&pfds[0], pfds.size(), -1);
-		for (size_t i = 0; i < pfds.size(); i++)
-		{
-			if (pfds[i].revents & POLLIN)
-			{
-				std::cout << "Pollin\n";
-				pollin(pfds, sockets, Connections, i);
-			}
-			
-			if (pfds[i].revents & POLLOUT && Connections[pfds[i].fd].SendAvailble)
-			{
-				std::cout << "Pollout\n";
-				pollout(pfds, Connections, i);
-			}
-
-			if (pfds[i].revents & (POLLERR | POLLHUP))
-			{
-				std::cout << "PollError\n";
-				close(pfds[i].fd);
-				pfds.erase(pfds.begin() + i);
-				i--;
-			}
-		}
-	}
+	
 	return (0);
 }
