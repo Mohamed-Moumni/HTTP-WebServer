@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/27 10:41:12 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/27 10:47:15 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,22 @@ std::string		read_file(std::string file_name)
 	return data;
 }
 
+void	start_server(std::string & _config)
+{
+	ConfigFile						configFile;
+	std::vector<Socket>				sockets;
+	std::vector<pfd>				pfds;
+	std::map<int, ConnectSocket>	Connections;
+
+	_config = read_file(_config);
+	configFile = start_parse_config_file(_config);
+}
+
 int main(int argc, char **argv)
 {
 	if (argc > 2)
 		return (std::cout << "INVALID ARGUMENTS" << std::endl, 1);
 	std::string config_file = (argc == 2 ? argv[1] : "./tests/def.conf");
-
-	ConfigFile config;
-	std::vector<Socket> sockets;
-	std::vector<pfd>	pfds;
-	std::map<int, ConnectSocket>    Connections;
-
-	config_file = read_file(config_file);
-	config = start_parse_config_file(config_file);
-	
+	start_server(config_file);	
 	return (0);
 }
