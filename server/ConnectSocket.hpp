@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/27 10:52:23 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/27 11:24:30 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,8 @@ class ConnectSocket
 {
     public:
         int             ConnectSocketId;
-        int             ContentLength;
-        unsigned long   ResponseLength;
         bool            ReadAvailble;
         bool            SendAvailble;
-        bool            ConnectionClosed;
         std::string     IpAdress;
         std::string     Port;
         request         _request;

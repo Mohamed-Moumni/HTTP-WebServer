@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/27 11:11:29 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/27 11:33:26 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,34 +150,17 @@ std::vector<Socket> create_sockets(ConfigFile & _configfile)
     return (_sockets);
 }
 
-// void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map<int, ConnectSocket> & Connections, size_t i)
-// {
-//     int         connection;
-//     sockStorage so_storage;
-//     socklen_t   socket_len;
-//     pfd         temp_pfd;
+void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map<int, ConnectSocket> & Connections, size_t i)
+{
+    
+}
 
-//     if (i < _sockets.size() && pfds[i].fd == _sockets[i].getSocketId())
-//     {
-//         connection = accept(pfds[i].fd, (sockaddr *)&so_storage, &socket_len);
-//         temp_pfd.fd = connection;
-//         temp_pfd.events = POLLIN | POLLOUT;
-//         Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
-//     }
-//     else
-//     {
-//         if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].ReadAvailble)
-//         {
-//             Connections[pfds[i].fd].read_request();
-//         }
-//     }
-// }
+void                pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+{
+    
+}
 
-// void                pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
-// {
-//     std::string respo = "HTTP/1.1 200 OK\r\nContent-Type: text/plain-text\r\nConnection: Closed\r\n\r\nHello World";
-//     if (Connections.find(pfds[i].fd) != Connections.end())
-//     {
-//         Connections[pfds[i].fd].send_response(respo);
-//     }
-// }
+void                pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+{
+    
+}
