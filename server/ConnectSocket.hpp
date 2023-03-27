@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/27 08:25:03 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/27 10:02:48 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,9 @@
 
 class ConnectSocket
 {
-    private:
+    public:
         int             ConnectSocketId;
         int             ContentLength;
-    public:
         unsigned long   ResponseLength;
         bool            ReadAvailble;
         bool            SendAvailble;

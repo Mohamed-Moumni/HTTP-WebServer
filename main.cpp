@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/25 14:20:31 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/27 10:47:15 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,47 +29,22 @@ std::string		read_file(std::string file_name)
 	return data;
 }
 
+void	start_server(std::string & _config)
+{
+	ConfigFile						configFile;
+	std::vector<Socket>				sockets;
+	std::vector<pfd>				pfds;
+	std::map<int, ConnectSocket>	Connections;
+
+	_config = read_file(_config);
+	configFile = start_parse_config_file(_config);
+}
 
 int main(int argc, char **argv)
 {
 	if (argc > 2)
 		return (std::cout << "INVALID ARGUMENTS" << std::endl, 1);
 	std::string config_file = (argc == 2 ? argv[1] : "./tests/def.conf");
-
-	ConfigFile config;
-	std::vector<Socket> sockets;
-	std::vector<pfd>	pfds;
-
-	config_file = read_file(config_file);
-	config = start_parse_config_file(config_file);
-	print_servers(config._servers);
-	// std::cout << config._servers.size() << std::endl;
-	// sockets = create_sockets(config);
-	// listenSocket(sockets);
-	// pfds = create_pfd(sockets);
-	// while (1)
-	// {
-	// 	poll(&pfds[0], pfds.size(), -1);
-	// 	for (int i = 0; i < pfds.size(); i++)
-	// 	{
-	// 		if (pfds[i].revents & POLLIN)
-	// 		{
-				
-	// 		}
-
-	// 		if (pfds[i].revents & POLLOUT)
-	// 		{
-				
-	// 		}
-
-	// 		if (pfds[i].revents & (POLLERR | POLLHUP))
-	// 		{
-	// 			close(pfds[i].fd);
-	// 			pfds.erase(pfds.begin() + i);
-	// 			i--;
-	// 		}
-	// 		i++;
-	// 	}
-	// }
+	start_server(config_file);	
 	return (0);
 }
