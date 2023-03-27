@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:52 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/25 16:01:26 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/27 10:52:12 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 
 typedef struct addrinfo addrinfo;
 typedef struct pollfd   pfd;
-typedef struct sockaddr_storage sockStorage; 
+typedef struct sockaddr_storage sockStorage;
 typedef struct sockaddr         sockaddr;
 
 class Socket

@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/26 13:38:35 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/27 11:11:29 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,10 @@ std::vector<pfd>    create_pfd(std::vector<Socket> & _sockets)
 
 std::vector<Socket> create_sockets(ConfigFile & _configfile)
 {
-    std::vector<Socket> _sockets;
-    std::map<std::string, std::set<std::string> >::iterator listenIter;
     std::string host;
+    std::vector<Socket> _sockets;
+    std::set<std::pair<std::string, std::string> > processedIp;
+    std::map<std::string, std::set<std::string> >::iterator listenIter;
 
     for (size_t i = 0; i < _configfile._servers.size(); i++)
     {
@@ -135,43 +136,48 @@ std::vector<Socket> create_sockets(ConfigFile & _configfile)
             setIter = listenIter->second.begin();
             for (; setIter != listenIter->second.end(); setIter++)
             {
-                Socket s(host, *setIter);
-                std::cout << "listening on host: " << host << " port: " << *setIter << std::endl;
-                _sockets.push_back(s);
+                std::cout << "Here\n";
+                if (processedIp.find(std::make_pair(host, *setIter)) == processedIp.end())
+                {
+                    Socket s(host, *setIter);
+                    std::cout << "listening on host: " << host << " port: " << *setIter << std::endl;
+                    _sockets.push_back(s);
+                    processedIp.insert(std::make_pair(host, *setIter));
+                }
             }
         }
     }
     return (_sockets);
 }
 
-void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map<int, ConnectSocket> & Connections, size_t i)
-{
-    int         connection;
-    sockStorage so_storage;
-    socklen_t   socket_len;
-    pfd         temp_pfd;
+// void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map<int, ConnectSocket> & Connections, size_t i)
+// {
+//     int         connection;
+//     sockStorage so_storage;
+//     socklen_t   socket_len;
+//     pfd         temp_pfd;
 
-    if (i < _sockets.size() && pfds[i].fd == _sockets[i].getSocketId())
-    {
-        connection = accept(pfds[i].fd, (sockaddr *)&so_storage, &socket_len);
-        temp_pfd.fd = connection;
-        temp_pfd.events = POLLIN | POLLOUT;
-        Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
-    }
-    else
-    {
-        if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].ReadAvailble)
-        {
-            Connections[pfds[i].fd].read_request();
-        }
-    }
-}
+//     if (i < _sockets.size() && pfds[i].fd == _sockets[i].getSocketId())
+//     {
+//         connection = accept(pfds[i].fd, (sockaddr *)&so_storage, &socket_len);
+//         temp_pfd.fd = connection;
+//         temp_pfd.events = POLLIN | POLLOUT;
+//         Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
+//     }
+//     else
+//     {
+//         if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].ReadAvailble)
+//         {
+//             Connections[pfds[i].fd].read_request();
+//         }
+//     }
+// }
 
-void                pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
-{
-    std::string respo = "HTTP/1.1 200 OK\r\nContent-Type: text/plain-text\r\nConnection: Closed\r\n\r\nHello World";
-    if (Connections.find(pfds[i].fd) != Connections.end())
-    {
-        Connections[pfds[i].fd].send_response(respo);
-    }
-}
+// void                pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+// {
+//     std::string respo = "HTTP/1.1 200 OK\r\nContent-Type: text/plain-text\r\nConnection: Closed\r\n\r\nHello World";
+//     if (Connections.find(pfds[i].fd) != Connections.end())
+//     {
+//         Connections[pfds[i].fd].send_response(respo);
+//     }
+// }

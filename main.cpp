@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/27 10:47:15 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/27 11:05:28 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	start_server(std::string & _config)
 
 	_config = read_file(_config);
 	configFile = start_parse_config_file(_config);
+	sockets = create_sockets(configFile);
 }
 
 int main(int argc, char **argv)
