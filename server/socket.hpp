@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:52 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/25 06:45:39 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/27 11:33:36 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@
 #include "../configfile/configfile.hpp"
 #include "./ConnectSocket.hpp"
 
-typedef struct addrinfo addrinfo;
-typedef struct pollfd   pfd;
-typedef struct sockaddr_storage sockStorage; 
+typedef struct sockaddr_storage sockStorage;
+typedef struct addrinfo         addrinfo;
+typedef struct pollfd           pfd;
 typedef struct sockaddr         sockaddr;
 
 class Socket
@@ -53,3 +53,6 @@ class Socket
 void                listenSocket(std::vector<Socket> & _sockets);
 std::vector<Socket> create_sockets(ConfigFile & _configfile);
 std::vector<pfd>    create_pfd(std::vector<Socket> & _sockets);
+void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map<int, ConnectSocket> & Connections, size_t i);
+void                pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i);
+void                pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i);

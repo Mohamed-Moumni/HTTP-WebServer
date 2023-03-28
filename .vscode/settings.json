@@ -68,6 +68,9 @@
 		"utility": "cpp",
 		"vector": "cpp",
 		"__functional_03": "cpp",
+<<<<<<< HEAD
+		"set": "cpp"
+=======
 		"clocale": "cpp",
 		"csignal": "cpp",
 		"any": "cpp",
@@ -89,5 +92,6 @@
 		"cinttypes": "cpp",
 		"typeindex": "cpp",
 		"variant": "cpp"
+>>>>>>> main
 	}
 }

@@ -6,7 +6,7 @@
 #    By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
-#    Updated: 2023/03/25 08:32:51 by mmoumni          ###   ########.fr        #
+#    Updated: 2023/03/25 14:30:45 by mmoumni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,9 +28,9 @@ CONFIG_SRCS = ./configfile/configfile.cpp ./configfile/server.cpp ./configfile/l
 
 ####		SERVER FILES		#####
 
-SERVER_SRCS = ./server/socket.cpp
+SERVER_SRCS = ./server/socket.cpp ./server/ConnectSocket.cpp
 
-SERVER_HEADER = ./server/socket.hpp
+SERVER_HEADER = ./server/socket.hpp ./server/ConnectSocket.hpp
 
 UTILS_SRC = ./utils/str_trim.cpp ./utils/str_split.cpp
 

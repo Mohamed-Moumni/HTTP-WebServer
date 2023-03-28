@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/25 14:21:24 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/27 14:20:14 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,6 @@ void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 		fill_allowed_methods(serv, vec);
 	else
 	{
-		// std::cout << attr << std::endl;
 		exit_mode("SOMETHING WRONG");
 	}
 }
@@ -284,31 +283,18 @@ location	parse_one_location(std::string data)
 	location	loc;
 	std::vector<std::string> vec = str_split(data, '\n');
 	std::vector<std::string> v;
-
-	// std::cout << " data ---------------- " << std::endl;
-	// std::cout << data << std::endl;
-	// loc.path = abstract_path(vec[0]);
-	// std::cout << loc.path << std::endl;
-	// std::cout << " data ---------------- " << std::endl;
 	
 	loc.path = abstract_path(vec[0]);
-	// std::cout << "location++++++++" << std::endl;
-	// std::cout << loc.path << std::endl;
 	for (size_t i = 1; i < vec.size(); i++)
 	{
 		std::vector<std::string> line = str_split(vec[i], ' ');
-		// std::cout << line[0] << "    ";
 		for (size_t j = 1; j < line.size(); j++)
 		{
 			v.push_back(line[j]);
-			// std::cout << line[j] << std::endl;
-			// std::cout << v[v.size() - 1] << std::endl;
 		}
-		// print_vector(v);
 		loc._location_attr.insert(std::make_pair(line[0], v));
 		v.clear();
 	}
-	// std::cout << "location---------" << std::endl;
 	return loc;
 }
 
@@ -318,9 +304,6 @@ std::vector<location>	fill_location(std::vector<std::string>& data)
 	std::vector<location>	locations;
 	for (size_t i = 0; i < data.size(); i++)
 	{
-		// std::cout << " ---------------- " << std::endl;
-		// std::cout << str_trim(data[i]) << std::endl;
-		// std::cout << " ---------------- " << std::endl;
 		locations.push_back((parse_one_location(str_trim(data[i]))));
 	}
 	return locations;
@@ -392,5 +375,6 @@ ConfigFile	start_parse(std::string config_file)
 
 	conf._servers = parse_servers(config_file);
 	errors_handling(conf._servers);
+	// print_servers(conf._servers);
 	return (conf);
 }
