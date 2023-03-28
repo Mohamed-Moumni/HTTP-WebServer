@@ -78,12 +78,14 @@ int find_server(ConnectSocket socket, ConfigFile configfile, Server & server)
 
     for(int i = 0; i < configfile._servers.size(); i++)
     {
-        if(configfile._servers[i]._listen.count(socket.IpAdress) && (configfile._servers[i]._listen[socket.IpAdress]).find(socket.Port) != (configfile._servers[i]._listen[socket.IpAdress]).end())
+        if((configfile._servers[i]._listen.count(socket.IpAdress) || configfile._servers[i]._listen.count("0.0.0.0"))
+        && (configfile._servers[i]._listen[socket.IpAdress]).find(socket.Port) != (configfile._servers[i]._listen[socket.IpAdress]).end())
             possible_servers.push_back(configfile._servers[i]);
     }
     for(int i = 0; i < possible_servers.size(); i++)
     {
-        if(std::find(possible_servers[i]._server_names.begin(), possible_servers[i]._server_names.end(), socket._request.headers_map["Host"]) == possible_servers[i]._server_names.end())
+        if(std::find(possible_servers[i]._server_names.begin(), possible_servers[i]._server_names.end(), socket._request.headers_map["Host"]) 
+        == possible_servers[i]._server_names.end())
             possible_servers.erase(possible_servers.begin() + i);
     }
     if(!possible_servers.size())
@@ -97,10 +99,12 @@ int find_server(ConnectSocket socket, ConfigFile configfile, Server & server)
         server = possible_servers[0];
     return 1;
 }
-int find_location(ConnectSocket socket)
+int find_location(ConnectSocket socket, Server server)
 {
-    
-
+    for(int i = 0; i < server._locations.size(); i++)
+    {
+        
+    }
     return 1;
 }
 
@@ -110,6 +114,8 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
 
 
     find_server(socket, configfile, server);
+    find_location(socket);
+    std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
 }
 
 int request_handler(ConnectSocket & socket, ConfigFile configfile)
