@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/29 08:39:00 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/29 09:27:59 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 class ConnectSocket
 {
     public:
-        int             CharReaded;
+        // int             CharReaded;
         int             ConnectSocketId;
         bool            ReadAvailble;
         bool            SendAvailble;
@@ -33,7 +33,6 @@ class ConnectSocket
         bool            Chuncked;
         bool            ReadFirst;
         long long       TimeOut;
-        size_t          ContentLength;
         std::string     IpAdress;
         std::string     Port;
         request         _request;
@@ -43,6 +42,7 @@ class ConnectSocket
         ConnectSocket(int SocketId, std::string _IpAdress, std::string _port);
         void    readRequest(void);
         void    readFirst(void);
+        void    availablity(void);
         void    sendResponse(void);
         void    getContentLength(void);
 };

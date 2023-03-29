@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/29 07:04:34 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/29 10:21:53 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,6 @@ void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _socke
     else
     {
         Connections[pfds[i].fd].readRequest();
-        std::cout << Connections[pfds[i].fd]._request.request_string << std::endl;
     }
 }
 
