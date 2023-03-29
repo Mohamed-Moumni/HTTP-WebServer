@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/27 14:20:14 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/29 06:49:54 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 		fill_allowed_methods(serv, vec);
 	else
 	{
+		std::cout << attr << std::endl;
 		exit_mode("SOMETHING WRONG");
 	}
 }
@@ -359,11 +360,11 @@ std::vector<Server>	parse_servers(std::string str)
 	std::string				line;
 	size_t					offset;
 
-	offset = str.find("server");
+	offset = str.find("server ");
 	while (offset != std::string::npos)
 	{
 		_vec_serv.push_back(parse_one_server(str, offset));
-		offset = str.find("server", offset + 1);
+		offset = str.find("server ", offset + 1);
 	}
 	return _vec_serv;
 }
@@ -375,6 +376,6 @@ ConfigFile	start_parse(std::string config_file)
 
 	conf._servers = parse_servers(config_file);
 	errors_handling(conf._servers);
-	// print_servers(conf._servers);
+	print_servers(conf._servers);
 	return (conf);
 }
