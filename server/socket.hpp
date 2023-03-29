@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:52 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/27 11:33:36 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/29 07:03:01 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,3 +56,4 @@ std::vector<pfd>    create_pfd(std::vector<Socket> & _sockets);
 void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map<int, ConnectSocket> & Connections, size_t i);
 void                pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i);
 void                pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i);
+void                closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i);

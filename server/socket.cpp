@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/27 11:53:25 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/29 07:04:34 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,18 +161,29 @@ void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _socke
         pfds.push_back(tmp_pfd);
         Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
     }
+    else
+    {
+        Connections[pfds[i].fd].readRequest();
+        std::cout << Connections[pfds[i].fd]._request.request_string << std::endl;
+    }
 }
 
 void                pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
-    (void) (pfds);
-    (void) (Connections);
-    (void) (i);
+    if (Connections.find(pfds[i].fd) != Connections.end())
+    {
+        Connections[pfds[i].fd].sendResponse();
+    }
 }
 
 void                pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
-    (void) (Connections);
+    closeConnection(pfds, Connections, i);
+}
+
+void                closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+{
     close(pfds[i].fd);
-    pfds.erase(pfds.begin()+i);
+    Connections.erase(pfds[i].fd);
+    pfds.erase(pfds.begin() + i);
 }
