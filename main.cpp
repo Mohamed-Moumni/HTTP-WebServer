@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/28 15:25:24 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/27 14:11:52 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	start_server(std::string & _config)
 	{
 		_config = read_file(_config);
 		configFile = start_parse_config_file(_config);
+		return ;
 		sockets = create_sockets(configFile);
 		listenSocket(sockets);
 		pfds = create_pfd(sockets);
