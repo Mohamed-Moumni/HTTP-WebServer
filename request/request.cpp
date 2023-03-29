@@ -114,7 +114,7 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
 
 
     find_server(socket, configfile, server);
-    find_location(socket);
+    // find_location(socket);
     std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
 }
 
