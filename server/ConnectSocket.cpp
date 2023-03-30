@@ -6,11 +6,14 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/29 10:24:54 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/30 14:53:23 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConnectSocket.hpp"
+#include "../server/ConnectSocket.hpp"
+#include "../configfile/configfile.hpp"
+#include "../request/request.class.hpp"
 
 ConnectSocket::ConnectSocket()
 {
@@ -33,36 +36,20 @@ ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _p
     ReadFirst = false;
 }
 
-void    ConnectSocket::readRequest(void)
+void    ConnectSocket::readRequest(ConfigFile & _configfile)
 {
     char    Buffer[BUFFER];
     int     CharReaded;
+    CharReaded = 0;
 
     if (!ReadFirst)
     {
         CharReaded += recv(ConnectSocketId, Buffer, BUFFER, 0);
         _request.request_string.append(std::string(Buffer,CharReaded));
-        // getContentLength();
-        // if (Chuncked)
-        // {
-        // }
-        // if (_request.ContentLen != 0)
-        // {
-        //     _request.bodyReaded += (CharReaded - _request.bodyStart);
-        //     availablity();
-        // }
-        // else
-        // {
-        //     availablity();
-        // }
-        ReadFirst = true;
     }
     else
     {
-        CharReaded += recv(ConnectSocketId, Buffer, BUFFER, 0);
-        _request.request_string.append(std::string(Buffer, CharReaded));
-        _request.ContentLen += CharReaded;
-        availablity();
+        
     }
 }
 
@@ -76,7 +63,7 @@ void    ConnectSocket::availablity(void)
 }
 
 
-void    ConnectSocket::sendResponse(void)
+void    ConnectSocket::sendResponse(ConfigFile & _configfile)
 {
     int CharSent;
 

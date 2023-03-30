@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 21:09:49 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/25 06:24:08 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/29 17:14:42 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ class ConfigFile
 		std::vector<Server>										_servers;
 };
 
-ConfigFile    		start_parse_config_file(std::string config_file);
+ConfigFile		start_parse_config_file(std::string config_file);
 void			check_syntax(std::string config_file);
 void			check_brackets(std::string std);
-ConfigFile			start_parse(std::string config_file);
+ConfigFile		start_parse(std::string config_file);
 void			exit_mode(std::string str);
 void			print_servers(std::vector<Server>& vec);
 bool			is_has_bracket(std::string s);
