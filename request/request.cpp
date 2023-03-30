@@ -1,11 +1,19 @@
 #include <iostream>
 #include <fstream>
 #include <deque>
-// #include "request.class.hpp"
-// #include "response.class.hpp"
 #include "../utils/utils.hpp"
 #include "../configfile/configfile.hpp"
 #include "../server/ConnectSocket.hpp"
+
+int prefix_match(std::string s1, std::string s2)
+{
+    int minm = std::min(s1.size(), s2.size());
+    int i = 0;
+
+    while(i < minm && s1[i] == s2[i])
+        i++;
+    return i;
+}
 
 int get_request_line(request &request)
 {
@@ -99,11 +107,18 @@ int find_server(ConnectSocket socket, ConfigFile configfile, Server & server)
         server = possible_servers[0];
     return 1;
 }
-int find_location(ConnectSocket socket, Server server)
+
+int find_location(ConnectSocket socket, Server server, location &final_location)
 {
+    int max_match = 0;
+
     for(int i = 0; i < server._locations.size(); i++)
     {
-        
+        if(prefix_match(socket._request.request_target, server._locations[i].path) > max_match)
+        {
+            final_location = server._locations[i];
+            max_match = prefix_match(socket._request.request_target, server._locations[i].path);
+        }
     }
     return 1;
 }
@@ -111,11 +126,12 @@ int find_location(ConnectSocket socket, Server server)
 int respond(ConnectSocket &socket, ConfigFile configfile)
 {
     Server server;
-
+    location location;
 
     find_server(socket, configfile, server);
-    // find_location(socket);
+    find_location(socket, server, location);
     std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
+    std::cout << "the chosen location is : " << location.path << std::endl;
 }
 
 int request_handler(ConnectSocket & socket, ConfigFile configfile)
@@ -150,9 +166,9 @@ int main()
     socket.IpAdress = "127.0.0.1";
     socket.Port = "8080";
     ConfigFile configfile = start_parse_config_file(read_file("../tests/def.conf"));
-    std::cout << configfile._servers[0]._index[0] << std::endl;
+    // std::cout << configfile._servers[0]._index[0] << std::endl;
 
-    socket._request.request_string  = "GET / HTTP/1.1\r\nHost: myserver\r\nConnection: close\r\n\r\nhello everybody here is the body";
+    socket._request.request_string  = "GET /ph HTTP/1.1\r\nHost: unknownserver\r\nConnection: close\r\n\r\nhello everybody here is the body";
     std::fstream out_file;
 
     out_file.open("out.html");
@@ -163,9 +179,9 @@ int main()
         return 0;
     }
     // out_file << response << std::endl;
-    std::cout << "HOST:" << socket._request.headers_map["Host"] << std::endl;
-    std::cout << "User-Agent:" << socket._request.headers_map["User-Agent"] << std::endl;
-    std::cout << "Accept:" << socket._request.headers_map["Accept"] << std::endl;
-    std::cout << "Connection:" << socket._request.headers_map["Connection"] << std::endl;
-    std::cout << "+++" << socket._request.request_body << "+++" << std::endl;
+    // std::cout << "HOST:" << socket._request.headers_map["Host"] << std::endl;
+    // std::cout << "User-Agent:" << socket._request.headers_map["User-Agent"] << std::endl;
+    // std::cout << "Accept:" << socket._request.headers_map["Accept"] << std::endl;
+    // std::cout << "Connection:" << socket._request.headers_map["Connection"] << std::endl;
+    // std::cout << "+++" << socket._request.request_body << "+++" << std::endl;
 }
