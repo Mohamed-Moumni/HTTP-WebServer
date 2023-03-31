@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/29 06:49:54 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/31 11:59:23 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,9 +349,56 @@ Server		parse_one_server(std::string str, size_t pos)
 
 	serv_data = data_of_server(str, pos);
 	fill_server(serv, serv_data);
+	// std::cout << "----- data -----" << std::endl;
+	// std::cout << serv_data << std::endl;
 	loc_data = get_data_of_scope(data_from_pos(str, pos));
 	serv._locations = fill_location(loc_data);
 	return serv;
+}
+
+bool	is_server_block(std::string str, size_t pos)
+{
+	str = data_from_pos(str, pos + 6);
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		if (!isspace(str[i]))
+			return str[i] == '{';
+	}
+	return false;
+}
+
+void	move_offset_to_next_server_block(std::string str, size_t &offset)
+{
+	// std::cout << "moving #############" << std::endl;
+	// std::cout << data_from_pos(str, offset);
+	size_t i = -1;
+	size_t bracket = 0;
+	while (str[++i])
+	{
+		if (bracket != 0)
+			break;
+		if (str[i] == '{')
+			bracket++;
+		else if (str[i] == '}')
+			bracket--;
+	}
+	if (bracket < 0)
+		exit_mode("FOUND CLOSE BRACKET");
+	while (str[++i])
+	{
+		if (bracket == 0)
+			break;
+		if (str[i] == '{')
+			bracket++;
+		else if (str[i] == '}')
+			bracket--;
+	}
+	// std::cout << "##########" << std::endl;
+	// std::cout << offset << std::endl;
+	// std::cout << i << std::endl;
+	// std::cout << str.length() << std::endl;
+	// std::cout << "##########" << std::endl;
+	offset += i;
 }
 
 std::vector<Server>	parse_servers(std::string str)
@@ -360,12 +407,17 @@ std::vector<Server>	parse_servers(std::string str)
 	std::string				line;
 	size_t					offset;
 
-	offset = str.find("server ");
+	offset = str.find("server");
 	while (offset != std::string::npos)
 	{
-		_vec_serv.push_back(parse_one_server(str, offset));
-		offset = str.find("server ", offset + 1);
+		if (is_server_block(str, offset))
+		{
+			_vec_serv.push_back(parse_one_server(str, offset));
+			move_offset_to_next_server_block(str, offset);
+		}
+		offset = str.find("server", offset + 1);
 	}
+	exit(0);
 	return _vec_serv;
 }
 
