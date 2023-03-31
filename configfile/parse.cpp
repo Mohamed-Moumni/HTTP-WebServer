@@ -417,7 +417,6 @@ std::vector<Server>	parse_servers(std::string str)
 		}
 		offset = str.find("server", offset + 1);
 	}
-	exit(0);
 	return _vec_serv;
 }
 

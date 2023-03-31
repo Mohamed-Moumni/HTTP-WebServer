@@ -73,14 +73,14 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
     }
 }
 
-std::string ConnectSocket::getChunckedbody(void)
-{
-    std::string body;
-    size_t      contentLength;
+// std::string ConnectSocket::getChunckedbody(void)
+// {
+//     std::string body;
+//     size_t      contentLength;
 
-    body = "";
-        
-}
+//     body = "";
+//     return 
+// }
 
 void    ConnectSocket::readChuncked(void)
 {
