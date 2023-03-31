@@ -4,7 +4,8 @@
 #include "../configfile/configfile.hpp"
 #include "../request/request.class.hpp"
 #include "../request/response.class.hpp"
+#include "../server/ConnectSocket.hpp"
 
-int request_handler(request &request, response &response, ConfigFile configfile);
+int request_handler(ConnectSocket & socket, ConfigFile configfile);
 
 #endif

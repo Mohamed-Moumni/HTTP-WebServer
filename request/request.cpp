@@ -47,7 +47,7 @@ int get_request_headers(request &request)
     else
         return 0;
     header_lines = str_split(header_string, "\r\n");
-    for(int i = 0; i < header_lines.size(); i++)
+    for(size_t i = 0; i < header_lines.size(); i++)
     {
         key_value.clear();
         key_value = header_spliter(header_lines[i]);
@@ -80,17 +80,18 @@ int possible_error(ConnectSocket &socket)
 {
     //todo
 }
+
 int find_server(ConnectSocket socket, ConfigFile configfile, Server & server)
 {
     std::deque<Server> possible_servers;
 
-    for(int i = 0; i < configfile._servers.size(); i++)
+    for(size_t i = 0; i < configfile._servers.size(); i++)
     {
         if((configfile._servers[i]._listen.count(socket.IpAdress) || configfile._servers[i]._listen.count("0.0.0.0"))
         && (configfile._servers[i]._listen[socket.IpAdress]).find(socket.Port) != (configfile._servers[i]._listen[socket.IpAdress]).end())
             possible_servers.push_back(configfile._servers[i]);
     }
-    for(int i = 0; i < possible_servers.size(); i++)
+    for(size_t i = 0; i < possible_servers.size(); i++)
     {
         if(std::find(possible_servers[i]._server_names.begin(), possible_servers[i]._server_names.end(), socket._request.headers_map["Host"]) 
         == possible_servers[i]._server_names.end())
@@ -112,7 +113,7 @@ int find_location(ConnectSocket socket, Server server, location &final_location)
 {
     int max_match = 0;
 
-    for(int i = 0; i < server._locations.size(); i++)
+    for(size_t i = 0; i < server._locations.size(); i++)
     {
         if(prefix_match(socket._request.request_target, server._locations[i].path) > max_match)
         {
@@ -136,6 +137,7 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
 
 int request_handler(ConnectSocket & socket, ConfigFile configfile)
 {
+    (void)(configfile);
     if(!pars_request(socket._request))
         return 0;
     if(!possible_error(socket))

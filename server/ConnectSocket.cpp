@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/30 14:53:23 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/31 10:57:44 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../server/ConnectSocket.hpp"
 #include "../configfile/configfile.hpp"
 #include "../request/request.class.hpp"
+#include "../request/request.hpp"
 
 ConnectSocket::ConnectSocket()
 {
@@ -32,6 +33,8 @@ ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _p
     IpAdress = _IpAdress;
     Port = _port;
     _request.request_string = "";
+    ReadAvailble = true;
+    SendAvailble = false;
     Chuncked = false;
     ReadFirst = false;
 }
@@ -40,17 +43,61 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
 {
     char    Buffer[BUFFER];
     int     CharReaded;
-    CharReaded = 0;
 
-    if (!ReadFirst)
+    (void)(_configfile);
+    CharReaded = 0;
+    if (ReadAvailble)
     {
-        CharReaded += recv(ConnectSocketId, Buffer, BUFFER, 0);
-        _request.request_string.append(std::string(Buffer,CharReaded));
+        if (!ReadFirst)
+        {
+            CharReaded += recv(ConnectSocketId, Buffer, BUFFER, 0);
+            _request.request_string.append(std::string(Buffer,CharReaded));
+                ReadAvailble = false;
+                SendAvailble = true;
+            // request_handler(*this, _configfile);
+        }
+        else
+        {
+            // if (this->Chuncked)
+            // {
+            //     readChuncked();
+            // }
+            // else
+            // {
+            //     readContentLength();
+            // }
+            // if (_request.ContentLen == _request.bodyReaded)
+            // {
+            // }
+        }
     }
-    else
-    {
+}
+
+std::string ConnectSocket::getChunckedbody(void)
+{
+    std::string body;
+    size_t      contentLength;
+
+    body = "";
         
-    }
+}
+
+void    ConnectSocket::readChuncked(void)
+{
+       
+}
+
+void    ConnectSocket::readContentLength(void)
+{
+    
+}
+
+long long   getTimeOfnow(void)
+{
+    struct timeval time;
+
+    gettimeofday(&time, NULL);
+    return(time.tv_sec + time.tv_usec / 1000000);
 }
 
 void    ConnectSocket::availablity(void)
@@ -62,11 +109,11 @@ void    ConnectSocket::availablity(void)
     }
 }
 
-
-void    ConnectSocket::sendResponse(ConfigFile & _configfile)
+void    ConnectSocket::sendResponse( void )
 {
     int CharSent;
 
+    CharSent = 0;
     if (SendAvailble)
     {
         CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.ContentLength, 0);
@@ -82,22 +129,3 @@ void    ConnectSocket::sendResponse(ConfigFile & _configfile)
         }
     }
 }
-
-// void    ConnectSocket::getContentLength(void)
-// {
-//     std::map<std::string, std::string>::iterator contentLenHeader;
-//     std::map<std::string, std::string>::iterator TeHeader;
-//     TeHeader = _request.headers_map.find("Transfer-Encoding");
-//     contentLenHeader = _request.headers_map.find("Content-Length");
-//     if ( TeHeader != _request.headers_map.end() )
-//     {
-//         if (!(*TeHeader).second.compare("chunked"))
-//             Chuncked = true;
-//         else
-//             Chuncked = false;
-//     }
-//     if ( contentLenHeader != _request.headers_map.end() )
-//     {
-//         ContentLength = std::stoi((*contentLenHeader).second);
-//     }
-// }

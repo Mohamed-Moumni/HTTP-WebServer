@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/30 14:33:39 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/30 17:59:26 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,20 @@
 #include <map>
 #include <vector>
 #include <unistd.h>
+#include <sys/time.h>
 #include "../request/request.class.hpp"
 #include "../request/response.class.hpp"
+#include "../configfile/configfile.hpp"
 
 #define BUFFER 1024
 
 class ConnectSocket
 {
     public:
-        // int             CharReaded;
         int             ConnectSocketId;
         bool            ReadAvailble;
         bool            SendAvailble;
-        bool            persistance;
+        bool            ConnectionType;
         bool            Chuncked;
         bool            ReadFirst;
         long long       TimeOut;
@@ -40,9 +41,14 @@ class ConnectSocket
         ~ConnectSocket();
         ConnectSocket();
         ConnectSocket(int SocketId, std::string _IpAdress, std::string _port);
-        void    readRequest(ConfigFile & _configfile);
-        void    readFirst(void);
-        void    availablity(void);
-        void    sendResponse(ConfigFile & _configfile);
-        void    getContentLength(void);
+        void        readRequest(ConfigFile & _configfile);
+        void        readFirst(void);
+        void        availablity(void);
+        void        sendResponse( void );
+        void        getContentLength(void);
+        void        readChuncked(void);
+        void        readContentLength(void);
+        std::string getChunckedbody(void);
 };
+
+long long   getTimeOfnow(void);

@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/30 14:19:47 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/30 18:15:14 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	start_server(std::string & _config)
 			}
 			if (pfds[i].revents & POLLOUT)
 			{
-				pollout(configFile, pfds, Connections, i);	
+				// pollout(pfds, Connections, i);
 			}
 			if (pfds[i].revents & (POLLERR | POLLHUP))
 			{

@@ -6,7 +6,7 @@ class response
 {
     public:
         std::string response_string;
-        int      ContentLength;
+        int         ContentLength;
         int         CharSent;
 };
 
