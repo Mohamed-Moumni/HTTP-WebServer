@@ -79,6 +79,7 @@ int pars_request(request &request)
 int possible_error(ConnectSocket &socket)
 {
     //todo
+    return 1;
 }
 
 int find_server(ConnectSocket socket, ConfigFile configfile, Server & server)
@@ -131,8 +132,10 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
 
     find_server(socket, configfile, server);
     find_location(socket, server, location);
+
     std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
     std::cout << "the chosen location is : " << location.path << std::endl;
+    return 1;
 }
 
 int request_handler(ConnectSocket & socket, ConfigFile configfile)
@@ -172,14 +175,17 @@ int main()
 
     socket._request.request_string  = "GET /ph HTTP/1.1\r\nHost: unknownserver\r\nConnection: close\r\n\r\nhello everybody here is the body";
     std::fstream out_file;
-
     out_file.open("out.html");
 
-    if(!request_handler(socket, configfile))
-    {
-        std::cout << "request error" << std::endl;
-        return 0;
-    }
+    // if(!request_handler(socket, configfile))
+    // {
+    //     std::cout << "request error" << std::endl;
+    //     return 0;
+    // }
+
+    for(int i = 0; i < configfile._servers.size(); i++)
+        std::cout << configfile._servers[i]._server_names[0] << std::endl;
+
     // out_file << response << std::endl;
     // std::cout << "HOST:" << socket._request.headers_map["Host"] << std::endl;
     // std::cout << "User-Agent:" << socket._request.headers_map["User-Agent"] << std::endl;
