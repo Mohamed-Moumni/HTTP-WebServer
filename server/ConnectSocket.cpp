@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConnectSocket.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/31 10:57:44 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/31 14:01:22 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,14 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
     }
 }
 
-std::string ConnectSocket::getChunckedbody(void)
-{
-    std::string body;
-    size_t      contentLength;
+// std::string ConnectSocket::getChunckedbody(void)
+// {
+//     std::string body;
+//     size_t      contentLength;
 
-    body = "";
+//     body = "";
         
-}
+// }
 
 void    ConnectSocket::readChuncked(void)
 {
