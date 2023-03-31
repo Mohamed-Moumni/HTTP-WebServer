@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/27 11:53:25 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/30 18:16:16 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ std::vector<Socket> create_sockets(ConfigFile & _configfile)
     return (_sockets);
 }
 
-void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map<int, ConnectSocket> & Connections, size_t i)
+void    pollin(ConfigFile & _configfile, std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map<int, ConnectSocket> & Connections, size_t i)
 {
     int connection;
     pfd tmp_pfd;
@@ -161,18 +161,35 @@ void                pollin(std::vector<pfd> & pfds, std::vector<Socket> & _socke
         pfds.push_back(tmp_pfd);
         Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
     }
+    else
+    {
+        Connections[pfds[i].fd].readRequest(_configfile);
+        std::cout << Connections[pfds[i].fd]._request.request_string << std::endl;
+    }
 }
 
-void                pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+void    pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
-    (void) (pfds);
-    (void) (Connections);
-    (void) (i);
+    if (Connections.find(pfds[i].fd) != Connections.end())
+    {
+        Connections[pfds[i].fd].sendResponse();
+        if (Connections[pfds[i].fd].ConnectionType)
+            closeConnection(pfds, Connections, i);
+    }
 }
 
-void                pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+void    pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
-    (void) (Connections);
+    closeConnection(pfds, Connections, i);
+}
+
+void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+{
     close(pfds[i].fd);
-    pfds.erase(pfds.begin()+i);
+    Connections.erase(pfds[i].fd);
+    pfds.erase(pfds.begin() + i);
 }
+
+// void    sendError(int fd, std::vector<pfd> &pfds, std::map<int, ConnectSocket> & connections, ConfigFile & _configfile, std::string _Error)
+// {   
+// }

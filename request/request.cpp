@@ -1,11 +1,19 @@
 #include <iostream>
 #include <fstream>
 #include <deque>
-#include "request.class.hpp"
-#include "response.class.hpp"
 #include "../utils/utils.hpp"
 #include "../configfile/configfile.hpp"
-#include "../configfile/server.hpp"
+#include "../server/ConnectSocket.hpp"
+
+int prefix_match(std::string s1, std::string s2)
+{
+    int minm = std::min(s1.size(), s2.size());
+    int i = 0;
+
+    while(i < minm && s1[i] == s2[i])
+        i++;
+    return i;
+}
 
 int get_request_line(request &request)
 {
@@ -39,7 +47,7 @@ int get_request_headers(request &request)
     else
         return 0;
     header_lines = str_split(header_string, "\r\n");
-    for(int i = 0; i < header_lines.size(); i++)
+    for(size_t i = 0; i < header_lines.size(); i++)
     {
         key_value.clear();
         key_value = header_spliter(header_lines[i]);
@@ -68,63 +76,114 @@ int pars_request(request &request)
     return 1;
 }
 
-int possible_error(request request, response &response)
+int possible_error(ConnectSocket &socket)
 {
     //todo
 }
-int find_server(ConfigFile configfile, Server & server)
+
+int find_server(ConnectSocket socket, ConfigFile configfile, Server & server)
 {
     std::deque<Server> possible_servers;
 
-    // for(int i = 0; i < configfile._servers.size(); i++)
-    // {
-    //     if(configfile.)
-    // }
-
-
+    for(size_t i = 0; i < configfile._servers.size(); i++)
+    {
+        if((configfile._servers[i]._listen.count(socket.IpAdress) || configfile._servers[i]._listen.count("0.0.0.0"))
+        && (configfile._servers[i]._listen[socket.IpAdress]).find(socket.Port) != (configfile._servers[i]._listen[socket.IpAdress]).end())
+            possible_servers.push_back(configfile._servers[i]);
+    }
+    for(size_t i = 0; i < possible_servers.size(); i++)
+    {
+        if(std::find(possible_servers[i]._server_names.begin(), possible_servers[i]._server_names.end(), socket._request.headers_map["Host"]) 
+        == possible_servers[i]._server_names.end())
+            possible_servers.erase(possible_servers.begin() + i);
+    }
+    if(!possible_servers.size())
+    {
+        if(!configfile._servers.size())
+            return 0;
+        else
+            server = configfile._servers[0];
+    }
+    else
+        server = possible_servers[0];
+    return 1;
 }
 
-int respond(request request, response &respond, ConfigFile configfile)
+int find_location(ConnectSocket socket, Server server, location &final_location)
+{
+    int max_match = 0;
+
+    for(size_t i = 0; i < server._locations.size(); i++)
+    {
+        if(prefix_match(socket._request.request_target, server._locations[i].path) > max_match)
+        {
+            final_location = server._locations[i];
+            max_match = prefix_match(socket._request.request_target, server._locations[i].path);
+        }
+    }
+    return 1;
+}
+
+int respond(ConnectSocket &socket, ConfigFile configfile)
 {
     Server server;
+    location location;
 
-    find_server(configfile, server);
+    find_server(socket, configfile, server);
+    find_location(socket, server, location);
+    std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
+    std::cout << "the chosen location is : " << location.path << std::endl;
 }
 
-int request_handler(request &request, response &response, ConfigFile configfile)
+int request_handler(ConnectSocket & socket, ConfigFile configfile)
 {
-    if(!pars_request(request))
+    (void)(configfile);
+    if(!pars_request(socket._request))
         return 0;
-    if(!possible_error(request, response))
+    if(!possible_error(socket))
         return 0;
-    if(!respond(request, response, configfile))
+    if(!respond(socket, configfile))
         return 0;
 
     return 1;
 }
 
+std::string		read_file(std::string file_name)
+{
+	std::string	data;
+	std::string	tmp;
+
+	std::ifstream	file(file_name);
+	while (getline(file, tmp))
+	{
+		data += tmp;
+		data += "\n";
+	}
+	return data;
+}
+
 int main()
 {
-    request request;
-    response response;
-    ConfigFile configfile;
+    ConnectSocket socket;
+    socket.IpAdress = "127.0.0.1";
+    socket.Port = "8080";
+    ConfigFile configfile = start_parse_config_file(read_file("../tests/def.conf"));
+    // std::cout << configfile._servers[0]._index[0] << std::endl;
 
-    request.request_string  = "GET / HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\nhello everybody here is the body";
+    socket._request.request_string  = "GET /ph HTTP/1.1\r\nHost: unknownserver\r\nConnection: close\r\n\r\nhello everybody here is the body";
     std::fstream out_file;
 
     out_file.open("out.html");
 
-    if(!request_handler(request, response, configfile))
+    if(!request_handler(socket, configfile))
     {
         std::cout << "request error" << std::endl;
         return 0;
     }
     // out_file << response << std::endl;
-    std::cout << "HOST:" << request.headers_map["Host"] << std::endl;
-    std::cout << "User-Agent:" << request.headers_map["User-Agent"] << std::endl;
-    std::cout << "Accept:" << request.headers_map["Accept"] << std::endl;
-    std::cout << "Connection:" << request.headers_map["Connection"] << std::endl;
-    std::cout << "+++" << request.request_body << "+++" << std::endl;
-
-    
+    // std::cout << "HOST:" << socket._request.headers_map["Host"] << std::endl;
+    // std::cout << "User-Agent:" << socket._request.headers_map["User-Agent"] << std::endl;
+    // std::cout << "Accept:" << socket._request.headers_map["Accept"] << std::endl;
+    // std::cout << "Connection:" << socket._request.headers_map["Connection"] << std::endl;
+    // std::cout << "+++" << socket._request.request_body << "+++" << std::endl;
 }
