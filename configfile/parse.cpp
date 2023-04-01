@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/31 14:05:30 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/01 17:30:04 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 		fill_allowed_methods(serv, vec);
 	else
 	{
-		std::cout << attr << std::endl;
+		// std::cout << attr << std::endl;
 		exit_mode("SOMETHING WRONG");
 	}
 }
@@ -362,7 +362,11 @@ bool	is_server_block(std::string str, size_t pos)
 	for (size_t i = 0; i < str.length(); i++)
 	{
 		if (!isspace(str[i]))
-			return str[i] == '{';
+		{
+			if (str[i] != '{')
+				exit_mode("AGAIN DAKHAL SERVER BLOCK M9AD AWELD NAS");
+			return true;
+		}
 	}
 	return false;
 }
@@ -423,6 +427,6 @@ ConfigFile	start_parse(std::string config_file)
 	conf._servers = parse_servers(config_file);
 	errors_handling(conf._servers);
 	print_servers(conf._servers);
-	exit(0);
+	// exit(0);
 	return (conf);
 }
