@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/30 17:59:26 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/01 11:34:12 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <sys/socket.h>
+#include <math.h>
 #include <map>
 #include <vector>
 #include <unistd.h>
@@ -22,7 +23,7 @@
 #include "../request/response.class.hpp"
 #include "../configfile/configfile.hpp"
 
-#define BUFFER 1024
+#define BUFFER 10200
 
 class ConnectSocket
 {
@@ -33,6 +34,7 @@ class ConnectSocket
         bool            ConnectionType;
         bool            Chuncked;
         bool            ReadFirst;
+        
         long long       TimeOut;
         std::string     IpAdress;
         std::string     Port;
@@ -48,7 +50,9 @@ class ConnectSocket
         void        getContentLength(void);
         void        readChuncked(void);
         void        readContentLength(void);
-        std::string getChunckedbody(void);
+        void        FirstRead(ConfigFile & _configfile);
+        std::string getChunckedbody(std::string _req);
 };
 
 long long   getTimeOfnow(void);
+size_t      hex2dec(std::string & hex);
