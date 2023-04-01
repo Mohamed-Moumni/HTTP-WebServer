@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/01 11:34:12 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/01 14:43:40 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,10 @@ class ConnectSocket
         ConnectSocket(int SocketId, std::string _IpAdress, std::string _port);
         void        readRequest(ConfigFile & _configfile);
         void        readFirst(void);
-        void        availablity(void);
         void        sendResponse( void );
         void        getContentLength(void);
         void        readChuncked(void);
-        void        readContentLength(void);
+        void        readUnChuncked(void);
         void        FirstRead(ConfigFile & _configfile);
         std::string getChunckedbody(std::string _req);
 };
