@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/29 14:18:00 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/31 14:05:30 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,9 +349,49 @@ Server		parse_one_server(std::string str, size_t pos)
 
 	serv_data = data_of_server(str, pos);
 	fill_server(serv, serv_data);
+	// std::cout << "----- data -----" << std::endl;
+	// std::cout << serv_data << std::endl;
 	loc_data = get_data_of_scope(data_from_pos(str, pos));
 	serv._locations = fill_location(loc_data);
 	return serv;
+}
+
+bool	is_server_block(std::string str, size_t pos)
+{
+	str = data_from_pos(str, pos + 6);
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		if (!isspace(str[i]))
+			return str[i] == '{';
+	}
+	return false;
+}
+
+void	move_offset_to_next_server_block(std::string str, size_t &offset)
+{
+	size_t i = -1;
+	size_t bracket = 0;
+	while (str[++i])
+	{
+		if (bracket != 0)
+			break;
+		if (str[i] == '{')
+			bracket++;
+		else if (str[i] == '}')
+			bracket--;
+	}
+	if (bracket < 0)
+		exit_mode("FOUND CLOSE BRACKET");
+	while (str[++i])
+	{
+		if (bracket == 0)
+			break;
+		if (str[i] == '{')
+			bracket++;
+		else if (str[i] == '}')
+			bracket--;
+	}
+	offset += i;
 }
 
 std::vector<Server>	parse_servers(std::string str)
@@ -360,11 +400,17 @@ std::vector<Server>	parse_servers(std::string str)
 	std::string				line;
 	size_t					offset;
 
-	offset = str.find("server ");
+	offset = str.find("server");
+	if (offset)
+		exit_mode("DAKHAL SERVER M9AD MN ZAMLA DYAL WALOU");
 	while (offset != std::string::npos)
 	{
-		_vec_serv.push_back(parse_one_server(str, offset));
-		offset = str.find("server ", offset + 1);
+		if (is_server_block(str, offset))
+		{
+			_vec_serv.push_back(parse_one_server(str, offset));
+			move_offset_to_next_server_block(str, offset);
+		}
+		offset = str.find("server", offset + 1);
 	}
 	return _vec_serv;
 }
@@ -376,6 +422,7 @@ ConfigFile	start_parse(std::string config_file)
 
 	conf._servers = parse_servers(config_file);
 	errors_handling(conf._servers);
-	// print_servers(conf._servers);
+	print_servers(conf._servers);
+	exit(0);
 	return (conf);
 }
