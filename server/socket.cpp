@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/30 18:16:16 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/03/31 11:43:00 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,6 @@ void    pollin(ConfigFile & _configfile, std::vector<pfd> & pfds, std::vector<So
     else
     {
         Connections[pfds[i].fd].readRequest(_configfile);
-        std::cout << Connections[pfds[i].fd]._request.request_string << std::endl;
     }
 }
 
