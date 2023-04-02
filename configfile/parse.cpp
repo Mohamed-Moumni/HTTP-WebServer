@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 17:33:02 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/02 17:51:33 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,6 +277,20 @@ std::vector<std::string>	get_data_of_scope(std::string str)
 	return loc;
 }
 
+void	check_path_validity(std::string data, std::string path)
+{
+	std::string s = "";
+
+	for (size_t i = 0; i < data.length(); i++)
+	{
+		if (data[i] == '{')
+			break;
+		s += data[i];
+	}
+	if (path[0] != '/')
+		exit_mode("THE PATH OF LOCATION SHOULD START WITH '/'");
+}
+
 std::string		abstract_path(std::string data)
 {
 	std::string str;
@@ -290,7 +304,9 @@ std::string		abstract_path(std::string data)
 			break;
 	}
 	reverse(res.begin(), res.end());
-	return str_trim(res);
+	res = str_trim(res);
+	check_path_validity(data, res);
+	return res;
 }
 
 void	print_vector(std::vector<std::string>& v)
