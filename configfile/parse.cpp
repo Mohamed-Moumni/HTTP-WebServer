@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 15:13:47 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/02 16:41:07 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,19 +336,12 @@ location	parse_one_location(std::string data)
 {
 	location	loc;
 	std::vector<std::string> vec = str_split(data, '\n');
-	std::vector<std::string> v;
 	
 	loc.path = abstract_path(vec[0]);
 	for (size_t i = 1; i < vec.size(); i++)
 	{
+		std::cout << "line is : " << vec[i] << std::endl;
 		fill_location_attr(loc, vec[i]);
-		// std::vector<std::string> line = str_split(vec[i], ' ');
-		// for (size_t j = 1; j < line.size(); j++)
-		// {
-		// 	v.push_back(line[j]);
-		// }
-		// loc._location_attr.insert(std::make_pair(line[0], v));
-		v.clear();
 	}
 	return loc;
 }
