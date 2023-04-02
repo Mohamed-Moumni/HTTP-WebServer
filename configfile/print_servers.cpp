@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:53:14 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 13:54:01 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/02 14:01:57 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,17 @@ void	print_error_pages(Server& vec)
 	}
 }
 
+void	print_return(Server& vec)
+{
+	std::cout << "####### RETURN #######" << std::endl;
+	std::map<std::string, std::string>::iterator it = vec._return.begin();
+
+	for (; it != vec._return.end(); it++)
+	{
+		std::cout << it->first << " " << it->second << std::endl;
+	}
+}
+
 // void	print_locations(Server& serv)
 // {
 // 	std::vector<location> loc = serv._locations;
@@ -94,6 +105,7 @@ void	print_servers(std::vector<Server>& vec)
 		print_server_names(vec[i]);
 		print_index(vec[i]);
 		print_error_pages(vec[i]);
+		print_return(vec[i]);
 		// print_locations(vec[i]);
 	}
 }

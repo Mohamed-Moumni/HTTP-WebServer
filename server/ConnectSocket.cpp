@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConnectSocket.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/01 13:18:13 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/02 13:19:36 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,51 +39,51 @@ ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _p
     ReadFirst = false;
 }
 
-void    ConnectSocket::readRequest(ConfigFile & _configfile)
-{
-    char    Buffer[BUFFER];
-    int     CharReaded;
+// void    ConnectSocket::readRequest(ConfigFile & _configfile)
+// {
+//     // char    Buffer[BUFFER];
+//     int     CharReaded;
 
-    (void)(_configfile);
-    CharReaded = 0;
-    if (ReadAvailble)
-    {
-        if (!ReadFirst)
-        {
-            FirstRead(_configfile);
-        }
-        else
-        {
-            if (this->Chuncked)
-                readChuncked();
-            else    
-                readContentLength();
-            if (_request.ContentLen == 0)
-            {
-                ReadAvailble = false;
-                SendAvailble = true;
-            }
-        }
-    }
-}
+//     (void)(_configfile);
+//     CharReaded = 0;
+//     if (ReadAvailble)
+//     {
+//         if (!ReadFirst)
+//         {
+//             FirstRead(_configfile);
+//         }
+//         else
+//         {
+//             if (this->Chuncked)
+//                 // readChuncked();
+//             else    
+//                 readContentLength();
+//             if (_request.ContentLen == 0)
+//             {
+//                 ReadAvailble = false;
+//                 SendAvailble = true;
+//             }
+//         }
+//     }
+// }
 
-void    ConnectSocket::FirstRead(ConfigFile & _configfile)
-{
-    int     CharRead;
-    char    Buffer[BUFFER];
+// void    ConnectSocket::FirstRead(ConfigFile & _configfile)
+// {
+//     int     CharRead;
+//     char    Buffer[BUFFER];
 
-    CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
-    _request.request_string.append(std::string(Buffer, CharRead));
-    request_handler(*this, _configfile);
-    if (Chuncked)
-    {
-        readChuncked()
-    }
-    else
-    {
+//     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
+//     _request.request_string.append(std::string(Buffer, CharRead));
+//     request_handler(*this, _configfile);
+//     if (Chuncked)
+//     {
+//         readChuncked()
+//     }
+//     else
+//     {
         
-    }
-}
+//     }
+// }
 
 size_t  hex2dec(std::string hex)
 {

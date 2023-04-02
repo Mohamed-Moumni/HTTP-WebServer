@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 13:58:19 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/02 14:01:02 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,6 @@ void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 		fill_return(serv, vec);
 	else
 	{
-		// std::cout << attr << std::endl;
 		exit_mode("SOMETHING WRONG");
 	}
 }
