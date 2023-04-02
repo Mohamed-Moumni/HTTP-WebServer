@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 16:41:07 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/02 17:33:02 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,18 @@ void	fill_allowed_methods(T& fill, std::vector<std::string>& vec)
 	}
 }
 
+void	fill_string_attr(Server& serv, std::vector<std::string>& vec)
+{
+	if (vec.size() != 2)
+		exit_mode("NUM OF ARGS IS NOT VALID CHECK(ROOT/AUTOINDEX/CLIENT__SIZE)");
+	if (vec[0] == "client_max_body_size")
+		serv._client_max_body_size = vec[1];
+	else if (vec[0] == "root")
+		serv._root = vec[1];
+	else if (vec[0] == "autoindex")
+		serv._autoindex = vec[1];
+}
+
 void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 {
 	std::string		attr = vec[0];
@@ -146,12 +158,8 @@ void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 		fill_index(serv, vec);
 	else if (attr == "error_page")
 		fill_error_pages(serv, vec);
-	else if (attr == "client_max_body_size")
-		serv._client_max_body_size = vec[1];
-	else if (attr == "root")
-		serv._root = vec[1];
-	else if (attr == "autoindex")
-		serv._autoindex = vec[1];
+	else if (attr == "client_max_body_size" || attr == "root" || attr == "autoindex")
+		fill_string_attr(serv, vec);
 	else if (attr == "allowed_methods")
 		fill_allowed_methods(serv, vec);
 	else if (attr == "return")
@@ -340,7 +348,6 @@ location	parse_one_location(std::string data)
 	loc.path = abstract_path(vec[0]);
 	for (size_t i = 1; i < vec.size(); i++)
 	{
-		std::cout << "line is : " << vec[i] << std::endl;
 		fill_location_attr(loc, vec[i]);
 	}
 	return loc;
