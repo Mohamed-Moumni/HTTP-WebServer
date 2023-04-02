@@ -125,6 +125,33 @@ int find_location(ConnectSocket socket, Server server, location &final_location)
     return 1;
 }
 
+void GET()
+{
+    //to add an "if statement" that check if the request target is a dir and append index to it
+    //to add an "if statement" that check if the request target is still a dir and the autoindex is on
+    //-------->// if the autoindex is off and the the directory exist responde with 403 Forbidden else responde with 404 Not Found if the requested directory does not exist
+
+    //check if the content is dynamic or static and server each one separatly
+    
+}
+void POST()
+{}
+void DELETE()
+{}
+
+int response_generator(ConnectSocket socket, Server server, location location)
+{
+    if(socket._request.method == "GET")
+        GET();
+    else if(socket._request.method == "POST")
+        POST();
+    else if(socket._request.method == "DELETE")
+        DELETE();
+    else
+        //responde with 501 Not Implemented
+    
+}
+
 int respond(ConnectSocket &socket, ConfigFile configfile)
 {
     Server server;
@@ -132,7 +159,9 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
 
     find_server(socket, configfile, server);
     find_location(socket, server, location);
-
+    //to add a check for the redirection
+    response_generator(socket, server, location);
+    
     std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
     std::cout << "the chosen location is : " << location.path << std::endl;
     return 1;
@@ -147,7 +176,6 @@ int request_handler(ConnectSocket & socket, ConfigFile configfile)
         return 0;
     if(!respond(socket, configfile))
         return 0;
-
     return 1;
 }
 

@@ -31,7 +31,6 @@ class Server
 		std::vector<location>								_locations;
 		std::map<std::string, std::string>					_error_pages;
 		std::string											_client_max_body_size;
-
 	public:
 		Server();
 		~Server();

@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/31 13:29:53 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/03/31 14:05:30 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -369,8 +369,6 @@ bool	is_server_block(std::string str, size_t pos)
 
 void	move_offset_to_next_server_block(std::string str, size_t &offset)
 {
-	// std::cout << "moving #############" << std::endl;
-	// std::cout << data_from_pos(str, offset);
 	size_t i = -1;
 	size_t bracket = 0;
 	while (str[++i])
@@ -393,11 +391,6 @@ void	move_offset_to_next_server_block(std::string str, size_t &offset)
 		else if (str[i] == '}')
 			bracket--;
 	}
-	// std::cout << "##########" << std::endl;
-	// std::cout << offset << std::endl;
-	// std::cout << i << std::endl;
-	// std::cout << str.length() << std::endl;
-	// std::cout << "##########" << std::endl;
 	offset += i;
 }
 
@@ -408,6 +401,8 @@ std::vector<Server>	parse_servers(std::string str)
 	size_t					offset;
 
 	offset = str.find("server");
+	if (offset)
+		exit_mode("DAKHAL SERVER M9AD MN ZAMLA DYAL WALOU");
 	while (offset != std::string::npos)
 	{
 		if (is_server_block(str, offset))
@@ -428,5 +423,6 @@ ConfigFile	start_parse(std::string config_file)
 	conf._servers = parse_servers(config_file);
 	errors_handling(conf._servers);
 	// print_servers(conf._servers);
+	// exit(0);
 	return (conf);
 }
