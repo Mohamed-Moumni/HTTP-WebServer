@@ -140,11 +140,10 @@ int request_handler(ConnectSocket & socket, ConfigFile configfile)
     (void)(configfile);
     if(!pars_request(socket._request))
         return 0;
-    if(!possible_error(socket))
-        return 0;
-    if(!respond(socket, configfile))
-        return 0;
-
+    // if(!possible_error(socket))
+    //     return 0;
+    // if(!respond(socket, configfile))
+    //     return 0;
     return 1;
 }
 

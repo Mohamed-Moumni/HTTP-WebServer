@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/01 15:31:16 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/02 15:47:47 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,27 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
     }
 }
 
+void        ConnectSocket::requestType(void)
+{
+    std::map<std::string , std::string>::iterator Te;
+    std::map<std::string , std::string>::iterator Cl;
+    Te = _request.headers_map.find("Transfer-Encoding");
+    Cl = _request.headers_map.find("Content-Length");
+    if ( Te != _request.headers_map.end())
+    {
+        if (Te->second == "Chuncked")
+            Chuncked = true;
+    }
+    else if (Cl != _request.headers_map.end())
+    {
+        _request.ContentLen = atol(Cl->second.c_str());
+    }
+    else
+    {
+        _request.ContentLen = -1;
+    }
+}
+
 void    ConnectSocket::FirstRead(ConfigFile & _configfile)
 {
     int     CharRead;
@@ -81,6 +102,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
     _request.request_string.append(std::string(Buffer, CharRead));
     request_handler(*this, _configfile);
+    requestType();
     if (Chuncked)
         readChuncked();
     else
