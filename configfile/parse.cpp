@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 17:51:33 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/02 17:52:29 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,6 +287,8 @@ void	check_path_validity(std::string data, std::string path)
 			break;
 		s += data[i];
 	}
+	if (str_split(str_trim(s), ' ').size() != 2)
+		exit_mode("DIR PATH M9AD MN ZAMLA");
 	if (path[0] != '/')
 		exit_mode("THE PATH OF LOCATION SHOULD START WITH '/'");
 }
