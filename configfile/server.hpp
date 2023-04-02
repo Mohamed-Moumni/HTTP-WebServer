@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 17:53:21 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/30 17:25:09 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/02 13:56:15 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class Server
 		std::vector<location>								_locations;
 		std::map<std::string, std::string>					_error_pages;
 		std::string											_client_max_body_size;
+		std::map<std::string, std::string>					_return;
 
 	public:
 		Server();

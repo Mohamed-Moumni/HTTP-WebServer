@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:53:14 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/31 14:08:50 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/02 13:54:01 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,27 +60,27 @@ void	print_error_pages(Server& vec)
 	}
 }
 
-void	print_locations(Server& serv)
-{
-	std::vector<location> loc = serv._locations;
+// void	print_locations(Server& serv)
+// {
+// 	std::vector<location> loc = serv._locations;
 	
-	std::cout << "####### LOCATIONS #######" << std::endl;
-	std::cout << "THIS SERVER HAS " << loc.size() << (loc.size() > 1 ? " LOCATIONS" : " LOCATION") << std::endl;
-	for (size_t i = 0; i < loc.size(); i++)
-	{
-		location tmp = loc[i];
-		std::cout << " -------------------------- " << std::endl;
-		std::cout << "location number " << i+1 << std::endl;
-		std::cout << "PATH " << tmp.path << std::endl;
-		std::map<std::string, std::vector<std::string> >::iterator it = tmp._location_attr.begin();
-		for (; it != tmp._location_attr.end(); it++)
-		{
-			std::cout << it->first << " ";
-			print_vector(it->second);
-		}
-		std::cout << " -------------------------- " << std::endl;
-	}
-}
+// 	std::cout << "####### LOCATIONS #######" << std::endl;
+// 	std::cout << "THIS SERVER HAS " << loc.size() << (loc.size() > 1 ? " LOCATIONS" : " LOCATION") << std::endl;
+// 	for (size_t i = 0; i < loc.size(); i++)
+// 	{
+// 		location tmp = loc[i];
+// 		std::cout << " -------------------------- " << std::endl;
+// 		std::cout << "location number " << i+1 << std::endl;
+// 		std::cout << "PATH " << tmp.path << std::endl;
+// 		std::map<std::string, std::vector<std::string> >::iterator it = tmp._location_attr.begin();
+// 		for (; it != tmp._location_attr.end(); it++)
+// 		{
+// 			std::cout << it->first << " ";
+// 			print_vector(it->second);
+// 		}
+// 		std::cout << " -------------------------- " << std::endl;
+// 	}
+// }
 
 void	print_servers(std::vector<Server>& vec)
 {
@@ -94,6 +94,6 @@ void	print_servers(std::vector<Server>& vec)
 		print_server_names(vec[i]);
 		print_index(vec[i]);
 		print_error_pages(vec[i]);
-		print_locations(vec[i]);
+		// print_locations(vec[i]);
 	}
 }

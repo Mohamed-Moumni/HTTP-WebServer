@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/01 17:30:04 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/02 13:58:19 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,16 @@ void	fill_error_pages(Server& serv, std::vector<std::string>& vec)
 	}
 }
 
+void	fill_return(Server& serv, std::vector<std::string>& vec)
+{
+	if (vec.size() < 3)
+		exit_mode("LESS RETURN ARGS");
+	for (size_t i = 1; i < vec.size() - 1; i++)
+	{
+		serv._return.insert(std::make_pair(vec[i], vec[vec.size() - 1]));
+	}
+}
+
 void	fill_allowed_methods(Server& serv, std::vector<std::string>& vec)
 {
 	std::vector<std::string>	methods = str_split(vec[1], ',');
@@ -137,6 +147,8 @@ void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 		serv._upload = vec[1];
 	else if (attr == "allowed_methods")
 		fill_allowed_methods(serv, vec);
+	else if (attr == "return")
+		fill_return(serv, vec);
 	else
 	{
 		// std::cout << attr << std::endl;
@@ -288,12 +300,13 @@ location	parse_one_location(std::string data)
 	loc.path = abstract_path(vec[0]);
 	for (size_t i = 1; i < vec.size(); i++)
 	{
-		std::vector<std::string> line = str_split(vec[i], ' ');
-		for (size_t j = 1; j < line.size(); j++)
-		{
-			v.push_back(line[j]);
-		}
-		loc._location_attr.insert(std::make_pair(line[0], v));
+		std::cout << "line is : " << vec[i] << std::endl;
+		// std::vector<std::string> line = str_split(vec[i], ' ');
+		// for (size_t j = 1; j < line.size(); j++)
+		// {
+		// 	v.push_back(line[j]);
+		// }
+		// loc._location_attr.insert(std::make_pair(line[0], v));
 		v.clear();
 	}
 	return loc;
