@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   configfile.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 21:09:49 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/29 17:14:42 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/02 15:13:09 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,23 @@ bool			is_has_bracket(std::string s);
 void			print_vector(std::vector<std::string>& v);
 std::string		preprocessing(std::string str);
 void			errors_handling(std::vector<Server>& servers);
+
+template <typename T>
+void	fill_allowed_methods(T& fill, std::vector<std::string>& vec);
+
+template <typename T>
+void	fill_return(T& fill, std::vector<std::string>& vec);
+
+template <typename T>
+void	fill_error_pages(T& fill, std::vector<std::string>& vec);
+
+template <typename T>
+void	fill_index(T& fill, std::vector<std::string>& vec);
+
+template <typename T>
+void	fill_server_name(T& fill, std::vector<std::string>& vec);
+
+void	fill_server_attr(Server& serv, std::vector<std::string>& vec);
+
 
 #endif
