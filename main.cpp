@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/30 18:15:14 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/02 13:20:33 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,35 +39,35 @@ void	start_server(std::string & _config)
 	{
 		_config = read_file(_config);
 		configFile = start_parse_config_file(_config);
-		sockets = create_sockets(configFile);
-		listenSocket(sockets);
-		pfds = create_pfd(sockets);
+		// sockets = create_sockets(configFile);
+		// listenSocket(sockets);
+		// pfds = create_pfd(sockets);
 	}
 	catch(const std::exception & e)
 	{
 		std::cerr << e.what() << '\n';
 		exit(EXIT_FAILURE);
 	}
-	while (1)
-	{
-		poll(&pfds[0], pfds.size(), 0);
-		for (size_t i = 0; i < pfds.size(); i++)
-		{
-			if (pfds[i].revents & POLLIN)
-			{
-				pollin(configFile, pfds, sockets, Connections, i);	
-			}
-			if (pfds[i].revents & POLLOUT)
-			{
-				// pollout(pfds, Connections, i);
-			}
-			if (pfds[i].revents & (POLLERR | POLLHUP))
-			{
-				pollErrHup(pfds, Connections, i);
-				i--;
-			}
-		}
-	}
+	// while (1)
+	// {
+	// 	poll(&pfds[0], pfds.size(), 0);
+	// 	for (size_t i = 0; i < pfds.size(); i++)
+	// 	{
+	// 		if (pfds[i].revents & POLLIN)
+	// 		{
+	// 			pollin(configFile, pfds, sockets, Connections, i);	
+	// 		}
+	// 		if (pfds[i].revents & POLLOUT)
+	// 		{
+	// 			// pollout(pfds, Connections, i);
+	// 		}
+	// 		if (pfds[i].revents & (POLLERR | POLLHUP))
+	// 		{
+	// 			pollErrHup(pfds, Connections, i);
+	// 			i--;
+	// 		}
+	// 	}
+	// }
 }
 
 int main(int argc, char **argv)

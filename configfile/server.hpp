@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 17:53:21 by mkarim            #+#    #+#             */
-/*   Updated: 2023/03/30 17:25:09 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/02 14:40:12 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,18 @@ class Server
 		std::map<std::string, std::set<std::string> > 		_listen;
 		std::string											_root;
 		std::string											_autoindex;
-		std::string											_upload;
+		std::string											_client_max_body_size;
 		std::vector<std::string>							_server_names;
 		std::vector<std::string>							_index;
 		std::vector<std::string>							_allowed_methods;
 		std::vector<location>								_locations;
 		std::map<std::string, std::string>					_error_pages;
+<<<<<<< HEAD
 		std::string											_client_max_body_size;
+=======
+		std::map<std::string, std::string>					_return;
+
+>>>>>>> cee4e13aa953520f419143ae6d2a6fc2cbefaf0b
 	public:
 		Server();
 		~Server();
