@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/02 13:21:58 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/03 15:06:10 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,47 +148,46 @@ std::vector<Socket> create_sockets(ConfigFile & _configfile)
     return (_sockets);
 }
 
-// void    pollin(ConfigFile & _configfile, std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map<int, ConnectSocket> & Connections, size_t i)
-// {
-//     int connection;
-//     pfd tmp_pfd;
+void    pollin(ConfigFile & _configfile, std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map<int, ConnectSocket> & Connections, size_t i)
+{
+    int connection;
+    pfd tmp_pfd;
+    
+    connection = accept(pfds[i].fd, NULL, NULL);
+    tmp_pfd.fd = connection;
+    tmp_pfd.events = (POLLIN | POLLOUT);
+    pfds.push_back(tmp_pfd);
+    Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
+    Connections[connection]._response.response_string = "HTTP/1.1 200 OK\r\nContent-Length: 12\r\nContent-Type: text/plain; charset=utf-8\r\n\r\nHello World!";
+}
 
-//     if (i < _sockets.size() && pfds[i].fd == _sockets[i].getSocketId())
-//     {
-//         connection = accept(pfds[i].fd, NULL, NULL);
-//         tmp_pfd.fd = connection;
-//         tmp_pfd.events = (POLLIN | POLLOUT);
-//         pfds.push_back(tmp_pfd);
-//         Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
-//     }
-//     else
-//     {
-//         Connections[pfds[i].fd].readRequest(_configfile);
-//     }
-// }
+void    pollout(ConfigFile & _configfile, std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+{
+    if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].SendAvailble)
+    {
+        Connections[pfds[i].fd].sendResponse(Connections);
+        if (Connections[pfds[i].fd].ConnectionType)
+            closeConnection(pfds, Connections, i);
+    }
+}
 
-// void    pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
-// {
-//     if (Connections.find(pfds[i].fd) != Connections.end())
-//     {
-//         Connections[pfds[i].fd].sendResponse();
-//         if (Connections[pfds[i].fd].ConnectionType)
-//             closeConnection(pfds, Connections, i);
-//     }
-// }
+void    pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+{
+    closeConnection(pfds, Connections, i);
+}
 
-// void    pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
-// {
-//     closeConnection(pfds, Connections, i);
-// }
-
-// void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
-// {
-//     close(pfds[i].fd);
-//     Connections.erase(pfds[i].fd);
-//     pfds.erase(pfds.begin() + i);
-// }
+void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+{
+    close(pfds[i].fd);
+    Connections.erase(pfds[i].fd);
+    pfds.erase(pfds.begin() + i);
+}
 
 // void    sendError(int fd, std::vector<pfd> &pfds, std::map<int, ConnectSocket> & connections, ConfigFile & _configfile, std::string _Error)
-// {   
+// {
+//     std::map<std::string, std::string>::iterator error = _configfile._servers[0]._error_pages.find(_Error);
+//     send(fd, error->second.c_str(), error->second.size(), 0);
+//     close(fd);
+//     connections.erase(fd);
+//     pfds.erase(pfds.begin() + i);
 // }

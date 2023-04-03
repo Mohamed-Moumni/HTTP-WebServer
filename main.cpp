@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 13:20:33 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/03 15:07:38 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,26 +48,29 @@ void	start_server(std::string & _config)
 		std::cerr << e.what() << '\n';
 		exit(EXIT_FAILURE);
 	}
-	// while (1)
-	// {
-	// 	poll(&pfds[0], pfds.size(), 0);
-	// 	for (size_t i = 0; i < pfds.size(); i++)
-	// 	{
-	// 		if (pfds[i].revents & POLLIN)
-	// 		{
-	// 			pollin(configFile, pfds, sockets, Connections, i);	
-	// 		}
-	// 		if (pfds[i].revents & POLLOUT)
-	// 		{
-	// 			// pollout(pfds, Connections, i);
-	// 		}
-	// 		if (pfds[i].revents & (POLLERR | POLLHUP))
-	// 		{
-	// 			pollErrHup(pfds, Connections, i);
-	// 			i--;
-	// 		}
-	// 	}
-	// }
+	while (1)
+	{
+		poll(&pfds[0], pfds.size(), 0);
+		for (size_t i = 0; i < pfds.size(); i++)
+		{
+			if (pfds[i].revents & POLLIN)
+			{
+				if (i < sockets.size() && pfds[i].fd == sockets[i].getSocketId())
+					pollin(configFile, pfds, Connections, i);	
+				else
+				{
+					Connections[pfds[i].fd].readRequest(configFile, Connections);
+				}
+			}
+			if (pfds[i].revents & POLLOUT)
+				pollout(configFile, pfds, Connections, i);
+			if (pfds[i].revents & (POLLERR | POLLHUP))
+			{
+				pollErrHup(pfds, Connections, i);
+				i--;
+			}
+		}
+	}
 }
 
 int main(int argc, char **argv)
