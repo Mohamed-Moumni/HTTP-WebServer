@@ -1,9 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <deque>
-#include "../utils/utils.hpp"
-#include "../configfile/configfile.hpp"
-#include "../server/ConnectSocket.hpp"
+#include "request.hpp"
 
 int prefix_match(std::string s1, std::string s2)
 {
@@ -14,6 +9,9 @@ int prefix_match(std::string s1, std::string s2)
         i++;
     return i;
 }
+
+void file2response()
+{}
 
 int get_request_line(request &request)
 {
@@ -125,31 +123,86 @@ int find_location(ConnectSocket socket, Server server, location &final_location)
     return 1;
 }
 
-void GET()
+void redirect()
 {
-    //to add an "if statement" that check if the request target is a dir and append index to it
-    //to add an "if statement" that check if the request target is still a dir and the autoindex is on
-    //-------->// if the autoindex is off and the the directory exist responde with 403 Forbidden else responde with 404 Not Found if the requested directory does not exist
 
+}
+
+int listdir(location location)
+{
+    DIR *dir;
+    struct dirent *ent;
+
+    dir = opendir(location.path.c_str());
+    if(!dir)
+        return 0;
+    while(ent = readdir(dir))
+        std::cout << ent->d_name << std::endl;
+    closedir(dir);
+}
+
+int isallowed_method(ConnectSocket &socket, location &location, Server &server)
+{
+    if(location._allowed_methods.size() || server._allowed_methods.size())
+    {
+        if(location._allowed_methods.size() && !std::count(location._allowed_methods.begin(), location._allowed_methods.end(), socket._request.method))
+            return 0;//after 405 not allowed
+        else if (!std::count(server._allowed_methods.begin(), server._allowed_methods.end(), socket._request.method))
+            return 0;//after 405 not allowed
+    }
+    return 1;
+}
+
+void GET(ConnectSocket &socket, Server &server, location &location)
+{
+    if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
+    {
+        if(location._index.size())
+            socket._request.request_target += location._index;
+        else
+            socket._request.request_target += server._index;
+    }
+    if(socket._request.request_target[socket._request.request_target.size() - 1] == '/' && (location._autoindex == "on" || (!location._autoindex.size() && server._autoindex == "on")))
+    {
+        listdir(location);
+        return ;
+    }
+    else if (socket._request.request_target[socket._request.request_target.size() - 1] == '/')
+    {
+        if(opendir(socket._request.request_target.c_str()))
+            //responde with 403 forbidden and 
+        else
+            //responde with 404 notfound and 
+        return ;
+    }
     //check if the content is dynamic or static and server each one separatly
+    if(socket._request.request_target.size() >= 4 && strcmp(socket._request.request_target.c_str() + socket._request.request_target.size() - 4, ".php"))
+        //cgi here; return the response from here; return
     
+    //static here
+    if(!access(socket._request.request_target.c_str(), F_OK))
+        file2response();
+    else
+        //404 not found 
 }
 void POST()
 {}
 void DELETE()
 {}
 
-int response_generator(ConnectSocket socket, Server server, location location)
+void response_generator(ConnectSocket &socket, Server &server, location &location)
 {
+    //check if the method is not in the allowed methods else responde with  405 not allowed 
+    if(!isallowed_method(socket, location, server))
+        return ;
     if(socket._request.method == "GET")
-        GET();
+        GET(socket, server, location);
     else if(socket._request.method == "POST")
         POST();
     else if(socket._request.method == "DELETE")
         DELETE();
     else
         //responde with 501 Not Implemented
-    
 }
 
 int respond(ConnectSocket &socket, ConfigFile configfile)
@@ -160,6 +213,8 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     find_server(socket, configfile, server);
     find_location(socket, server, location);
     //to add a check for the redirection
+    if(server._return.size() || location._return.size())
+        redirect();
     response_generator(socket, server, location);
     
     std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
@@ -169,12 +224,10 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
 
 int request_handler(ConnectSocket & socket, ConfigFile configfile)
 {
-    (void)(configfile);
+
     if(!pars_request(socket._request))
         return 0;
     if(!possible_error(socket))
-        return 0;
-    if(!respond(socket, configfile))
         return 0;
     return 1;
 }
@@ -205,11 +258,14 @@ int main()
     std::fstream out_file;
     out_file.open("out.html");
 
-    // if(!request_handler(socket, configfile))
-    // {
-    //     std::cout << "request error" << std::endl;
-    //     return 0;
-    // }
+    if(!request_handler(socket, configfile))
+    {
+        std::cout << "request error" << std::endl;
+        return 0;
+    }
+    //check_max_body_size
+    if(!respond(socket, configfile))
+        return 0;
 
     for(int i = 0; i < configfile._servers.size(); i++)
         std::cout << configfile._servers[i]._server_names[0] << std::endl;
