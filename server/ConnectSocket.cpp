@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/03 15:05:50 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/03 17:30:09 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,73 +129,11 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile, std::map<int, Connect
     _request.request_string.clear();
 }
 
-size_t  hex2dec(std::string hex)
+void    fromHex(const std::string& hexValue, size_t & result)
 {
-    size_t  result;
-
-    result = 0;
-    for (size_t i = 0; i < hex.size() && hex[i] && hex[i] != '\r' && hex[i] != '\n' ; i++)
-    {
-        if (hex[i] >= 48 && hex[i] <= 57)
-        {
-            result += (hex[i] - 48) * pow(16, hex.length() - i - 1);
-        }
-        else if (hex[i] >= 65 && hex[i] <= 70)
-        {
-            result += (hex[i] - 55) * pow(16, hex.length() - i - 1);
-        }
-        else if (hex[i] >= 97 && hex[i] <= 102)
-        {
-            result += (hex[i] - 87) * pow(16, hex.length() - i - 1);
-        }
-        else
-            return (-1);
-    }
-    return result;
-}
-
-std::string ConnectSocket::getChunckedbody(std::string _req, std::map<int, ConnectSocket> & Connections)
-{
-    std::string body;
-    std::string data;
-    size_t      size;
-    size_t      pos;
-
-    body = "";
-    pos = 0;
-    size = hex2dec(&_req[pos]);
-    if (size == 0)
-    {
-        ReadAvailble = false;
-        SendAvailble = true;
-        return (body);
-    }
-    pos = _req.find("\r\n", pos);
-    if (pos == std::string::npos)
-        return (body);
-    pos += 2;
-    data = _req.substr(pos , size);
-    while (size > 0)
-    {
-        body.append(std::string(data, size));
-        pos = _req.find("\r\n", pos);
-        if (pos == std::string::npos)
-            return (body);
-        pos += 2;
-        size = hex2dec(&_req[pos]);
-        if (size == 0)
-        {
-            ReadAvailble = false;
-            SendAvailble = true;
-            return (body);
-        }
-        pos = _req.find("\r\n", pos);
-        if (pos == std::string::npos)
-            return (body);
-        pos += 2;
-        data = _req.substr(pos, size);
-    }
-    return (body);
+    std::stringstream ss;
+    ss << std::hex << hexValue;
+    ss >> result;
 }
 
 void    ConnectSocket::readChuncked(std::map<int, ConnectSocket> & Connections)

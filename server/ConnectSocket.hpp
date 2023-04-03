@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/03 11:47:26 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/03 17:29:47 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <vector>
 #include <unistd.h>
 #include <sys/time.h>
+#include <sstream>
 #include "../request/request.class.hpp"
 #include "../request/response.class.hpp"
 #include "../configfile/configfile.hpp"
@@ -33,6 +34,7 @@ class ConnectSocket
         bool            SendAvailble;
         bool            ConnectionType;
         bool            Chuncked;
+        
         bool            ReadFirst;
         
         long long       TimeOut;
