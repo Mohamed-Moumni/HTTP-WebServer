@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:53:14 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/03 14:19:40 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/03 15:51:35 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ void	print_locations(Server& serv)
 		std::cout << " -------------------------- " << std::endl;
 		std::cout << "location number " << i+1 << std::endl;
 		std::cout << "PATH " << tmp.path << std::endl;
+		std::cout << "UPLOAD " << tmp._upload << std::endl;
 		std::cout << "Root is : " << tmp._root << std::endl;
 		std::cout << "AutoIndex is : " << tmp._autoindex << std::endl;
 		print_index(tmp);
