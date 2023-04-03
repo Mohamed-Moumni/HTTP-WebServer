@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/31 11:43:00 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/02 15:52:36 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ void    pollin(ConfigFile & _configfile, std::vector<pfd> & pfds, std::vector<So
         tmp_pfd.events = (POLLIN | POLLOUT);
         pfds.push_back(tmp_pfd);
         Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
+        Connections[connection]._response.response_string = "HTTP/1.1 200 OK\r\nContent-Length: 12\r\nContent-Type: text/plain; charset=utf-8\r\n\r\nHello World!";
     }
     else
     {

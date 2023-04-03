@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/02 15:22:33 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/03 11:13:16 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,4 @@ class ConnectSocket
         void        requestType(void);
 };
 
-long long   getTimeOfnow(void);
-size_t      hex2dec(std::string & hex);
+size_t  hex2dec(std::string & hex);

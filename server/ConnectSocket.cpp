@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/02 15:47:47 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/03 11:20:12 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ ConnectSocket::~ConnectSocket()
     
 }
 
-
 ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _port)
 {
     ConnectSocketId = SocketId;
@@ -45,9 +44,13 @@ void    ConnectSocket::readUnChuncked(void)
     char    Buffer[BUFFER];
 
     CharRead = 0;
-    CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
+    if (_request.ContentLen == -1)
+    {
+        ReadAvailble = false;
+        SendAvailble = true;
+        return ;
+    }
     _request.ContentLen -= CharRead;
-    _request.request_body.append(std::string(Buffer,CharRead));
     if (_request.ContentLen == 0)
     {
         ReadAvailble = false;
@@ -57,6 +60,10 @@ void    ConnectSocket::readUnChuncked(void)
 
 void    ConnectSocket::readRequest(ConfigFile & _configfile)
 {
+    int     CharRead;
+    char    Buffer[BUFFER];
+
+    CharRead = 0;
     if (ReadAvailble)
     {
         if (!ReadFirst)
@@ -65,10 +72,12 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
         }
         else
         {
-            if (this->Chuncked)
+            _request.request_string.append(std::string(Buffer,CharRead));
+            if (Chuncked)
                 readChuncked();
             else
                 readUnChuncked();
+            _request.request_string.clear();
         }
     }
 }
@@ -96,17 +105,23 @@ void        ConnectSocket::requestType(void)
 
 void    ConnectSocket::FirstRead(ConfigFile & _configfile)
 {
-    int     CharRead;
-    char    Buffer[BUFFER];
+    int         CharRead;
+    char        Buffer[BUFFER];
+    std::string body;
 
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
     _request.request_string.append(std::string(Buffer, CharRead));
     request_handler(*this, _configfile);
     requestType();
     if (Chuncked)
-        readChuncked();
+    {
+        body = getChunckedbody(_request.request_body);
+        _request.request_body.clear();
+        _request.request_body = body;
+    }
     else
-        readUnChuncked();   
+        readUnChuncked();
+    _request.request_string.clear();
 }
 
 size_t  hex2dec(std::string hex)
@@ -182,17 +197,9 @@ void    ConnectSocket::readChuncked(void)
 {
     std::string body;
 
-    body = getChunckedbody(_request.request_body);
+    body.append(getChunckedbody(_request.request_string));
     _request.request_body.clear();
     _request.request_body = body;
-}
-
-long long   getTimeOfnow(void)
-{
-    struct timeval time;
-
-    gettimeofday(&time, NULL);
-    return(time.tv_sec + time.tv_usec / 1000000);
 }
 
 void    ConnectSocket::sendResponse( void )
