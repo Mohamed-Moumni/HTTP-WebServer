@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:53:14 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 17:17:36 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/03 15:51:35 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ void	print_locations(Server& serv)
 		std::cout << " -------------------------- " << std::endl;
 		std::cout << "location number " << i+1 << std::endl;
 		std::cout << "PATH " << tmp.path << std::endl;
+		std::cout << "UPLOAD " << tmp._upload << std::endl;
 		std::cout << "Root is : " << tmp._root << std::endl;
 		std::cout << "AutoIndex is : " << tmp._autoindex << std::endl;
 		print_index(tmp);
@@ -115,6 +116,10 @@ void	print_servers(std::vector<Server>& vec)
 		std::cout << "######## ####### ####### ######## " << std::endl;
 		std::cout << "######## SERVER NUMBER " << i + 1 << " ########" << std::endl;
 		std::cout << "######## ####### ####### ######## " << std::endl << std::endl;
+		std::cout << "_root is : " << vec[i]._root << std::endl;
+		std::cout << "_autoindex is : " << vec[i]._autoindex << std::endl;
+		std::cout << "_client_max_body_size is : " << vec[i]._client_max_body_size << std::endl;
+		std::cout << "_upload is : " << vec[i]._upload << std::endl;
 		print_listen(vec[i]);
 		print_server_names(vec[i]);
 		print_index(vec[i]);

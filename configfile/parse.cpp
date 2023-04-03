@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 17:52:29 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/03 15:53:33 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,8 @@ void	fill_string_attr(Server& serv, std::vector<std::string>& vec)
 		serv._root = vec[1];
 	else if (vec[0] == "autoindex")
 		serv._autoindex = vec[1];
+	else if (vec[0] == "upload")
+		serv._upload = vec[1];
 }
 
 void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
@@ -158,7 +160,7 @@ void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 		fill_index(serv, vec);
 	else if (attr == "error_page")
 		fill_error_pages(serv, vec);
-	else if (attr == "client_max_body_size" || attr == "root" || attr == "autoindex")
+	else if (attr == "client_max_body_size" || attr == "root" || attr == "autoindex" || attr == "upload")
 		fill_string_attr(serv, vec);
 	else if (attr == "allowed_methods")
 		fill_allowed_methods(serv, vec);
@@ -320,14 +322,16 @@ void	print_vector(std::vector<std::string>& v)
 	std::cout << std::endl;
 }
 
-void	fill_root_auto_index(location& loc, std::vector<std::string>& vec)
+void	fill_root_autoindex_upload(location& loc, std::vector<std::string>& vec)
 {
 	if (vec.size() != 2)
-		exit_mode("INVALID NUMBER OF ARGS CHECK (ROOT/AUTOINDEX)");
+		exit_mode("INVALID NUMBER OF ARGS CHECK (ROOT/AUTOINDEX/UPLOAD)");
 	if (vec[0] == "root")
 		loc._root = vec[1];
 	else if (vec[0] == "autoindex")
 		loc._autoindex = vec[1];
+	else if (vec[0] == "upload")
+		loc._upload = vec[1];
 }
 
 void	fill_others(location& loc, std::vector<std::string>& vec)
@@ -343,8 +347,8 @@ void	fill_others(location& loc, std::vector<std::string>& vec)
 void	fill_location_attr(location& loc, std::string& s)
 {
 	std::vector<std::string> vec = str_split(s, ' ');
-	if (vec[0] == "root" || vec[0] == "autoindex")
-		fill_root_auto_index(loc, vec);
+	if (vec[0] == "root" || vec[0] == "autoindex" || vec[0] == "upload")
+		fill_root_autoindex_upload(loc, vec);
 	else if (vec[0] == "index")
 		fill_index(loc, vec);
 	else if (vec[0] == "allowed_methods")
@@ -425,6 +429,8 @@ Server		parse_one_server(std::string str, size_t pos)
 	// std::cout << serv_data << std::endl;
 	loc_data = get_data_of_scope(data_from_pos(str, pos));
 	serv._locations = fill_location(loc_data);
+	if (serv._index.size() != 1)
+		exit_mode("INDEX SHOULD HAS EXACTLY ONE ARGUMENT");
 	return serv;
 }
 
