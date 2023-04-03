@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/03 11:13:16 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/03 11:47:26 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ class ConnectSocket
         ~ConnectSocket();
         ConnectSocket();
         ConnectSocket(int SocketId, std::string _IpAdress, std::string _port);
-        void        readRequest(ConfigFile & _configfile);
+        void        readRequest(ConfigFile & _configfile, std::map<int, ConnectSocket> & Connections);
         void        readFirst(void);
-        void        sendResponse( void );
+        void        sendResponse(std::map<int, ConnectSocket> & Connections);
         void        getContentLength(void);
-        void        readChuncked(void);
-        void        readUnChuncked(void);
-        void        FirstRead(ConfigFile & _configfile);
-        std::string getChunckedbody(std::string _req);
+        void        readChuncked(std::map<int, ConnectSocket> & Connections);
+        void        readUnChuncked(std::map<int, ConnectSocket> & Connections);
+        void        FirstRead(ConfigFile & _configfile, std::map<int, ConnectSocket> & Connections);
+        std::string getChunckedbody(std::string _req, std::map<int, ConnectSocket> & Connections);
         void        requestType(void);
 };
 

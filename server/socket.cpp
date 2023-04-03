@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/02 15:52:36 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/03 11:59:29 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ void    pollin(ConfigFile & _configfile, std::vector<pfd> & pfds, std::vector<So
     }
     else
     {
-        Connections[pfds[i].fd].readRequest(_configfile);
+        Connections[pfds[i].fd].readRequest(_configfile, Connections);
     }
 }
 
@@ -172,7 +172,7 @@ void    pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connecti
 {
     if (Connections.find(pfds[i].fd) != Connections.end())
     {
-        Connections[pfds[i].fd].sendResponse();
+        Connections[pfds[i].fd].sendResponse(Connections);
         if (Connections[pfds[i].fd].ConnectionType)
             closeConnection(pfds, Connections, i);
     }
@@ -190,6 +190,11 @@ void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & 
     pfds.erase(pfds.begin() + i);
 }
 
-// void    sendError(int fd, std::vector<pfd> &pfds, std::map<int, ConnectSocket> & connections, ConfigFile & _configfile, std::string _Error)
-// {   
-// }
+void    sendError(int fd, std::vector<pfd> &pfds, std::map<int, ConnectSocket> & connections, ConfigFile & _configfile, std::string _Error)
+{
+    std::map<std::string, std::string>::iterator error = _configfile._servers[0]._error_pages.find(_Error);
+    send(fd, error->second.c_str(), error->second.size(), 0);
+    close(fd);
+    connections.erase(fd);
+    pfds.erase(pfds.begin() + i);
+}

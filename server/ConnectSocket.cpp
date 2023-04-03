@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/03 11:20:12 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/03 11:47:57 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _p
     ReadFirst = false;
 }
 
-void    ConnectSocket::readUnChuncked(void)
+void    ConnectSocket::readUnChuncked(std::map<int, ConnectSocket> & Connections)
 {
     int     CharRead;
     char    Buffer[BUFFER];
@@ -58,7 +58,7 @@ void    ConnectSocket::readUnChuncked(void)
     }
 }
 
-void    ConnectSocket::readRequest(ConfigFile & _configfile)
+void    ConnectSocket::readRequest(ConfigFile & _configfile, std::map<int, ConnectSocket> & Connections)
 {
     int     CharRead;
     char    Buffer[BUFFER];
@@ -68,15 +68,15 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
     {
         if (!ReadFirst)
         {
-            FirstRead(_configfile);
+            FirstRead(_configfile, Connections);
         }
         else
         {
             _request.request_string.append(std::string(Buffer,CharRead));
             if (Chuncked)
-                readChuncked();
+                readChuncked(Connections);
             else
-                readUnChuncked();
+                readUnChuncked(Connections);
             _request.request_string.clear();
         }
     }
@@ -103,7 +103,7 @@ void        ConnectSocket::requestType(void)
     }
 }
 
-void    ConnectSocket::FirstRead(ConfigFile & _configfile)
+void    ConnectSocket::FirstRead(ConfigFile & _configfile, std::map<int, ConnectSocket> & Connections)
 {
     int         CharRead;
     char        Buffer[BUFFER];
@@ -115,12 +115,12 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     requestType();
     if (Chuncked)
     {
-        body = getChunckedbody(_request.request_body);
+        body = getChunckedbody(_request.request_body, Connections);
         _request.request_body.clear();
         _request.request_body = body;
     }
     else
-        readUnChuncked();
+        readUnChuncked(Connections);
     _request.request_string.clear();
 }
 
@@ -149,7 +149,7 @@ size_t  hex2dec(std::string hex)
     return result;
 }
 
-std::string ConnectSocket::getChunckedbody(std::string _req)
+std::string ConnectSocket::getChunckedbody(std::string _req, std::map<int, ConnectSocket> & Connections)
 {
     std::string body;
     std::string data;
@@ -193,16 +193,16 @@ std::string ConnectSocket::getChunckedbody(std::string _req)
     return (body);
 }
 
-void    ConnectSocket::readChuncked(void)
+void    ConnectSocket::readChuncked(std::map<int, ConnectSocket> & Connections)
 {
     std::string body;
 
-    body.append(getChunckedbody(_request.request_string));
+    body.append(getChunckedbody(_request.request_string, Connections));
     _request.request_body.clear();
     _request.request_body = body;
 }
 
-void    ConnectSocket::sendResponse( void )
+void    ConnectSocket::sendResponse(std::map<int, ConnectSocket> & Connections)
 {
     int CharSent;
 
