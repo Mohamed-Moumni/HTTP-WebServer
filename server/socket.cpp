@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/03 11:59:29 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/03 12:24:30 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,25 +152,18 @@ void    pollin(ConfigFile & _configfile, std::vector<pfd> & pfds, std::vector<So
 {
     int connection;
     pfd tmp_pfd;
-
-    if (i < _sockets.size() && pfds[i].fd == _sockets[i].getSocketId())
-    {
-        connection = accept(pfds[i].fd, NULL, NULL);
-        tmp_pfd.fd = connection;
-        tmp_pfd.events = (POLLIN | POLLOUT);
-        pfds.push_back(tmp_pfd);
-        Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
-        Connections[connection]._response.response_string = "HTTP/1.1 200 OK\r\nContent-Length: 12\r\nContent-Type: text/plain; charset=utf-8\r\n\r\nHello World!";
-    }
-    else
-    {
-        Connections[pfds[i].fd].readRequest(_configfile, Connections);
-    }
+    
+    connection = accept(pfds[i].fd, NULL, NULL);
+    tmp_pfd.fd = connection;
+    tmp_pfd.events = (POLLIN | POLLOUT);
+    pfds.push_back(tmp_pfd);
+    Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
+    Connections[connection]._response.response_string = "HTTP/1.1 200 OK\r\nContent-Length: 12\r\nContent-Type: text/plain; charset=utf-8\r\n\r\nHello World!";
 }
 
-void    pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+void    pollout(ConfigFile & _configfile, std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
-    if (Connections.find(pfds[i].fd) != Connections.end())
+    if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].SendAvailble)
     {
         Connections[pfds[i].fd].sendResponse(Connections);
         if (Connections[pfds[i].fd].ConnectionType)
@@ -190,11 +183,11 @@ void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & 
     pfds.erase(pfds.begin() + i);
 }
 
-void    sendError(int fd, std::vector<pfd> &pfds, std::map<int, ConnectSocket> & connections, ConfigFile & _configfile, std::string _Error)
-{
-    std::map<std::string, std::string>::iterator error = _configfile._servers[0]._error_pages.find(_Error);
-    send(fd, error->second.c_str(), error->second.size(), 0);
-    close(fd);
-    connections.erase(fd);
-    pfds.erase(pfds.begin() + i);
-}
+// void    sendError(int fd, std::vector<pfd> &pfds, std::map<int, ConnectSocket> & connections, ConfigFile & _configfile, std::string _Error)
+// {
+//     std::map<std::string, std::string>::iterator error = _configfile._servers[0]._error_pages.find(_Error);
+//     send(fd, error->second.c_str(), error->second.size(), 0);
+//     close(fd);
+//     connections.erase(fd);
+//     pfds.erase(pfds.begin() + i);
+// }

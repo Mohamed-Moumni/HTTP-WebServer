@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/03 11:47:57 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/03 13:27:04 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,13 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile, std::map<int, Connect
     std::string body;
 
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
+    if (CharRead < 0)
+    {
+        std::cout << "recv: Error\n";
+        exit(1);
+    }
     _request.request_string.append(std::string(Buffer, CharRead));
-    request_handler(*this, _configfile);
+    // request_handler(*this, _configfile);
     requestType();
     if (Chuncked)
     {
@@ -207,18 +212,15 @@ void    ConnectSocket::sendResponse(std::map<int, ConnectSocket> & Connections)
     int CharSent;
 
     CharSent = 0;
-    if (SendAvailble)
+    CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
+    _response.CharSent += CharSent;
+    _response.respLength -= CharSent;
+    if (_response.respLength == 0)
     {
-        CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
-        _response.CharSent += CharSent;
-        _response.respLength -= CharSent;
-        if (_response.respLength == 0)
-        {
-            SendAvailble = false;
-            ReadAvailble = true;
-            _response.response_string.clear();
-            _response.respLength = 0;
-            _response.CharSent = 0;
-        }
+        SendAvailble = false;
+        ReadAvailble = true;
+        _response.response_string.clear();
+        _response.respLength = 0;
+        _response.CharSent = 0;
     }
 }
