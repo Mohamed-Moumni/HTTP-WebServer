@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 17:52:29 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/03 14:19:51 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,8 @@ void	fill_string_attr(Server& serv, std::vector<std::string>& vec)
 		serv._root = vec[1];
 	else if (vec[0] == "autoindex")
 		serv._autoindex = vec[1];
+	else if (vec[0] == "upload")
+		serv._upload = vec[1];
 }
 
 void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
@@ -158,7 +160,7 @@ void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 		fill_index(serv, vec);
 	else if (attr == "error_page")
 		fill_error_pages(serv, vec);
-	else if (attr == "client_max_body_size" || attr == "root" || attr == "autoindex")
+	else if (attr == "client_max_body_size" || attr == "root" || attr == "autoindex" || attr == "upload")
 		fill_string_attr(serv, vec);
 	else if (attr == "allowed_methods")
 		fill_allowed_methods(serv, vec);
