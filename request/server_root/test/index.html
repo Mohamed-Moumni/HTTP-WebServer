@@ -1,1 +1,78 @@
-this is an html code here
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Welcome to our webserver</title>
+	<style>
+		body {
+			background-color: #fff;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			color: #444;
+			padding: 0;
+			margin: 0;
+		}
+
+		.container {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			width: 100%;
+			position: relative;
+		}
+
+		h1 {
+			font-size: 60px;
+			margin: 0;
+			animation-name: slidein;
+			animation-duration: 2s;
+			animation-fill-mode: forwards;
+			animation-timing-function: ease-out;
+		}
+
+		@keyframes slidein {
+			from {
+				transform: translateY(-100%);
+				opacity: 0;
+			}
+			to {
+				transform: translateY(0%);
+				opacity: 1;
+			}
+		}
+
+		p {
+			font-size: 24px;
+			margin: 0;
+			margin-top: 20px;
+		}
+
+		.button {
+			background-color: #444;
+			color: #fff;
+			display: inline-block;
+			padding: 10px 20px;
+			border-radius: 5px;
+			text-decoration: none;
+			font-weight: bold;
+			box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+			transition: all 0.3s ease;
+			margin-top: 30px;
+		}
+
+		.button:hover {
+			background-color: #fff;
+			color: #444;
+			box-shadow: 4px 4px 4px rgba(0,0,0,0.3);
+			transform: translate(-2px,-2px);
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>Welcome To NGINY</h1>
+		<p>Simple http server inspired from nginx to learn more about nginy hite the help button</p>
+		<a href="./help.html" class="button">HELP</a>
+	</div>
+</body>
+</html>
