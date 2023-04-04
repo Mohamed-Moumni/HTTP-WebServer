@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/04 14:29:56 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/04 14:56:20 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,13 @@ void        ConnectSocket::requestType(void)
 {
     std::map<std::string , std::string>::iterator Te;
     std::map<std::string , std::string>::iterator Cl;
+
     Te = _request.headers_map.find("Transfer-Encoding");
     Cl = _request.headers_map.find("Content-Length");
     if ( Te != _request.headers_map.end())
     {
         if (Te->second == "Chuncked")
-        {
-            HexToDec(_request.request_body, ChunckedSize);
             Chuncked = true;
-        }
     }
     else if (Cl != _request.headers_map.end())
     {
@@ -139,17 +137,43 @@ void    ConnectSocket::readUnChuncked(std::map<int, ConnectSocket> & Connections
     }
 }
 
+std::string ConnectSocket::getChuncked(std::string req)
+{
+    std::string body = "";
+    size_t pos;
+    size_t  size = 1;
+
+    pos = 0;
+    while (size > 0)
+    {
+        HexToDec(&req[pos], size);
+        pos = req.find("\r\n", pos);
+        if (pos == std::string::npos)
+            break ;
+        pos += 2;
+        if (pos < req.size())
+            body.append(req.substr(pos, size));
+        pos = req.find("\r\n", pos);
+        if (pos == std::string::npos)
+            break ;
+        pos += 2;
+    }
+    return (body);
+}
+
 void    ConnectSocket::readChuncked(std::map<int, ConnectSocket> & Connections)
 {
     std::string body;
-    int         pos;
 
-    pos = 0;
-    pos = _request.request_body.find("\r\n");
-    pos += 2;
-    body = _request.request_body.substr(pos);
-    _request.request_body.clear();
-    _request.request_body.append(body, body.size());
+    body = "";
+    if (_request.request_body.find("0\r\n\r\n") == std::string::npos)
+    {
+        body.append(_request.request_body, _request.request_body.size());
+        _request.request_body.clear();
+        _request.request_body.append(getChuncked(body));
+        ReadAvailble = false;
+        SendAvailble = true;
+    }
 }
 
 void    ConnectSocket::sendResponse(std::map<int, ConnectSocket> & Connections)

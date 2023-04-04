@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/04 14:15:40 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/04 14:56:23 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ class ConnectSocket
         bool            ConnectionType;
         bool            Chuncked;
         bool            ReadFirst;
-        size_t          ChunckedSize;
         long long       TimeOut;
         std::string     IpAdress;
         std::string     Port;
@@ -51,8 +50,8 @@ class ConnectSocket
         void        readChuncked(std::map<int, ConnectSocket> & Connections);
         void        readUnChuncked(std::map<int, ConnectSocket> & Connections);
         void        FirstRead(ConfigFile & _configfile, std::map<int, ConnectSocket> & Connections);
-        std::string getChunckedbody(std::string _req, std::map<int, ConnectSocket> & Connections);
         void        requestType(void);
+        std::string getChuncked(std::string req);
 };
 
 void    HexToDec(const std::string hexValue, size_t & result);
