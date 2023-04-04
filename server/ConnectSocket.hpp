@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/03 17:29:47 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/04 14:15:40 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "../request/response.class.hpp"
 #include "../configfile/configfile.hpp"
 
-#define BUFFER 10200
+#define BUFFER 1024
 
 class ConnectSocket
 {
@@ -34,9 +34,8 @@ class ConnectSocket
         bool            SendAvailble;
         bool            ConnectionType;
         bool            Chuncked;
-        
         bool            ReadFirst;
-        
+        size_t          ChunckedSize;
         long long       TimeOut;
         std::string     IpAdress;
         std::string     Port;
@@ -56,4 +55,4 @@ class ConnectSocket
         void        requestType(void);
 };
 
-size_t  hex2dec(std::string & hex);
+void    HexToDec(const std::string hexValue, size_t & result);
