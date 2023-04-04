@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/04 14:56:20 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/04 14:59:26 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile, std::map<int, Connect
         exit(1);
     }
     _request.request_string.append(std::string(Buffer, CharRead));
-    // request_handler(*this, _configfile); new function
+    // request_handler(*this, _configfile); new function by youssef
     requestType();
     if (Chuncked)
         readChuncked(Connections);
