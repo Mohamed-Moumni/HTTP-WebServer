@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/05 11:11:13 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/05 13:37:17 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,10 @@ void	start_server(std::string & _config)
 				else
 				{
 					Connections[pfds[i].fd].readRequest(configFile);
+					if (Connections[pfds[i].fd].closed)
+					{
+						closeConnection(pfds, Connections, i);
+					}
 				}
 			}
 			if (pfds[i].revents & POLLOUT)

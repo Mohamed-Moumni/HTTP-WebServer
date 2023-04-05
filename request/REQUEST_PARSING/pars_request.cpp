@@ -36,7 +36,6 @@ int get_request_headers(request &request)
     {
         key_value.clear();
         key_value = header_spliter(header_lines[i]);
-        // std::cout << key_value.size() << std::endl;
         if(key_value.size() != 2)
             return 0;
         request.headers_map[key_value[0]] = key_value[1];    

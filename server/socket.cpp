@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/05 11:15:36 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/05 13:23:58 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,9 @@ void    pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map
     tmp_pfd.events = (POLLIN | POLLOUT);
     pfds.push_back(tmp_pfd);
     Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
-    Connections[connection]._response.response_string = "HTTP/1.1 200 OK\r\nContent-Length: 12\r\nContent-Type: text/plain; charset=utf-8\r\n\r\nHello World!";
+    Connections[connection]._response.response_string = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 22\r\n\r\nHelloWorld\r\nHelloWorld\r\n";
+    Connections[connection]._response.respLength = Connections[connection]._response.response_string.size();
+    Connections[connection]._response.CharSent = 0;
 }
 
 void    pollout(ConfigFile & _configfile, std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
