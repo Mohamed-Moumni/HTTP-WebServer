@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:52 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/03 12:14:48 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/04 15:12:20 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,8 @@
 #include "../configfile/configfile.hpp"
 #include "./ConnectSocket.hpp"
 
-typedef struct sockaddr_storage sockStorage;
 typedef struct addrinfo         addrinfo;
 typedef struct pollfd           pfd;
-typedef struct sockaddr         sockaddr;
 
 class Socket
 {
