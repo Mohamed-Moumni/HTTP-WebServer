@@ -77,7 +77,6 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     find_location(socket, server, location);
     if(!check_max_size(socket, configfile, location))
         return 0;
-    //append root directive to the uri target
     if(location._root.size())
         socket._request.request_target = location._root + socket._request.request_target;
     else if(server._root.size())

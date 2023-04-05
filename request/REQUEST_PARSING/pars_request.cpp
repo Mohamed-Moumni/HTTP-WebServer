@@ -40,7 +40,7 @@ int get_request_headers(request &request)
         if(key_value.size() != 2)
             return 0;
         request.headers_map[key_value[0]] = key_value[1];    
-    } 
+    }
     return 1;
 }
 

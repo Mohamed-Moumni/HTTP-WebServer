@@ -1,20 +1,15 @@
 #include "INCLUDES/request.hpp"
 #include <fstream> //for ifstream
 
-int possible_error(ConnectSocket &socket)
-{
-    //todo
-    (void)socket;
-    return 1;
-}
+
 
 int request_handler(ConnectSocket & socket, ConfigFile configfile)
 {
     (void)configfile;
-    if(!pars_request(socket._request))
-        return 0;
-    if(!possible_error(socket))
-        return 0;
+    if(!pars_request(socket._request) || !possible_error(socket))
+    {
+        socket._response.response_string = respond_error("400");
+    }
     return 1;
 }
 
