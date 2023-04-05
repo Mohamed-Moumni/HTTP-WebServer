@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/03 15:07:38 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/05 11:11:13 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <fstream>
 #include "./configfile/configfile.hpp"
 #include "./server/socket.hpp"
+#include "./request/INCLUDES/request.hpp"
 
 void set_error_pages(ConfigFile &config)
 {
@@ -21,20 +22,6 @@ void set_error_pages(ConfigFile &config)
 	error_pages["404"] = "";
 	error_pages[""] = "";
 	//todo
-}
-
-std::string		read_file(std::string file_name)
-{
-	std::string	data;
-	std::string	tmp;
-
-	std::ifstream	file(file_name);
-	while (getline(file, tmp))
-	{
-		data += tmp;
-		data += "\n";
-	}
-	return data;
 }
 
 void	start_server(std::string & _config)
@@ -48,9 +35,9 @@ void	start_server(std::string & _config)
 		_config = read_file(_config);
 		configFile = start_parse_config_file(_config);
 		set_error_pages(configFile);
-		// sockets = create_sockets(configFile);
-		// listenSocket(sockets);
-		// pfds = create_pfd(sockets);
+		sockets = create_sockets(configFile);
+		listenSocket(sockets);
+		pfds = create_pfd(sockets);
 	}
 	catch(const std::exception & e)
 	{
@@ -65,10 +52,10 @@ void	start_server(std::string & _config)
 			if (pfds[i].revents & POLLIN)
 			{
 				if (i < sockets.size() && pfds[i].fd == sockets[i].getSocketId())
-					pollin(configFile, pfds, Connections, i);	
+					pollin(pfds, sockets, Connections, i);	
 				else
 				{
-					Connections[pfds[i].fd].readRequest(configFile, Connections);
+					Connections[pfds[i].fd].readRequest(configFile);
 				}
 			}
 			if (pfds[i].revents & POLLOUT)
