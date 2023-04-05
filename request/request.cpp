@@ -6,9 +6,10 @@
 int request_handler(ConnectSocket & socket, ConfigFile configfile)
 {
     (void)configfile;
-    if(!pars_request(socket._request) || !possible_error(socket))
+    if(!pars_request(socket._request) || !possible_error(socket, configfile))
     {
         socket._response.response_string = respond_error("400");
+		return 0;
     }
     return 1;
 }
@@ -22,32 +23,34 @@ std::string		read_file(std::string file_name)
 	while (getline(file, tmp))
 	{
 		data += tmp;
-		data += "\n";
+		data += "\r\n";
 	}
 	return data;
 }
 
-// int main()
-// {
-//     ConnectSocket socket;
-//     socket.IpAdress = "127.0.0.1";
-//     socket.Port = "8080";
-//     ConfigFile configfile = start_parse_config_file(read_file("../tests/def.conf"));
+int main()
+{
+    ConnectSocket socket;
+    socket.IpAdress = "127.0.0.1";
+    socket.Port = "8080";
+    ConfigFile configfile = start_parse_config_file(read_file("../tests/def.conf"));
 
-//     socket._request.request_string  = "GET /test/index.html HTTP/1.1\r\nHost: unknownserver\r\nConnection: close\r\n\r\nhello everybody here is the body";
-//     std::fstream out_file;
-//     out_file.open("out.html");
+    socket._request.request_string  = read_file("../tests/request.txt");
+	std::cout << socket._request.request_string << std::endl;
+    std::fstream out_file;
+    out_file.open("out.html");
 
-//     if(!request_handler(socket, configfile))
-//     {
-//         std::cout << "request error" << std::endl;
-//         return 0;
-//     }
+    if(!request_handler(socket, configfile))
+    {
+        std::cout << "request error" << std::endl;
+		std::cout << "the response is: "<< socket._response.response_string << std::endl;
+        return 0;
+    }
+	std::cout << "method: "<< socket._request.method << std::endl;
+    respond(socket, configfile);
 
-//     respond(socket, configfile);
+    std::cout << "the response is: "<< socket._response.response_string << std::endl;
 
-//     std::cout << "the response is: "<< socket._response.response_string << std::endl;
-
-//     for(size_t i = 0; i < configfile._servers.size(); i++)
-//         std::cout << configfile._servers[i]._server_names[0] << std::endl;
-// }
+    for(size_t i = 0; i < configfile._servers.size(); i++)
+        std::cout << configfile._servers[i]._server_names[0] << std::endl;
+}

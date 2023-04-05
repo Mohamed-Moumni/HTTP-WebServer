@@ -9,7 +9,7 @@
 std::string		read_file(std::string file_name);
 int request_handler(ConnectSocket & socket, ConfigFile configfile);
 int pars_request(request &request);
-int possible_error(ConnectSocket &socket);
+int possible_error(ConnectSocket &socket, ConfigFile configfile);
 
 /////////////RESPONSE////////////
 int respond(ConnectSocket &socket, ConfigFile configfile);
