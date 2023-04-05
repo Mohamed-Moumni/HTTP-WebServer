@@ -83,7 +83,7 @@ void        ConnectSocket::requestType(void)
     }
     else
     {
-        _request.ContentLen = -1;
+        _request.ContentLen = 0;
     }
 }
 
@@ -116,12 +116,6 @@ void    HexToDec(const std::string hexValue, size_t & result)
 
 void    ConnectSocket::readUnChuncked(void)
 {
-    if (_request.ContentLen == -1)
-    {
-        ReadAvailble = false;
-        SendAvailble = true;
-        return ;
-    }
     if (_request.ContentLen == 0)
     {
         ReadAvailble = false;
