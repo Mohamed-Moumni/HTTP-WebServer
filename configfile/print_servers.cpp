@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:53:14 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 14:01:57 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/03 15:51:35 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,59 +39,74 @@ void	print_server_names(Server& vec)
 	std::cout << std::endl;
 }
 
-void	print_index(Server& vec)
+template <typename T>
+void	print_index(T& fill)
 {
+	if (!fill._index.size())
+		return ;
 	std::cout << "####### INDEX #######" << std::endl;
-	for (size_t i = 0; i < vec._index.size(); i++)
+	for (size_t i = 0; i < fill._index.size(); i++)
 	{
-		std::cout << vec._index[i] << " ";
+		std::cout << fill._index[i] << " ";
 	}
 	std::cout << std::endl;
 }
 
-void	print_error_pages(Server& vec)
+template <typename T>
+void	print_error_pages(T& fill)
 {
+	if (!fill._error_pages.size())
+		return ;
 	std::cout << "####### ERROR PAGES #######" << std::endl;
-	std::map<std::string, std::string>::iterator it = vec._error_pages.begin();
+	std::map<std::string, std::string>::iterator it = fill._error_pages.begin();
 
-	for (; it != vec._error_pages.end(); it++)
+	for (; it != fill._error_pages.end(); it++)
 	{
 		std::cout << it->first << " " << it->second << std::endl;
 	}
 }
 
-void	print_return(Server& vec)
+template <typename T>
+void	print_return(T& fill)
 {
+	if (!fill._return.size())
+		return ;
 	std::cout << "####### RETURN #######" << std::endl;
-	std::map<std::string, std::string>::iterator it = vec._return.begin();
+	std::map<std::string, std::string>::iterator it = fill._return.begin();
 
-	for (; it != vec._return.end(); it++)
+	for (; it != fill._return.end(); it++)
 	{
 		std::cout << it->first << " " << it->second << std::endl;
 	}
 }
 
-// void	print_locations(Server& serv)
-// {
-// 	std::vector<location> loc = serv._locations;
+void	print_locations(Server& serv)
+{
+	std::vector<location> loc = serv._locations;
 	
-// 	std::cout << "####### LOCATIONS #######" << std::endl;
-// 	std::cout << "THIS SERVER HAS " << loc.size() << (loc.size() > 1 ? " LOCATIONS" : " LOCATION") << std::endl;
-// 	for (size_t i = 0; i < loc.size(); i++)
-// 	{
-// 		location tmp = loc[i];
-// 		std::cout << " -------------------------- " << std::endl;
-// 		std::cout << "location number " << i+1 << std::endl;
-// 		std::cout << "PATH " << tmp.path << std::endl;
-// 		std::map<std::string, std::vector<std::string> >::iterator it = tmp._location_attr.begin();
-// 		for (; it != tmp._location_attr.end(); it++)
-// 		{
-// 			std::cout << it->first << " ";
-// 			print_vector(it->second);
-// 		}
-// 		std::cout << " -------------------------- " << std::endl;
-// 	}
-// }
+	std::cout << "####### LOCATIONS #######" << std::endl;
+	std::cout << "THIS SERVER HAS " << loc.size() << (loc.size() > 1 ? " LOCATIONS" : " LOCATION") << std::endl;
+	for (size_t i = 0; i < loc.size(); i++)
+	{
+		location tmp = loc[i];
+		std::cout << " -------------------------- " << std::endl;
+		std::cout << "location number " << i+1 << std::endl;
+		std::cout << "PATH " << tmp.path << std::endl;
+		std::cout << "UPLOAD " << tmp._upload << std::endl;
+		std::cout << "Root is : " << tmp._root << std::endl;
+		std::cout << "AutoIndex is : " << tmp._autoindex << std::endl;
+		print_index(tmp);
+		print_error_pages(tmp);
+		print_return(tmp);
+		std::map<std::string, std::vector<std::string> >::iterator it = tmp._others.begin();
+		for (; it != tmp._others.end(); it++)
+		{
+			std::cout << it->first << " ";
+			print_vector(it->second);
+		}
+		std::cout << " -------------------------- " << std::endl;
+	}
+}
 
 void	print_servers(std::vector<Server>& vec)
 {
@@ -101,11 +116,15 @@ void	print_servers(std::vector<Server>& vec)
 		std::cout << "######## ####### ####### ######## " << std::endl;
 		std::cout << "######## SERVER NUMBER " << i + 1 << " ########" << std::endl;
 		std::cout << "######## ####### ####### ######## " << std::endl << std::endl;
+		std::cout << "_root is : " << vec[i]._root << std::endl;
+		std::cout << "_autoindex is : " << vec[i]._autoindex << std::endl;
+		std::cout << "_client_max_body_size is : " << vec[i]._client_max_body_size << std::endl;
+		std::cout << "_upload is : " << vec[i]._upload << std::endl;
 		print_listen(vec[i]);
 		print_server_names(vec[i]);
 		print_index(vec[i]);
 		print_error_pages(vec[i]);
 		print_return(vec[i]);
-		// print_locations(vec[i]);
+		print_locations(vec[i]);
 	}
 }

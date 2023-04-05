@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 15:13:47 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/03 15:53:33 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,20 @@ void	fill_allowed_methods(T& fill, std::vector<std::string>& vec)
 	}
 }
 
+void	fill_string_attr(Server& serv, std::vector<std::string>& vec)
+{
+	if (vec.size() != 2)
+		exit_mode("NUM OF ARGS IS NOT VALID CHECK(ROOT/AUTOINDEX/CLIENT__SIZE)");
+	if (vec[0] == "client_max_body_size")
+		serv._client_max_body_size = vec[1];
+	else if (vec[0] == "root")
+		serv._root = vec[1];
+	else if (vec[0] == "autoindex")
+		serv._autoindex = vec[1];
+	else if (vec[0] == "upload")
+		serv._upload = vec[1];
+}
+
 void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 {
 	std::string		attr = vec[0];
@@ -146,12 +160,8 @@ void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 		fill_index(serv, vec);
 	else if (attr == "error_page")
 		fill_error_pages(serv, vec);
-	else if (attr == "client_max_body_size")
-		serv._client_max_body_size = vec[1];
-	else if (attr == "root")
-		serv._root = vec[1];
-	else if (attr == "autoindex")
-		serv._autoindex = vec[1];
+	else if (attr == "client_max_body_size" || attr == "root" || attr == "autoindex" || attr == "upload")
+		fill_string_attr(serv, vec);
 	else if (attr == "allowed_methods")
 		fill_allowed_methods(serv, vec);
 	else if (attr == "return")
@@ -269,6 +279,22 @@ std::vector<std::string>	get_data_of_scope(std::string str)
 	return loc;
 }
 
+void	check_path_validity(std::string data, std::string path)
+{
+	std::string s = "";
+
+	for (size_t i = 0; i < data.length(); i++)
+	{
+		if (data[i] == '{')
+			break;
+		s += data[i];
+	}
+	if (str_split(str_trim(s), ' ').size() != 2)
+		exit_mode("DIR PATH M9AD MN ZAMLA");
+	if (path[0] != '/')
+		exit_mode("THE PATH OF LOCATION SHOULD START WITH '/'");
+}
+
 std::string		abstract_path(std::string data)
 {
 	std::string str;
@@ -282,7 +308,9 @@ std::string		abstract_path(std::string data)
 			break;
 	}
 	reverse(res.begin(), res.end());
-	return str_trim(res);
+	res = str_trim(res);
+	check_path_validity(data, res);
+	return res;
 }
 
 void	print_vector(std::vector<std::string>& v)
@@ -294,14 +322,16 @@ void	print_vector(std::vector<std::string>& v)
 	std::cout << std::endl;
 }
 
-void	fill_root_auto_index(location& loc, std::vector<std::string>& vec)
+void	fill_root_autoindex_upload(location& loc, std::vector<std::string>& vec)
 {
 	if (vec.size() != 2)
-		exit_mode("INVALID NUMBER OF ARGS CHECK (ROOT/AUTOINDEX)");
+		exit_mode("INVALID NUMBER OF ARGS CHECK (ROOT/AUTOINDEX/UPLOAD)");
 	if (vec[0] == "root")
 		loc._root = vec[1];
 	else if (vec[0] == "autoindex")
 		loc._autoindex = vec[1];
+	else if (vec[0] == "upload")
+		loc._upload = vec[1];
 }
 
 void	fill_others(location& loc, std::vector<std::string>& vec)
@@ -317,8 +347,8 @@ void	fill_others(location& loc, std::vector<std::string>& vec)
 void	fill_location_attr(location& loc, std::string& s)
 {
 	std::vector<std::string> vec = str_split(s, ' ');
-	if (vec[0] == "root" || vec[0] == "autoindex")
-		fill_root_auto_index(loc, vec);
+	if (vec[0] == "root" || vec[0] == "autoindex" || vec[0] == "upload")
+		fill_root_autoindex_upload(loc, vec);
 	else if (vec[0] == "index")
 		fill_index(loc, vec);
 	else if (vec[0] == "allowed_methods")
@@ -336,19 +366,11 @@ location	parse_one_location(std::string data)
 {
 	location	loc;
 	std::vector<std::string> vec = str_split(data, '\n');
-	std::vector<std::string> v;
 	
 	loc.path = abstract_path(vec[0]);
 	for (size_t i = 1; i < vec.size(); i++)
 	{
 		fill_location_attr(loc, vec[i]);
-		// std::vector<std::string> line = str_split(vec[i], ' ');
-		// for (size_t j = 1; j < line.size(); j++)
-		// {
-		// 	v.push_back(line[j]);
-		// }
-		// loc._location_attr.insert(std::make_pair(line[0], v));
-		v.clear();
 	}
 	return loc;
 }
@@ -407,6 +429,8 @@ Server		parse_one_server(std::string str, size_t pos)
 	// std::cout << serv_data << std::endl;
 	loc_data = get_data_of_scope(data_from_pos(str, pos));
 	serv._locations = fill_location(loc_data);
+	if (serv._index.size() != 1)
+		exit_mode("INDEX SHOULD HAS EXACTLY ONE ARGUMENT");
 	return serv;
 }
 
