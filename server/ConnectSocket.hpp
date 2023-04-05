@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/04 17:45:18 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/05 09:30:23 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <vector>
 #include <unistd.h>
 #include <sys/time.h>
+#include <sstream>
 #include "../request/INCLUDES/request.class.hpp"
 #include "../request/INCLUDES/response.class.hpp"
 #include "../configfile/configfile.hpp"
@@ -34,7 +35,7 @@ class ConnectSocket
         bool            ConnectionType;
         bool            Chuncked;
         bool            ReadFirst;
-        long long       TimeOut;
+        bool            closed;
         std::string     IpAdress;
         std::string     Port;
         request         _request;
@@ -42,13 +43,13 @@ class ConnectSocket
         ~ConnectSocket();
         ConnectSocket();
         ConnectSocket(int SocketId, std::string _IpAdress, std::string _port);
-        void        readRequest( ConfigFile & _configfile, std::map<int, ConnectSocket> & Connections);
+        void        readRequest( ConfigFile & _configfile);
         void        readFirst(void);
-        void        sendResponse(std::map<int, ConnectSocket> & Connections);
+        void        sendResponse(void);
         void        getContentLength(void);
-        void        readChuncked(std::map<int, ConnectSocket> & Connections);
-        void        readUnChuncked(std::map<int, ConnectSocket> & Connections);
-        void        FirstRead(ConfigFile & _configfile, std::map<int, ConnectSocket> & Connections);
+        void        readChuncked(void);
+        void        readUnChuncked(void);
+        void        FirstRead(ConfigFile & _configfile);
         void        requestType(void);
         std::string getChuncked(std::string req);
 };

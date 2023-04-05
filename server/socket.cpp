@@ -6,15 +6,15 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/03 15:06:10 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/05 09:30:29 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "socket.hpp"
+#include "ConnectSocket.hpp"
 #include "../configfile/configfile.hpp"
 #include "../configfile/server.hpp"
-#include "ConnectSocket.hpp"
 
 Socket::Socket()
 {
@@ -165,7 +165,7 @@ void    pollout(ConfigFile & _configfile, std::vector<pfd> & pfds, std::map<int,
 {
     if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].SendAvailble)
     {
-        Connections[pfds[i].fd].sendResponse(Connections);
+        Connections[pfds[i].fd].sendResponse();
         if (Connections[pfds[i].fd].ConnectionType)
             closeConnection(pfds, Connections, i);
     }
