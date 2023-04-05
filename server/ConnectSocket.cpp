@@ -6,12 +6,13 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/04 14:59:26 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/05 09:02:39 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConnectSocket.hpp"
 #include "../server/ConnectSocket.hpp"
+#include "../server/socket.hpp"
 #include "../configfile/configfile.hpp"
 #include "../request/request.class.hpp"
 #include "../request/request.hpp"
@@ -53,11 +54,6 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile, std::map<int, Conne
         else
         {
             CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
-            if (CharRead < 0)
-            {
-                std::cout << "recv: Error\n";
-                exit(1);
-            }
             _request.request_body.append(std::string(Buffer,CharRead));
             if (Chuncked)
                 readChuncked(Connections);
@@ -97,11 +93,6 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile, std::map<int, Connect
     std::string body;
 
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
-    if (CharRead < 0)
-    {
-        std::cout << "recv: Error\n";
-        exit(1);
-    }
     _request.request_string.append(std::string(Buffer, CharRead));
     // request_handler(*this, _configfile); new function by youssef
     requestType();

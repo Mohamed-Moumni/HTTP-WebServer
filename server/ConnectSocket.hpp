@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/04 14:56:23 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/04 17:45:18 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ class ConnectSocket
         ~ConnectSocket();
         ConnectSocket();
         ConnectSocket(int SocketId, std::string _IpAdress, std::string _port);
-        void        readRequest(ConfigFile & _configfile, std::map<int, ConnectSocket> & Connections);
+        void        readRequest( ConfigFile & _configfile, std::map<int, ConnectSocket> & Connections);
         void        readFirst(void);
         void        sendResponse(std::map<int, ConnectSocket> & Connections);
         void        getContentLength(void);
