@@ -15,6 +15,14 @@
 #include "./configfile/configfile.hpp"
 #include "./server/socket.hpp"
 
+void set_error_pages(ConfigFile &config)
+{
+	std::map<std::string , std::string> error_pages;
+	error_pages["404"] = "";
+	error_pages[""] = "";
+	//todo
+}
+
 std::string		read_file(std::string file_name)
 {
 	std::string	data;
@@ -39,6 +47,7 @@ void	start_server(std::string & _config)
 	{
 		_config = read_file(_config);
 		configFile = start_parse_config_file(_config);
+		set_error_pages(configFile);
 		// sockets = create_sockets(configFile);
 		// listenSocket(sockets);
 		// pfds = create_pfd(sockets);

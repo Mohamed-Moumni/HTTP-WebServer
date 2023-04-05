@@ -37,9 +37,8 @@ int main()
     socket.IpAdress = "127.0.0.1";
     socket.Port = "8080";
     ConfigFile configfile = start_parse_config_file(read_file("../tests/def.conf"));
-    // std::cout << configfile._servers[0]._index[0] << std::endl;
 
-    socket._request.request_string  = "GET /test/ HTTP/1.1\r\nHost: unknownserver\r\nConnection: close\r\n\r\nhello everybody here is the body";
+    socket._request.request_string  = "GET /test/index.html HTTP/1.1\r\nHost: unknownserver\r\nConnection: close\r\n\r\nhello everybody here is the body";
     std::fstream out_file;
     out_file.open("out.html");
 
@@ -48,10 +47,9 @@ int main()
         std::cout << "request error" << std::endl;
         return 0;
     }
-    //check_max_body_size
 
-    if(!respond(socket, configfile))
-        return 0;
+    respond(socket, configfile);
+
     std::cout << "the response is: "<< socket._response.response_string << std::endl;
 
     for(int i = 0; i < configfile._servers.size(); i++)

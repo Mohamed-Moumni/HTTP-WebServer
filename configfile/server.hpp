@@ -30,12 +30,8 @@ class Server
 		std::vector<std::string>							_allowed_methods;
 		std::vector<location>								_locations;
 		std::map<std::string, std::string>					_error_pages;
-<<<<<<< HEAD
-		std::string											_client_max_body_size;
-=======
 		std::map<std::string, std::string>					_return;
 
->>>>>>> cee4e13aa953520f419143ae6d2a6fc2cbefaf0b
 	public:
 		Server();
 		~Server();

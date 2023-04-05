@@ -19,8 +19,8 @@
 #include <vector>
 #include <unistd.h>
 #include <sys/time.h>
-#include "../request/request.class.hpp"
-#include "../request/response.class.hpp"
+#include "../request/INCLUDES/request.class.hpp"
+#include "../request/INCLUDES/response.class.hpp"
 #include "../configfile/configfile.hpp"
 
 #define BUFFER 10200

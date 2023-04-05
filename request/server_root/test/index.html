@@ -5,10 +5,11 @@
 	<style>
 		body {
 			background-color: #fff;
-			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			font-family: Fantasy;
 			color: #444;
 			padding: 0;
 			margin: 0;
+			position: relative;
 		}
 
 		.container {
@@ -18,25 +19,33 @@
 			align-items: center;
 			height: 100vh;
 			width: 100%;
-			position: relative;
+			position: absolute;
+			top: 0;
+			left: 0;
 		}
 
+		@keyframes typing {
+		from { width: 0% }
+		to { width: 60% }
+		}
+
+		/* Apply the animation to the text */
 		h1 {
-			font-size: 60px;
-			margin: 0;
-			animation-name: slidein;
-			animation-duration: 2s;
-			animation-fill-mode: forwards;
-			animation-timing-function: ease-out;
+		font-size: 60px;
+		margin: 0;
+		overflow: hidden;
+		white-space: nowrap;
+		animation: typing 2s steps(30, end);
+		font-family:'Courier New', Courier, monospace;
 		}
 
 		@keyframes slidein {
 			from {
-				transform: translateY(-100%);
+				transform: translateY(-150%);
 				opacity: 0;
 			}
 			to {
-				transform: translateY(0%);
+				transform: translateY(-5%);
 				opacity: 1;
 			}
 		}
@@ -45,6 +54,8 @@
 			font-size: 24px;
 			margin: 0;
 			margin-top: 20px;
+			text-align: center;
+			font-family: 'Roboto', sans-serif;
 		}
 
 		.button {
@@ -58,6 +69,7 @@
 			box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
 			transition: all 0.3s ease;
 			margin-top: 30px;
+			font-family: 'Roboto', sans-serif;
 		}
 
 		.button:hover {
@@ -66,13 +78,26 @@
 			box-shadow: 4px 4px 4px rgba(0,0,0,0.3);
 			transform: translate(-2px,-2px);
 		}
-	</style>
+
+	@media screen and (max-width: 600px) {
+		h1 {
+			font-size: 40px;
+		}
+
+		p {
+			font-size: 20px;
+		}
+
+	}
+</style>
+
 </head>
 <body>
 	<div class="container">
 		<h1>Welcome To NGINY</h1>
-		<p>Simple http server inspired from nginx to learn more about nginy hite the help button</p>
-		<a href="./help.html" class="button">HELP</a>
+		<p>Home Made HTTP Server </p>
+		<a href="help.html" class="button">Get started</a>
 	</div>
+
 </body>
 </html>

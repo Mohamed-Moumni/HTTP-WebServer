@@ -13,8 +13,8 @@
 #include "ConnectSocket.hpp"
 #include "../server/ConnectSocket.hpp"
 #include "../configfile/configfile.hpp"
-#include "../request/request.class.hpp"
-#include "../request/request.hpp"
+#include "../request/INCLUDES/request.class.hpp"
+#include "../request/INCLUDES/request.hpp"
 
 ConnectSocket::ConnectSocket()
 {

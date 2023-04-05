@@ -6,6 +6,7 @@
 #include "../../utils/utils.hpp"
 
 /////////////PARSING RE////////////
+std::string		read_file(std::string file_name);
 int request_handler(ConnectSocket & socket, ConfigFile configfile);
 int pars_request(request &request);
 std::string respond_error(std::string error);

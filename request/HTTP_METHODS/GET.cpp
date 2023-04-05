@@ -3,19 +3,25 @@
 
 void file2response(ConnectSocket &socket, Server &server, location &location)
 {
-    socket._response.response_string = "tobe defined in file2response function";
+    socket._response.response_string = read_file(socket._request.request_target);
 }
 
-int listdir(location location)
+int listdir(ConnectSocket &socket)
 {
     DIR *dir;
     struct dirent *ent;
+    std::string resp;
 
-    dir = opendir(location.path.c_str());
+    dir = opendir(socket._request.request_target.c_str());
     if(!dir)
         return 0;
     while((ent = readdir(dir)))
-        std::cout << ent->d_name << std::endl;
+    {    
+        resp += ent->d_name;
+        resp += '\n';
+    }
+    std::cout << resp <<  std::endl;
+    socket._response.response_string = resp;
     closedir(dir);
     return 1;
 }
@@ -26,12 +32,15 @@ void GET(ConnectSocket &socket, Server &server, location &location)
     {
         if(location._index.size())
             socket._request.request_target += location._index[0];
-        else
+        else if(server._index.size())
             socket._request.request_target += server._index[0];
     }
-    if(socket._request.request_target[socket._request.request_target.size() - 1] == '/' && (location._autoindex == "on" || (!location._autoindex.size() && server._autoindex == "on")))
+    if(socket._request.request_target[socket._request.request_target.size() - 1] == '/' && (location._autoindex == "on"
+    || (!location._autoindex.size() && server._autoindex == "on")))
     {
-        listdir(location);
+    std::cout << socket._request.request_target << std::endl;
+        if(!listdir(socket))
+            socket._response.response_string = respond_error("404");
         return ;
     }
     else if (socket._request.request_target[socket._request.request_target.size() - 1] == '/')
@@ -40,10 +49,15 @@ void GET(ConnectSocket &socket, Server &server, location &location)
             socket._response.response_string = respond_error("403");//responde with 403 forbidden and 
         else
             socket._response.response_string = respond_error("404");//responde with 404 notfound and
+        return ;
     }
     //check if the content is dynamic or static and server each one separatly
-    // if(socket._request.request_target.size() >= 4 && strcmp(socket._request.request_target.c_str() + socket._request.request_target.size() - 4, ".php"))
-        //cgi here; return the response from here; return
+    if(socket._request.request_target.size() >= 4 && !strcmp(socket._request.request_target.c_str() + socket._request.request_target.size() - 4, ".php"))
+    {
+        // std::cout << "dynamic content detected" << std::endl;
+        socket._response.response_string = respond_error("CGI not working yet");
+        return;
+    }
     
     //static here
     std::cout << socket._request.request_target << std::endl;

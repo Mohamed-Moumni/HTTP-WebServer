@@ -11,9 +11,9 @@ int prefix_match(std::string s1, std::string s2)
 }
 
 
-void redirect()
+void redirect(ConnectSocket & socket, ConfigFile configfile)
 {
-
+    socket._response.response_string = respond_error("redirected");
 }
 
 int check_max_size(ConnectSocket & socket, ConfigFile configfile, location location)
@@ -80,7 +80,10 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
         socket._request.request_target = server._root + socket._request.request_target;
 
     if(server._return.size() || location._return.size())
-        redirect();
+    {
+        redirect(socket, configfile);
+        return 0;
+    }
 
     response_generator(socket, server, location);
 
