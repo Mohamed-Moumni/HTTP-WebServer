@@ -3,6 +3,8 @@
 
 void file2response(ConnectSocket &socket, Server &server, location &location)
 {
+    (void)server;
+    (void)location;
     socket._response.response_string = read_file(socket._request.request_target);
 }
 

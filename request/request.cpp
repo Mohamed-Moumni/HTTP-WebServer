@@ -4,12 +4,13 @@
 int possible_error(ConnectSocket &socket)
 {
     //todo
+    (void)socket;
     return 1;
 }
 
 int request_handler(ConnectSocket & socket, ConfigFile configfile)
 {
-
+    (void)configfile;
     if(!pars_request(socket._request))
         return 0;
     if(!possible_error(socket))
@@ -52,6 +53,6 @@ int main()
 
     std::cout << "the response is: "<< socket._response.response_string << std::endl;
 
-    for(int i = 0; i < configfile._servers.size(); i++)
+    for(size_t i = 0; i < configfile._servers.size(); i++)
         std::cout << configfile._servers[i]._server_names[0] << std::endl;
 }

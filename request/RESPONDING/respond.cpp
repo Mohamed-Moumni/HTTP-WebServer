@@ -13,11 +13,15 @@ int prefix_match(std::string s1, std::string s2)
 
 void redirect(ConnectSocket & socket, ConfigFile configfile)
 {
+    (void)configfile;
     socket._response.response_string = respond_error("redirected");
 }
 
 int check_max_size(ConnectSocket & socket, ConfigFile configfile, location location)
 {
+    (void)socket;
+    (void)configfile;
+    (void)location;
     return 1;
 }
 
