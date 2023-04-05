@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/05 13:37:17 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/05 17:17:58 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,26 @@ void	start_server(std::string & _config)
 			if (pfds[i].revents & POLLIN)
 			{
 				if (i < sockets.size() && pfds[i].fd == sockets[i].getSocketId())
-					pollin(pfds, sockets, Connections, i);	
+					pollin(pfds, sockets, Connections, i);
 				else
 				{
 					Connections[pfds[i].fd].readRequest(configFile);
 					if (Connections[pfds[i].fd].closed)
 					{
 						closeConnection(pfds, Connections, i);
+						i--;
 					}
 				}
 			}
 			if (pfds[i].revents & POLLOUT)
+			{
 				pollout(configFile, pfds, Connections, i);
+				if (Connections[pfds[i].fd].ConnectionType)
+				{
+            		closeConnection(pfds, Connections, i);
+					i--;
+				}
+			}
 			if (pfds[i].revents & (POLLERR | POLLHUP))
 			{
 				pollErrHup(pfds, Connections, i);

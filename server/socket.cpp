@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/05 13:23:58 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/05 17:17:04 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,11 +152,12 @@ void    pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map
 {
     int connection;
     pfd tmp_pfd;
-    
+
     connection = accept(pfds[i].fd, NULL, NULL);
     tmp_pfd.fd = connection;
     tmp_pfd.events = (POLLIN | POLLOUT);
     pfds.push_back(tmp_pfd);
+    // std::cout << "Socket " << connection << "is Created\n";
     Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
     Connections[connection]._response.response_string = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 22\r\n\r\nHelloWorld\r\nHelloWorld\r\n";
     Connections[connection]._response.respLength = Connections[connection]._response.response_string.size();
@@ -167,9 +168,8 @@ void    pollout(ConfigFile & _configfile, std::vector<pfd> & pfds, std::map<int,
 {
     if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].SendAvailble)
     {
+        // std::cout << "Sending to " << pfds[i].fd << "\n";
         Connections[pfds[i].fd].sendResponse();
-        if (Connections[pfds[i].fd].ConnectionType)
-            closeConnection(pfds, Connections, i);
     }
 }
 
@@ -180,6 +180,7 @@ void    pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Conne
 
 void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
+    // shutdown(pfds[i].fd, SHUT_RDWR);
     close(pfds[i].fd);
     Connections.erase(pfds[i].fd);
     pfds.erase(pfds.begin() + i);
