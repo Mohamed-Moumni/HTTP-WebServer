@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/05 11:17:55 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/05 13:37:59 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ ConnectSocket::~ConnectSocket()
 ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _port)
 {
     ConnectSocketId = SocketId;
+    ConnectionType = false;
     IpAdress = _IpAdress;
     Port = _port;
     _request.request_string = "";
@@ -55,6 +56,11 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
         else
         {
             CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
+            if (!CharRead)
+            {
+                closed = true;
+                return ;
+            }
             _request.request_body.append(std::string(Buffer,CharRead));
             if (Chuncked)
                 readChuncked();
@@ -94,15 +100,22 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     std::string body;
 
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
+    if (!CharRead)
+    {
+        closed = true;
+        return ;
+    }
     _request.request_string.append(std::string(Buffer, CharRead));
-    std::cout << _request.request_string << std::endl;
     request_handler(*this, _configfile);
     requestType();
     if (Chuncked)
+    {
         readChuncked();
+    }
     else
     {
-        _request.ContentLen -= CharRead;
+        if (_request.ContentLen >= CharRead)
+            _request.ContentLen -= CharRead;
         readUnChuncked();
     }
     _request.request_string.clear();
@@ -169,6 +182,7 @@ void    ConnectSocket::sendResponse(void)
 
     CharSent = 0;
     CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
+    std::cout << CharSent << std::endl;
     _response.CharSent += CharSent;
     _response.respLength -= CharSent;
     if (_response.respLength == 0)
