@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/05 10:41:51 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/05 16:04:16 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class ConnectSocket
         bool            Chuncked;
         bool            ReadFirst;
         bool            closed;
+        bool            sended;
         std::string     IpAdress;
         std::string     Port;
         request         _request;
