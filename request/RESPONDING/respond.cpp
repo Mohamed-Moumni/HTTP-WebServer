@@ -10,6 +10,14 @@ int prefix_match(std::string s1, std::string s2)
     return i;
 }
 
+void append_root(ConnectSocket &socket,Server &server,location &location)
+{
+    //append root
+    if(location._root.size())
+        socket._request.request_target = location._root + socket._request.request_target;
+    else if(server._root.size())
+        socket._request.request_target = server._root + socket._request.request_target;
+}
 
 void redirect(ConnectSocket & socket, ConfigFile configfile)
 {
@@ -77,20 +85,13 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     find_location(socket, server, location);
     if(!check_max_size(socket, configfile, location))
         return 0;
-    if(location._root.size())
-        socket._request.request_target = location._root + socket._request.request_target;
-    else if(server._root.size())
-        socket._request.request_target = server._root + socket._request.request_target;
-
+    append_root(socket, server, location);
     if(server._return.size() || location._return.size())
     {
         redirect(socket, configfile);
         return 0;
     }
-
     response_generator(socket, server, location);
-
-
     std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
     std::cout << "the chosen location is : " << location.path << std::endl;
     return 1;

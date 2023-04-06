@@ -504,7 +504,7 @@ ConfigFile	start_parse(std::string config_file)
 
 	conf._servers = parse_servers(config_file);
 	errors_handling(conf._servers);
-	print_servers(conf._servers);
-	exit(0);
+	// print_servers(conf._servers);
+	// exit(0);
 	return (conf);
 }

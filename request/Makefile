@@ -1,7 +1,7 @@
 NAME = NGINY	
 CC = c++
 
-FLAGS = -Wall -Wextra -Werror -std=c++98
+# FLAGS = -Wall -Wextra -Werror -std=c++98
 
 HEADERS = INCLUDES/request.class.hpp  INCLUDES/request.hpp        INCLUDES/response.class.hpp
 
