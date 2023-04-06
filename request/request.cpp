@@ -34,7 +34,7 @@ int main()
     ConfigFile configfile = start_parse_config_file(read_file("../tests/def.conf"));
 
     socket._request.request_string  = read_file("../tests/request.txt");
-	std::cout << socket._request.request_string << std::endl;
+
     std::fstream out_file;
     out_file.open("out.html");
 
@@ -47,8 +47,5 @@ int main()
 	std::cout << "method: "<< socket._request.method << std::endl;
     respond(socket, configfile);
 
-    std::cout << "the response is: "<< socket._response.response_string << std::endl;
-
-    for(size_t i = 0; i < configfile._servers.size(); i++)
-        std::cout << configfile._servers[i]._server_names[0] << std::endl;
+    std::cout << "the response is: ------------------------> "<< socket._response.response_string << std::endl;
 }

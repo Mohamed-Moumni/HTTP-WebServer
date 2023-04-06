@@ -21,9 +21,9 @@ void response_generator(ConnectSocket &socket, Server &server, location &locatio
     if(socket._request.method == "GET")
         GET(socket, server, location);
     else if(socket._request.method == "POST")
-        POST();
+        POST(socket, server, location);
     else if(socket._request.method == "DELETE")
-        DELETE();
+        DELETE(socket, server, location);
     else
         socket._response.response_string = respond_error("501");
 }

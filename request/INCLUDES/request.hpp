@@ -18,7 +18,7 @@ std::string respond_error(std::string error);
 
 /////////////METHODS/////////////
 void GET(ConnectSocket &socket, Server &server, location &location);
-void POST();
-void DELETE();
+void POST(ConnectSocket &socket, Server server, location location);
+void DELETE(ConnectSocket &socket, Server server, location location);
 
 #endif
