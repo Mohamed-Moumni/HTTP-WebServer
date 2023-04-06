@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/05 13:53:27 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/06 16:46:30 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -429,6 +429,8 @@ Server		parse_one_server(std::string str, size_t pos)
 	// std::cout << serv_data << std::endl;
 	loc_data = get_data_of_scope(data_from_pos(str, pos));
 	serv._locations = fill_location(loc_data);
+	if (!serv._locations.size())
+		exit_mode("AT LEAST ONE LOCATION NEEDED IN SERVER BLOCK");
 	if (serv._index.size() != 1)
 		exit_mode("INDEX SHOULD HAS EXACTLY ONE ARGUMENT");
 	return serv;
