@@ -528,11 +528,6 @@ ConfigFile	start_parse(std::string config_file)
 	conf._servers = parse_servers(config_file);
 	errors_handling(conf._servers);
 	// print_servers(conf._servers);
-<<<<<<< HEAD
 	// exit(0);
-=======
-	fill_meme_types(conf);
-	exit(0);
->>>>>>> 743887bc963400b619fb070793d372e692bd6e26
 	return (conf);
 }
