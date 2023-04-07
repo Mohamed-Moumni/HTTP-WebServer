@@ -19,7 +19,7 @@ void append_root(ConnectSocket &socket,Server &server,location &location)
         socket._request.request_target =  '.' + server._root + socket._request.request_target;
 }
 
-void redirect(ConnectSocket & socket,location location, Server server, ConfigFile configfile)
+void redirect(ConnectSocket &socket,location location, Server server, ConfigFile configfile)
 {
     std::ostringstream response;
     std::string loca;
@@ -28,7 +28,8 @@ void redirect(ConnectSocket & socket,location location, Server server, ConfigFil
 
     response << "HTTP/1.1 301 Moved Permanently\r\n";
     response << "Location: " << loca << CRLF << CRLF;
-    socket._request.request_string = response;
+    socket._request.request_string = response.str();
+    std::cout << "||||"<<socket._request.request_string  << std::endl;
 }
 
 int check_max_size(ConnectSocket & socket, ConfigFile configfile, location location)
@@ -92,9 +93,10 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     if(!check_max_size(socket, configfile, location))
         return 0;
     append_root(socket, server, location);
-    if(server._return.size() || location._return.size())
+    if( location._return.size())
     {
         redirect(socket, location , server ,configfile);
+        std::cout << "+++++++++++++++++++"<<socket._response.response_string << std::endl;
         return 0;
     }
     //should be decommanted when switching to the exeternal makefile

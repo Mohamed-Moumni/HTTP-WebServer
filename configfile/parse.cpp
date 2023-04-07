@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/07 13:48:15 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/07 18:19:38 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,9 @@ void	fill_error_pages(T& fill, std::vector<std::string>& vec)
 template <typename T>
 void	fill_return(T& fill, std::vector<std::string>& vec)
 {
-	if (vec.size() < 3)
-		exit_mode("LESS RETURN ARGS");
-	for (size_t i = 1; i < vec.size() - 1; i++)
-	{
-		fill._return.insert(std::make_pair(vec[i], vec[vec.size() - 1]));
-	}
+	if (vec.size() != 2)
+		exit_mode("INVALID RETURN ARGS");
+	fill._return = vec[1];
 }
 
 template <typename T>
@@ -165,8 +162,6 @@ void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
 		fill_string_attr(serv, vec);
 	else if (attr == "allowed_methods")
 		fill_allowed_methods(serv, vec);
-	else if (attr == "return")
-		fill_return(serv, vec);
 	else
 		exit_mode("INVALID ARG FOR SERVER BLOCK");
 }
@@ -532,7 +527,7 @@ ConfigFile	start_parse(std::string config_file)
 
 	conf._servers = parse_servers(config_file);
 	errors_handling(conf._servers);
-	// print_servers(conf._servers);
+	print_servers(conf._servers);
 	fill_meme_types(conf);
 	// exit(0);
 	return (conf);
