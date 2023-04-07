@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/07 18:14:35 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/07 18:19:38 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -528,6 +528,6 @@ ConfigFile	start_parse(std::string config_file)
 	errors_handling(conf._servers);
 	print_servers(conf._servers);
 	fill_meme_types(conf);
-	exit(0);
+	// exit(0);
 	return (conf);
 }
