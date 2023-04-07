@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/07 15:45:13 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/07 18:11:36 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,24 +64,15 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
             }
             else
             {
-                if (_request.ContentLen == std::string::npos)
+                CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
+                if (CharRead <= 0)
                 {
-                    ReadAvailble = false;
-                    SendAvailble = true;
-                    ConnectionType();
+                    closed = true;
+                    return ;
                 }
-                else
-                {
-                    CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
-                    if (CharRead <= 0)
-                    {
-                        closed = true;
-                        return ;
-                    }
-                    _request.request_body.append(std::string(Buffer, CharRead));
-                    _request.BodyReaded += CharRead;
-                    readUnChuncked();
-                }
+                _request.request_body.append(std::string(Buffer, CharRead));
+                _request.BodyReaded += CharRead;
+                readUnChuncked();
             }
         }
     }
@@ -133,7 +124,6 @@ void    ConnectSocket::chunckBody(void)
     body = getChuncked(_request.request_body);
     _request.request_body.clear();
     _request.request_body.append(body);
-    std::cout << _request.request_body << std::endl;
     ReadAvailble = false;
     SendAvailble = true;
     ConnectionType();
@@ -160,6 +150,9 @@ void        ConnectSocket::requestType(void)
     else
     {
         _request.ContentLen = std::string::npos;
+        ReadAvailble = false;
+        SendAvailble = true;
+        ConnectionType();
     }
 }
 
@@ -189,7 +182,9 @@ void    ConnectSocket::ConnectionType(void)
     if (connectType != _request.headers_map.end())
     {
         if (connectType->second == "close")
+        {
             conType = true;
+        }
     }
 }
 
@@ -236,6 +231,5 @@ void    ConnectSocket::sendResponse(void)
         ReadAvailble = true;
         _response.respLength = _response.response_string.size();
         _response.CharSent = 0;
-        ReadFirst = false;
     }
 }
