@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/05 16:04:32 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/07 09:56:56 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ ConnectSocket::~ConnectSocket()
 ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _port)
 {
     ConnectSocketId = SocketId;
-    ConnectionType = false;
     IpAdress = _IpAdress;
     Port = _port;
     _request.request_string = "";
@@ -39,7 +38,7 @@ ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _p
     Chuncked = false;
     ReadFirst = false;
     closed = false;
-    sended = false;
+    conType = false;
 }
 
 void    ConnectSocket::readRequest(ConfigFile & _configfile)
@@ -57,9 +56,8 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
         else
         {
             CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
-            if (!CharRead)
+            if (CharRead <= 0)
             {
-                // std::cout << "recv: Error\n";
                 closed = true;
                 return ;
             }
@@ -83,15 +81,16 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     std::string body;
 
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
-    if (!CharRead)
+    // std::cout << Buffer << std::endl;
+    if (CharRead <= 0)
     {
-        // std::cout << "recv: Error\n";
         closed = true;
         return ;
     }
     _request.request_string.append(std::string(Buffer, CharRead));
     request_handler(*this, _configfile);
     requestType();
+    ConnectionType();
     if (Chuncked)
     {
         readChuncked();
@@ -100,7 +99,6 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     {
         if (_request.ContentLen)
             _request.ContentLen -= _request.request_body.size();
-        // std::cout << _request.ContentLen << std::endl;
         readUnChuncked();
     }
     _request.request_string.clear();
@@ -112,9 +110,9 @@ void    ConnectSocket::readChuncked(void)
     std::string body;
 
     body = "";
-    if (_request.request_body.find("0\r\n\r\n") == std::string::npos)
+    if (_request.request_string.find("0\r\n\r\n") == std::string::npos)
     {
-        body.append(_request.request_body, _request.request_body.size());
+        body.append(_request.request_string, _request.request_string.size());
         _request.request_body.clear();
         _request.request_body.append(getChuncked(body));
         ReadAvailble = false;
@@ -161,6 +159,20 @@ void    ConnectSocket::readUnChuncked(void)
     }
 }
 
+void    ConnectSocket::ConnectionType(void)
+{
+    std::map<std::string , std::string>::iterator connectType;
+
+    connectType = _request.headers_map.find("Connection");
+    if (connectType != _request.headers_map.end())
+    {
+        if (connectType->second == "close")
+        {
+            conType = true;
+        }
+    }
+}
+
 std::string ConnectSocket::getChuncked(std::string req)
 {
     std::string body = "";
@@ -191,9 +203,12 @@ void    ConnectSocket::sendResponse(void)
     int CharSent;
 
     CharSent = 0;
-    // std::cout << _response.response_string << std::endl;
     CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
-    // std::cout << CharSent << std::endl;
+    if (CharSent <= 0)
+    {
+        closed = true;
+        return ;
+    }
     _response.CharSent += CharSent;
     _response.respLength -= CharSent;
     if (_response.respLength == 0)
@@ -203,6 +218,5 @@ void    ConnectSocket::sendResponse(void)
         _response.respLength = _response.response_string.size();
         _response.CharSent = 0;
         ReadFirst = false;
-        sended = true;
     }
 }

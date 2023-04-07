@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/05 16:04:16 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/07 09:52:14 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,10 @@ class ConnectSocket
         int             ConnectSocketId;
         bool            ReadAvailble;
         bool            SendAvailble;
-        bool            ConnectionType;
         bool            Chuncked;
         bool            ReadFirst;
         bool            closed;
-        bool            sended;
+        bool            conType;
         std::string     IpAdress;
         std::string     Port;
         request         _request;
@@ -52,6 +51,7 @@ class ConnectSocket
         void        readUnChuncked(void);
         void        FirstRead(ConfigFile & _configfile);
         void        requestType(void);
+        void        ConnectionType(void);
         std::string getChuncked(std::string req);
 };
 

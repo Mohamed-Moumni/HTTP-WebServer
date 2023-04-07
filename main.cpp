@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/05 17:17:58 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/07 09:52:36 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	start_server(std::string & _config)
 			if (pfds[i].revents & POLLOUT)
 			{
 				pollout(configFile, pfds, Connections, i);
-				if (Connections[pfds[i].fd].ConnectionType)
+				if (Connections[pfds[i].fd].closed || Connections[pfds[i].fd].conType)
 				{
             		closeConnection(pfds, Connections, i);
 					i--;
