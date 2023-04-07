@@ -20,6 +20,20 @@ std::string		read_file(std::string file_name)
 	while (getline(file, tmp))
 	{
 		data += tmp;
+		data += "\n";
+	}
+	return data;
+}
+
+std::string		read_request(std::string file_name)
+{
+	std::string	data;
+	std::string	tmp;
+
+	std::ifstream	file(file_name);
+	while (getline(file, tmp))
+	{
+		data += tmp;
 		data += "\r\n";
 	}
 	return data;
@@ -32,7 +46,7 @@ int main()
     socket.Port = "8080";
     ConfigFile configfile = start_parse_config_file(read_file("../tests/def.conf"));
 
-    socket._request.request_string  = read_file("../tests/request.txt");
+    socket._request.request_string  = read_request("../tests/request.txt");
 
     std::fstream out_file;
     out_file.open("out.html");

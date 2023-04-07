@@ -14,9 +14,9 @@ void append_root(ConnectSocket &socket,Server &server,location &location)
 {
     //append root
     if(location._root.size())
-        socket._request.request_target = location._root + socket._request.request_target;
+        socket._request.request_target = ".." + location._root + socket._request.request_target;
     else if(server._root.size())
-        socket._request.request_target = server._root + socket._request.request_target;
+        socket._request.request_target = ".." + server._root + socket._request.request_target;
 }
 
 void redirect(ConnectSocket & socket, ConfigFile configfile)
@@ -91,7 +91,7 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
         redirect(socket, configfile);
         return 0;
     }
-    response_generator(socket, server, location);
+    response_generator(socket, server, location, configfile);
     std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
     std::cout << "the chosen location is : " << location.path << std::endl;
     return 1;

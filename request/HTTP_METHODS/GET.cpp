@@ -28,8 +28,9 @@ int listdir(ConnectSocket &socket)
     return 1;
 }
 
-void GET(ConnectSocket &socket, Server &server, location &location)
+void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile)
 {
+    (void)configfile;
     if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
     {
         if(location._index.size())
@@ -66,5 +67,5 @@ void GET(ConnectSocket &socket, Server &server, location &location)
     if(!access(socket._request.request_target.c_str(), F_OK))
         file2response(socket, server, location);
     else 
-        socket._response.response_string = respond_error("404");//404 not found 
+        socket._response.response_string = respond_error("404"); //404 not found 
 }

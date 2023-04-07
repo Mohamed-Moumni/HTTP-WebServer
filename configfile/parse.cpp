@@ -504,7 +504,7 @@ void	fill_meme_types(ConfigFile& config)
 {
 	std::string meme_types;
 
-	meme_types = read_file("configfile/MIME_TYPES");
+	meme_types = read_file("../configfile/MIME_TYPES");
 	std::vector<std::string> list = str_split(meme_types, '\n');
 	for (size_t i = 0; i < list.size(); i++)
 	{
@@ -513,11 +513,10 @@ void	fill_meme_types(ConfigFile& config)
 		std::string value = key_value[1];
 		config._mime_types[key] = value;
 	}
-	for (auto it : config._mime_types)
-	{
-		std::cout << it.first << " " << it.second << std::endl;
-	}
-	exit(0);
+	// for (auto it : config._mime_types)
+	// {
+	// 	std::cout << it.first << " " << it.second << std::endl;
+	// }
 }
 
 ConfigFile	start_parse(std::string config_file)
@@ -528,6 +527,7 @@ ConfigFile	start_parse(std::string config_file)
 	conf._servers = parse_servers(config_file);
 	errors_handling(conf._servers);
 	// print_servers(conf._servers);
+	fill_meme_types(conf);
 	// exit(0);
 	return (conf);
 }
