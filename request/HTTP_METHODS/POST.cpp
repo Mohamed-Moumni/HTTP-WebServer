@@ -4,9 +4,10 @@
 
 void createfile(ConnectSocket &socket, ConfigFile configfile)
 {
-    //check the content type in the mimetype map
-    if(configfile._mime_types.find(socket._request.headers_map["Content-Type"]) == configfile._mime_types.end())
+    // check the content type in the mimetype map
+    if(configfile._content_types.find(socket._request.headers_map["Content-Type"]) == configfile._content_types.end())
     {
+        // std::cout << "||||"<<socket._request.headers_map["Content-Type"]<< "||||"<< std::endl;
         socket._response.response_string = "400";
         return;
     }

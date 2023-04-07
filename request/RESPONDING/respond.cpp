@@ -14,15 +14,21 @@ void append_root(ConnectSocket &socket,Server &server,location &location)
 {
     //append root
     if(location._root.size())
-        socket._request.request_target = ".." + location._root + socket._request.request_target;
+        socket._request.request_target = '.' + location._root + socket._request.request_target;
     else if(server._root.size())
-        socket._request.request_target = ".." + server._root + socket._request.request_target;
+        socket._request.request_target =  '.' + server._root + socket._request.request_target;
 }
 
-void redirect(ConnectSocket & socket, ConfigFile configfile)
+void redirect(ConnectSocket & socket,location location, Server server, ConfigFile configfile)
 {
-    (void)configfile;
-    socket._response.response_string = respond_error("redirected");
+    std::ostringstream response;
+    std::string loca;
+
+    loca = location._return;
+
+    response << "HTTP/1.1 301 Moved Permanently\r\n";
+    response << "Location: " << loca << CRLF << CRLF;
+    socket._request.request_string = response;
 }
 
 int check_max_size(ConnectSocket & socket, ConfigFile configfile, location location)
@@ -88,9 +94,12 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     append_root(socket, server, location);
     if(server._return.size() || location._return.size())
     {
-        redirect(socket, configfile);
+        redirect(socket, location , server ,configfile);
         return 0;
     }
+    //should be decommanted when switching to the exeternal makefile
+    if(socket._request.request_target.find("..") != std::string::npos)
+        return(socket._response.response_string = respond_error("403"), 0);
     response_generator(socket, server, location, configfile);
     std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
     std::cout << "the chosen location is : " << location.path << std::endl;

@@ -40,5 +40,7 @@ int possible_error(ConnectSocket &socket, ConfigFile configfile)
     // (void)socket;
     if(!get_contentL(socket, configfile))
         return 0;
+    if(socket._request.http_version != "HTTP/1.1")
+        return 0; 
     return 1;
 }

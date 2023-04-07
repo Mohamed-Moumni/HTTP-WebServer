@@ -1,7 +1,7 @@
 #ifndef __REQUEST_HPP__
 #define __REQUEST_HPP__
 
-
+#define CRLF "\r\n"
 #include "../../server/ConnectSocket.hpp"
 #include "../../utils/utils.hpp"
 

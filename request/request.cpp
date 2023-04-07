@@ -45,7 +45,6 @@ int main()
     socket.IpAdress = "127.0.0.1";
     socket.Port = "8080";
     ConfigFile configfile = start_parse_config_file(read_file("../tests/def.conf"));
-
     socket._request.request_string  = read_request("../tests/request.txt");
 
     std::fstream out_file;
@@ -60,5 +59,5 @@ int main()
 	std::cout << "method: "<< socket._request.method << std::endl;
     respond(socket, configfile);
 
-    std::cout << "the response is: ------------------------> "<< socket._response.response_string << std::endl;
+    std::cout << "the response is: \n\n\n------------------------\n"<< socket._response.response_string <<"------------------------\n" << std::endl;
 }

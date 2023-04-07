@@ -1,7 +1,5 @@
-POST /test/index.css HTTP/1.1
+GET /test/index.css HTTP/1.1
 Host: server1
-Connection: close
-Content-Type: dddd
 
 fdfsfssdfs
 sfssfs

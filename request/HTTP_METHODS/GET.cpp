@@ -1,11 +1,33 @@
 #include "../INCLUDES/request.hpp"
 #include <dirent.h>
 
-void file2response(ConnectSocket &socket, Server &server, location &location)
+std::string get_contenttype(std::string file, ConfigFile configfile)
+{
+    int i = file.size();
+    while(i > -1)
+    {
+        if(file[i] == '.')
+            break;
+        if(file[i] == '/')
+            return "plain/text";
+        i--;
+    }
+    return configfile._mime_types[file.c_str() + i];
+
+}
+
+void file2response(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile)
 {
     (void)server;
     (void)location;
+    std::ostringstream response;
     socket._response.response_string = read_file(socket._request.request_target);
+
+    response  << "HTTP/1.1 200 OK\r\n";
+    response << "Content-Type: " + get_contenttype(socket._request.request_target, configfile) << CRLF ;
+    response << "Content-Length: " << socket._response.response_string.size() << CRLF << CRLF;
+    response << socket._response.response_string;
+    socket._response.response_string = response.str();
 }
 
 int listdir(ConnectSocket &socket)
@@ -55,7 +77,8 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
         return ;
     }
     //check if the content is dynamic or static and server each one separatly
-    if(socket._request.request_target.size() >= 4 && !strcmp(socket._request.request_target.c_str() + socket._request.request_target.size() - 4, ".php"))
+    if(socket._request.request_target.size() >= 4 && !strcmp(socket._request.request_target.c_str() 
+    + socket._request.request_target.size() - 4, ".php"))
     {
         // std::cout << "dynamic content detected" << std::endl;
         socket._response.response_string = respond_error("CGI not working yet");
@@ -65,7 +88,7 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     //static here
     std::cout << socket._request.request_target << std::endl;
     if(!access(socket._request.request_target.c_str(), F_OK))
-        file2response(socket, server, location);
+        file2response(socket, server, location, configfile);
     else 
         socket._response.response_string = respond_error("404"); //404 not found 
 }

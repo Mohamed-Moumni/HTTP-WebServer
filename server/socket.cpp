@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/05 17:17:04 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/07 09:44:09 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ addrinfo    *Socket::getinfostruct(std::string hostname, std::string port)
     memset(&hints, 0, sizeof(addrinfo));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_PASSIVE;
+    hints.ai_protocol = IPPROTO_TCP;
     if ((err = getaddrinfo(hostname.c_str(), port.c_str(), &hints, &res)) < 0)
         throw std::runtime_error("getaddrinfo Error: " + std::string(gai_strerror(err)));
     return (res);
@@ -96,7 +98,7 @@ void    listenSocket(std::vector<Socket> & _sockets)
 {
     for (size_t i = 0; i < _sockets.size(); i++)
     {
-        if (listen(_sockets[i].getSocketId(), 50) < 0)
+        if (listen(_sockets[i].getSocketId(), SOMAXCONN) < 0)
         {
             std::cout << strerror(errno) << std::endl;
             exit(EXIT_FAILURE);
@@ -152,14 +154,17 @@ void    pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map
 {
     int connection;
     pfd tmp_pfd;
+    int var;
 
+    var = 1;
     connection = accept(pfds[i].fd, NULL, NULL);
+    // setsockopt(connection, SOL_SOCKET, SO_REUSEADDR, &var, sizeof(var));
     tmp_pfd.fd = connection;
     tmp_pfd.events = (POLLIN | POLLOUT);
     pfds.push_back(tmp_pfd);
     // std::cout << "Socket " << connection << "is Created\n";
     Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
-    Connections[connection]._response.response_string = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 22\r\n\r\nHelloWorld\r\nHelloWorld\r\n";
+    Connections[connection]._response.response_string = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 10\r\n\r\nHelloWorld\r\n";
     Connections[connection]._response.respLength = Connections[connection]._response.response_string.size();
     Connections[connection]._response.CharSent = 0;
 }
@@ -180,7 +185,7 @@ void    pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Conne
 
 void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
-    // shutdown(pfds[i].fd, SHUT_RDWR);
+    shutdown(pfds[i].fd, SHUT_RDWR);
     close(pfds[i].fd);
     Connections.erase(pfds[i].fd);
     pfds.erase(pfds.begin() + i);

@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/06 18:00:45 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/07 13:48:15 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -432,7 +432,7 @@ Server		parse_one_server(std::string str, size_t pos)
 	serv._locations = fill_location(loc_data);
 	if (!serv._locations.size())
 		exit_mode("AT LEAST ONE LOCATION NEEDED IN SERVER BLOCK");
-	if (serv._index.size() != 1)
+	if (serv._index.size() > 1)
 		exit_mode("INDEX SHOULD HAS EXACTLY ONE ARGUMENT");
 	return serv;
 }
@@ -512,11 +512,17 @@ void	fill_meme_types(ConfigFile& config)
 		std::string key = key_value[0];
 		std::string value = key_value[1];
 		config._mime_types[key] = value;
+		config._content_types.insert(value);
 	}
 	// for (auto it : config._mime_types)
 	// {
 	// 	std::cout << it.first << " " << it.second << std::endl;
 	// }
+	// for (auto &it : config._content_types)
+	// {
+	// 	std::cout << it << std::endl;
+	// }
+	// exit(0);
 }
 
 ConfigFile	start_parse(std::string config_file)
