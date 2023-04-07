@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/06 18:00:45 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/07 13:46:33 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -512,12 +512,16 @@ void	fill_meme_types(ConfigFile& config)
 		std::string key = key_value[0];
 		std::string value = key_value[1];
 		config._mime_types[key] = value;
+		config._content_types.insert(value);
 	}
-	for (auto it : config._mime_types)
-	{
-		std::cout << it.first << " " << it.second << std::endl;
-	}
-	exit(0);
+	// for (auto it : config._mime_types)
+	// {
+	// 	std::cout << it.first << " " << it.second << std::endl;
+	// }
+	// for (auto &it : config._content_types)
+	// {
+	// 	std::cout << it << std::endl;
+	// }
 }
 
 ConfigFile	start_parse(std::string config_file)
@@ -529,6 +533,6 @@ ConfigFile	start_parse(std::string config_file)
 	errors_handling(conf._servers);
 	// print_servers(conf._servers);
 	fill_meme_types(conf);
-	exit(0);
+	// exit(0);
 	return (conf);
 }
