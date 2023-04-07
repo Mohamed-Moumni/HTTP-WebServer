@@ -82,8 +82,6 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     location location;
 
     find_server(socket, configfile, server);
-    if(!server._locations.size())
-        return(std::cout << "\n\nNo location founded!!!\n\n" << std::endl, 0);
     find_location(socket, server, location);
     if(!check_max_size(socket, configfile, location))
         return 0;

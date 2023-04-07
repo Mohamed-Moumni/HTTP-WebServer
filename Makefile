@@ -30,7 +30,8 @@ CONFIG_SRCS = ./configfile/configfile.cpp ./configfile/server.cpp ./configfile/l
 
 SERVER_SRCS = ./server/socket.cpp ./server/ConnectSocket.cpp
 
-REQUEST_SRCS = ./request/request.cpp ./request/REQUEST_PARSING/pars_request.cpp ./request/REQUEST_PARSING/possible_error.cpp ./request/REQUEST_PARSING/respond_error.cpp
+REQUEST_SRCS = ./request/request.cpp ./request/REQUEST_PARSING/pars_request.cpp ./request/REQUEST_PARSING/possible_error.cpp ./request/REQUEST_PARSING/respond_error.cpp \
+RESPONDING/respond.cpp 
 
 UTILS_SRC = ./utils/str_trim.cpp ./utils/str_split.cpp ./utils/header_spliter.cpp ./utils/remove_side_spaces.cpp \
 			./utils/side_whitespaces.cpp ./utils/str_split.cpp ./utils/str_trim.cpp

@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 21:09:49 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/02 15:13:09 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/06 17:48:22 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class ConfigFile
 {
 	public:
 		std::vector<Server>										_servers;
+		std::map<std::string, std::string>						_mime_types;
 };
 
 ConfigFile		start_parse_config_file(std::string config_file);

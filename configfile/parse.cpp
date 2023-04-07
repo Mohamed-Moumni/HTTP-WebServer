@@ -6,11 +6,12 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/06 16:46:30 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/06 18:00:45 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "configfile.hpp"
+#include "../request/INCLUDES/request.hpp"
 #include <string>
 
 size_t		exclude_bracket(std::string str, size_t pos)
@@ -499,6 +500,26 @@ std::vector<Server>	parse_servers(std::string str)
 	return _vec_serv;
 }
 
+void	fill_meme_types(ConfigFile& config)
+{
+	std::string meme_types;
+
+	meme_types = read_file("configfile/MIME_TYPES");
+	std::vector<std::string> list = str_split(meme_types, '\n');
+	for (size_t i = 0; i < list.size(); i++)
+	{
+		std::vector<std::string> key_value = str_split(list[i], ' ');
+		std::string key = key_value[0];
+		std::string value = key_value[1];
+		config._mime_types[key] = value;
+	}
+	for (auto it : config._mime_types)
+	{
+		std::cout << it.first << " " << it.second << std::endl;
+	}
+	exit(0);
+}
+
 ConfigFile	start_parse(std::string config_file)
 {
 	ConfigFile		conf;
@@ -507,6 +528,11 @@ ConfigFile	start_parse(std::string config_file)
 	conf._servers = parse_servers(config_file);
 	errors_handling(conf._servers);
 	// print_servers(conf._servers);
+<<<<<<< HEAD
 	// exit(0);
+=======
+	fill_meme_types(conf);
+	exit(0);
+>>>>>>> 743887bc963400b619fb070793d372e692bd6e26
 	return (conf);
 }

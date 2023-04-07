@@ -1,6 +1,4 @@
-POST /test/index.html HTTP/1.1
-Host: unknownserver
-Content-Length: 2147483648
+DELETE /test/index.css HTTP/1.1
+Host: server1
 Connection: close
 
-hello everybody here is the body
