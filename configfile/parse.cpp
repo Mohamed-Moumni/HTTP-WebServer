@@ -6,11 +6,12 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/07 09:41:22 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/07 10:00:27 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "configfile.hpp"
+#include "../request/INCLUDES/request.hpp"
 #include <string>
 
 size_t		exclude_bracket(std::string str, size_t pos)
@@ -429,6 +430,8 @@ Server		parse_one_server(std::string str, size_t pos)
 	// std::cout << serv_data << std::endl;
 	loc_data = get_data_of_scope(data_from_pos(str, pos));
 	serv._locations = fill_location(loc_data);
+	if (!serv._locations.size())
+		exit_mode("AT LEAST ONE LOCATION NEEDED IN SERVER BLOCK");
 	if (serv._index.size() != 1)
 		exit_mode("INDEX SHOULD HAS EXACTLY ONE ARGUMENT");
 	return serv;
@@ -495,6 +498,26 @@ std::vector<Server>	parse_servers(std::string str)
 		offset = str.find("server", offset + 1);
 	}
 	return _vec_serv;
+}
+
+void	fill_meme_types(ConfigFile& config)
+{
+	std::string meme_types;
+
+	meme_types = read_file("configfile/MIME_TYPES");
+	std::vector<std::string> list = str_split(meme_types, '\n');
+	for (size_t i = 0; i < list.size(); i++)
+	{
+		std::vector<std::string> key_value = str_split(list[i], ' ');
+		std::string key = key_value[0];
+		std::string value = key_value[1];
+		config._mime_types[key] = value;
+	}
+	for (auto it : config._mime_types)
+	{
+		std::cout << it.first << " " << it.second << std::endl;
+	}
+	exit(0);
 }
 
 ConfigFile	start_parse(std::string config_file)
