@@ -10,6 +10,7 @@ class request
 {
     public:
         size_t      ContentLen;
+        size_t      BodyReaded;
         size_t      bodyStart;
         std::string request_string;
         std::string method;
