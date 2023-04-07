@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/07 09:52:14 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/07 11:41:00 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class ConnectSocket
         bool            ReadFirst;
         bool            closed;
         bool            conType;
+        bool            chunck;
         std::string     IpAdress;
         std::string     Port;
         request         _request;
@@ -43,15 +44,17 @@ class ConnectSocket
         ~ConnectSocket();
         ConnectSocket();
         ConnectSocket(int SocketId, std::string _IpAdress, std::string _port);
+        void        reading(void);
         void        readRequest( ConfigFile & _configfile);
         void        readFirst(void);
         void        sendResponse(void);
         void        getContentLength(void);
-        void        readChuncked(void);
+        void        chunckBody(void);
         void        readUnChuncked(void);
         void        FirstRead(ConfigFile & _configfile);
         void        requestType(void);
         void        ConnectionType(void);
+        void        readingChuncked(void);
         std::string getChuncked(std::string req);
 };
 

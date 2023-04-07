@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/07 09:44:09 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/07 13:52:45 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,11 +158,9 @@ void    pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map
 
     var = 1;
     connection = accept(pfds[i].fd, NULL, NULL);
-    // setsockopt(connection, SOL_SOCKET, SO_REUSEADDR, &var, sizeof(var));
     tmp_pfd.fd = connection;
     tmp_pfd.events = (POLLIN | POLLOUT);
     pfds.push_back(tmp_pfd);
-    // std::cout << "Socket " << connection << "is Created\n";
     Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
     Connections[connection]._response.response_string = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 10\r\n\r\nHelloWorld\r\n";
     Connections[connection]._response.respLength = Connections[connection]._response.response_string.size();
@@ -173,7 +171,6 @@ void    pollout(ConfigFile & _configfile, std::vector<pfd> & pfds, std::map<int,
 {
     if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].SendAvailble)
     {
-        // std::cout << "Sending to " << pfds[i].fd << "\n";
         Connections[pfds[i].fd].sendResponse();
     }
 }
@@ -190,12 +187,3 @@ void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & 
     Connections.erase(pfds[i].fd);
     pfds.erase(pfds.begin() + i);
 }
-
-// void    sendError(int fd, std::vector<pfd> &pfds, std::map<int, ConnectSocket> & connections, ConfigFile & _configfile, std::string _Error)
-// {
-//     std::map<std::string, std::string>::iterator error = _configfile._servers[0]._error_pages.find(_Error);
-//     send(fd, error->second.c_str(), error->second.size(), 0);
-//     close(fd);
-//     connections.erase(fd);
-//     pfds.erase(pfds.begin() + i);
-// }
