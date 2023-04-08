@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/08 11:15:44 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/08 11:49:42 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     _request.request_string.append(std::string(Buffer, CharRead));
     if (_request.request_string.find("\r\n\r\n") != std::string::npos)
     {
-        std::cout << _request.request_string << std::endl;
         request_handler(*this, _configfile);
         requestType(_configfile);
         _request.BodyReaded += _request.request_body.size();
@@ -197,8 +196,10 @@ void    ConnectSocket::ConnectionType(void)
         if (connectType->second == "close")
         {
             conType = true;
+            return ;
         }
     }
+    conType = true;
 }
 
 std::string ConnectSocket::getChuncked(std::string req)
