@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/08 10:26:26 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/08 10:39:39 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ class ConnectSocket
         void        readFirst(void);
         void        sendResponse(void);
         void        getContentLength(void);
-        void        chunckBody(void);
-        void        readUnChuncked(void);
+        void        chunckBody(ConfigFile & _configfile);
+        void        readUnChuncked(ConfigFile & _configfile);
         void        FirstRead(ConfigFile & _configfile);
-        void        requestType(void);
+        void        requestType(ConfigFile & _configfile);
         void        ConnectionType(void);
         void        readingChuncked(void);
         std::string getChuncked(std::string req);

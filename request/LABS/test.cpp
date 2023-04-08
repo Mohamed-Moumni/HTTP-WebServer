@@ -9,7 +9,7 @@ int listdir(std::string s)
     dir = opendir(s.c_str());
     if(!dir)
         return 0;
-    while(ent = readdir(dir))
+    while((ent = readdir(dir)))
         std::cout << ent->d_name << std::endl;
     closedir(dir);
 }
