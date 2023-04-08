@@ -34,19 +34,23 @@ int listdir(ConnectSocket &socket)
 {
     DIR *dir;
     struct dirent *ent;
-    std::string resp;
+    std::ostringstream resp;
 
     dir = opendir(socket._request.request_target.c_str());
     if(!dir)
         return 0;
     while((ent = readdir(dir)))
     {    
-        resp += ent->d_name;
-        resp += '\n';
+        socket._response.response_string += ent->d_name;
+        socket._response.response_string += '\n';
     }
-    std::cout << resp <<  std::endl;
-    socket._response.response_string = resp;
+    resp << "HTTP/1.1 200 OK\r\n";
+    resp << "Content-Type: text/palin" << CRLF ;
+    resp << "Content-Length: " << socket._response.response_string.size() << CRLF << CRLF;
+    resp << socket._response.response_string;
+    socket._response.response_string = resp.str();
     closedir(dir);
+
     return 1;
 }
 
