@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/08 10:37:17 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/08 10:56:10 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ void    pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map
 
 void    pollout(ConfigFile & _configfile, std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
+    (void)(_configfile);
     if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].SendAvailble)
     {
         Connections[pfds[i].fd].sendResponse();

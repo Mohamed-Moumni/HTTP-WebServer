@@ -6,7 +6,7 @@
 #    By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
-#    Updated: 2023/04/08 10:49:52 by mmoumni          ###   ########.fr        #
+#    Updated: 2023/04/08 11:02:44 by mmoumni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = webserv
 
 CC = c++
 
-FLAGS = -Wall -Wextra -Werror --std=c++98 -g -fsanitize=address
+# FLAGS = -Wall -Wextra -Werror --std=c++98 -g -fsanitize=address
 
 #####		CONFIG FILES		#####
 
@@ -33,7 +33,7 @@ SERVER_SRCS = ./server/socket.cpp ./server/ConnectSocket.cpp
 REQUEST_SRCS = ./request/HTTP_METHODS/DELETE.cpp ./request/REQUEST_PARSING/possible_error.cpp \
 				./request/HTTP_METHODS/GET.cpp ./request/REQUEST_PARSING/respond_error.cpp \
 				./request/HTTP_METHODS/POST.cpp ./request/RESPONDING/respond.cpp ./request/RESPONDING/response_generator.cpp \
-               ./request/REQUEST_PARSING/pars_request.cpp 
+               ./request/REQUEST_PARSING/pars_request.cpp ./request/request.cpp
 
 UTILS_SRC = ./utils/str_trim.cpp ./utils/str_split.cpp ./utils/header_spliter.cpp ./utils/remove_side_spaces.cpp \
 			./utils/side_whitespaces.cpp ./utils/str_split.cpp ./utils/str_trim.cpp

@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/08 10:42:49 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/08 10:57:14 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,8 @@ void    ConnectSocket::chunckBody(ConfigFile & _configfile)
     body = getChuncked(_request.request_body);
     _request.request_body.clear();
     _request.request_body.append(body);
+    respond(*this, _configfile);
+    _response.respLength = _response.response_string.size();
     ReadAvailble = false;
     SendAvailble = true;
     ConnectionType();
