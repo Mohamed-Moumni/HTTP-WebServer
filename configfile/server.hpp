@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 17:53:21 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/03 14:14:18 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/07 18:07:03 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ class Server
 		std::vector<std::string>							_allowed_methods;
 		std::vector<location>								_locations;
 		std::map<std::string, std::string>					_error_pages;
-		std::map<std::string, std::string>					_return;
 
 	public:
 		Server();

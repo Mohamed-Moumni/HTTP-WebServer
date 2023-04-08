@@ -10,14 +10,27 @@ int prefix_match(std::string s1, std::string s2)
     return i;
 }
 
-
-void redirect(ConnectSocket & socket, ConfigFile configfile)
+void append_root(ConnectSocket &socket,Server &server,location &location)
 {
-    (void)configfile;
-    socket._response.response_string = respond_error("redirected");
+    //append root
+    if(location._root.size())
+        socket._request.request_target = '.' + location._root + socket._request.request_target;
+    else if(server._root.size())
+        socket._request.request_target =  '.' + server._root + socket._request.request_target;
 }
 
-int check_max_size(ConnectSocket & socket, ConfigFile configfile, location location)
+void redirect(ConnectSocket &socket,location location, Server server, ConfigFile configfile)
+{
+    std::ostringstream response;
+    std::string loca;
+
+    loca = location._return;
+    response << "HTTP/1.1 301 Moved Permanently\r\n";
+    response << "Location: " << loca << CRLF << CRLF;
+    socket._response.response_string = response.str();
+}
+
+int check_max_size(ConnectSocket socket, ConfigFile configfile, location location)
 {
     (void)socket;
     (void)configfile;
@@ -77,20 +90,16 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     find_location(socket, server, location);
     if(!check_max_size(socket, configfile, location))
         return 0;
-    if(location._root.size())
-        socket._request.request_target = location._root + socket._request.request_target;
-    else if(server._root.size())
-        socket._request.request_target = server._root + socket._request.request_target;
-
-    if(server._return.size() || location._return.size())
+    append_root(socket, server, location);
+    if(location._return.size())
     {
-        redirect(socket, configfile);
+        redirect(socket, location , server ,configfile);
         return 0;
     }
-
-    response_generator(socket, server, location);
-
-
+    //should be decommanted when switching to the exeternal makefile
+    if(socket._request.request_target.find("..") != std::string::npos)
+        return(socket._response.response_string = respond_error("403"), 0);
+    response_generator(socket, server, location, configfile);
     std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
     std::cout << "the chosen location is : " << location.path << std::endl;
     return 1;
