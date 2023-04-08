@@ -6,7 +6,7 @@
 #    By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
-#    Updated: 2023/04/05 11:28:00 by mmoumni          ###   ########.fr        #
+#    Updated: 2023/04/08 10:19:45 by mmoumni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = webserv
 
 CC = c++
 
-# FLAGS = -Wall -Wextra -Werror --std=c++98 -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror --std=c++98 -g -fsanitize=address
 
 #####		CONFIG FILES		#####
 
@@ -52,10 +52,10 @@ OBJ = $(SRCS:.cpp=.o)
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-	$(CC) $^ -o $(NAME)
+	$(CC) $(FLAGS) $^ -o $(NAME)
 
 %.o : %.cpp $(HEADERS)
-	$(CC) -c $< -o $@
+	$(CC) -c $< $(FLAGS) -o $@
 
 clean :
 	rm -rf $(OBJ)

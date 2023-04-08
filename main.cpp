@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/07 18:00:05 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/08 10:33:29 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	start_server(std::string & _config)
 					pollin(pfds, sockets, Connections, i);
 				else
 				{
+					Connections[pfds[i].fd].timeOut = getTimeOfNow();
 					Connections[pfds[i].fd].readRequest(configFile);
 					if (Connections[pfds[i].fd].closed)
 					{
@@ -65,6 +66,11 @@ void	start_server(std::string & _config)
 			}
 			if (pfds[i].revents & POLLOUT)
 			{
+				if (getTimeOfNow() - Connections[pfds[i].fd].timeOut >= 6)
+				{
+					std::cout << "There is A Time Out\n";
+					closeConnection(pfds, Connections, i);
+				}
 				pollout(configFile, pfds, Connections, i);
 				if (Connections[pfds[i].fd].closed || Connections[pfds[i].fd].conType)
 				{
