@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/07 18:11:36 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/08 10:25:06 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
 {
     int         CharRead;
     char        Buffer[BUFFER];
-    std::string body;
 
+    _request.BodyReaded = 0;
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
     if (CharRead <= 0)
     {
@@ -156,7 +156,6 @@ void        ConnectSocket::requestType(void)
     }
 }
 
-
 void    HexToDec(const std::string hexValue, size_t & result)
 {
     std::stringstream ss;
@@ -166,6 +165,12 @@ void    HexToDec(const std::string hexValue, size_t & result)
 
 void    ConnectSocket::readUnChuncked(void)
 {
+    
+    if (_request.ContentLen < _request.BodyReaded)
+    {
+        closed = true;
+        return ;
+    }
     if (_request.ContentLen == _request.BodyReaded)
     {
         ReadAvailble = false;

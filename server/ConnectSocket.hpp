@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/07 11:41:00 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/08 10:26:26 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class ConnectSocket
         bool            closed;
         bool            conType;
         bool            chunck;
+        long long       timeOut;
         std::string     IpAdress;
         std::string     Port;
         request         _request;
