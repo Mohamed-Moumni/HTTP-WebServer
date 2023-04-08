@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/08 10:33:29 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/08 10:55:43 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 void set_error_pages(ConfigFile &config)
 {
+	(void)(config);
 	std::map<std::string , std::string> error_pages;
 	error_pages["404"] = "";
 	error_pages[""] = "";
