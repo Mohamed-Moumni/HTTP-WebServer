@@ -11,7 +11,8 @@ void createfile(ConnectSocket &socket, ConfigFile configfile)
         return;
     }
     
-    std::ofstream targeted_file(socket._request.request_target);
+    std::ofstream targeted_file;
+    targeted_file.open(socket._request.request_target);
     targeted_file << socket._request.request_body;
     targeted_file.close();
     //todo
@@ -20,6 +21,8 @@ void createfile(ConnectSocket &socket, ConfigFile configfile)
 
 void POST(ConnectSocket &socket, Server server, location location, ConfigFile configfile)
 {
+    DIR * dir;
+
     if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
         socket._response.response_string = respond_error("403", configfile);
     else
@@ -29,8 +32,11 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
             socket._response.response_string = respond_error("409", configfile);
         else
         {
-            if(opendir(socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')).c_str()))
+            if((dir = opendir(socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')).c_str())))
+            {
+                closedir(dir);
                 createfile(socket, configfile);
+            }
             else
                 socket._response.response_string = respond_error("404", configfile);
         }

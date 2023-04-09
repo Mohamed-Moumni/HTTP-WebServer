@@ -20,12 +20,11 @@ std::string get_contenttype(std::string file, ConfigFile configfile)
 std::string		GET_file(std::string file_name)
 {
     std::ifstream file;
+    std::ostringstream data;
 
-    file.open(file_name, std::ios::binary);
-    std::istreambuf_iterator<char> first(file);
-    std::istreambuf_iterator<char> last;
-    std::string data(first, last);
-	return data;
+    file.open(file_name);
+    data << file.rdbuf();
+    return data.str();
 }
 
 void file2response(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile)
@@ -86,15 +85,15 @@ int listdir(ConnectSocket &socket)
 
 void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile)
 {
-
-    if(opendir(socket._request.request_target.c_str()))
+    (void)configfile;
+    if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
     {
         if(location._index.size())
             socket._request.request_target += location._index[0];
         else if(server._index.size())
             socket._request.request_target += server._index[0];
     }
-    if(opendir(socket._request.request_target.c_str()) && (location._autoindex == "on"
+    if(socket._request.request_target[socket._request.request_target.size() - 1] == '/' && (location._autoindex == "on"
     || (!location._autoindex.size() && server._autoindex == "on")))
     {
     std::cout << socket._request.request_target << std::endl;
@@ -102,7 +101,7 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
             socket._response.response_string = respond_error("404", configfile);
         return ;
     }
-    else if (opendir(socket._request.request_target.c_str()))
+    else if (socket._request.request_target[socket._request.request_target.size() - 1] == '/')
     {
         if(opendir(socket._request.request_target.c_str()) != NULL)
             socket._response.response_string = respond_error("403", configfile);//responde with 403 forbidden and 
@@ -123,8 +122,10 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     std::cout << socket._request.request_target << std::endl;
     if(open(socket._request.request_target.c_str(), O_RDONLY) != -1)
     {
-        std::cout << "here : " << socket._request.request_target << std::endl;
-        file2response(socket, server, location, configfile);
+        if(opendir(socket._request.request_target.c_str()))
+            socket._response.response_string = respond_error("404", configfile);
+        else
+            file2response(socket, server, location, configfile);
     }
     else 
         socket._response.response_string = respond_error("404", configfile); //404 not found 
