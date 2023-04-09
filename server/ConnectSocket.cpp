@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/09 17:45:34 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/09 17:53:16 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
         requestType(_configfile);
         if (!error)
         {
-            std::cout << "Here\n" << std::endl;
             closed = true;
             return ;
         }
@@ -143,11 +142,7 @@ void    ConnectSocket::chunckBody(ConfigFile & _configfile)
     }
     _request.request_body.clear();
     _request.request_body.append(body);
-    respond(*this, _configfile);
-    _response.respLength = _response.response_string.size();
-    ReadAvailble = false;
-    SendAvailble = true;
-    ConnectionType();
+    responding(_configfile);
 }
 
 void    ConnectSocket::requestType(ConfigFile & _configfile)
@@ -166,22 +161,10 @@ void    ConnectSocket::requestType(ConfigFile & _configfile)
     {
         _request.ContentLen = atol(Cl->second.c_str());
         if (_request.ContentLen == _request.request_body.size())
-        {
-            ReadAvailble = false;
-            SendAvailble = true;
-            respond(*this, _configfile);
-            _response.respLength = _response.response_string.size();
-            ConnectionType();
-        }
+            responding(_configfile);
     }
     else
-    {
-        respond(*this, _configfile);
-        _response.respLength = _response.response_string.size();
-        ReadAvailble = false;
-        SendAvailble = true;
-        ConnectionType();
-    }
+        responding(_configfile);
 }
 
 void    HexToDec(const std::string hexValue, size_t & result)
@@ -204,13 +187,7 @@ void    ConnectSocket::readUnChuncked(ConfigFile & _configfile)
         return ;
     }
     if (_request.ContentLen == _request.BodyReaded)
-    {
-        ReadAvailble = false;
-        SendAvailble = true;
-        respond(*this, _configfile);
-        _response.respLength = _response.response_string.size();
-        ConnectionType();
-    }
+        responding(_configfile);
 }
 
 void    ConnectSocket::ConnectionType(void)
@@ -266,6 +243,15 @@ std::string ConnectSocket::getChuncked(std::string req)
         pos += 2;
     }
     return (body);
+}
+
+void        ConnectSocket::responding(ConfigFile & _configfile)
+{
+    ReadAvailble = false;
+    SendAvailble = true;
+    respond(*this, _configfile);
+    _response.respLength = _response.response_string.size();
+    ConnectionType();
 }
 
 void    ConnectSocket::sendResponse(void)

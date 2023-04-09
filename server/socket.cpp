@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/09 15:29:00 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/09 17:59:54 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,9 +154,7 @@ void    pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map
 {
     int connection;
     pfd tmp_pfd;
-    int var;
 
-    var = 1;
     connection = accept(pfds[i].fd, NULL, NULL);
     tmp_pfd.fd = connection;
     tmp_pfd.events = (POLLIN | POLLOUT);
@@ -164,9 +162,8 @@ void    pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map
     Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
 }
 
-void    pollout(ConfigFile & _configfile, std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
+void    pollout(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
-    (void)(_configfile);
     if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].SendAvailble)
     {
         Connections[pfds[i].fd].sendResponse();
@@ -180,6 +177,8 @@ void    pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Conne
 
 void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
+    if (Connections[pfds[i].fd]._response.respLength)
+        sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
     shutdown(pfds[i].fd, SHUT_RDWR);
     close(pfds[i].fd);
     Connections.erase(pfds[i].fd);
@@ -200,7 +199,5 @@ void                sendError(int socketId, std::string _Error)
 
     CharSent = send(socketId, _Error.c_str(), _Error.size(), 0);
     if (CharSent <= 0)
-    {
         return ;
-    }
 }

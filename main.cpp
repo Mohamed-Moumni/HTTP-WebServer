@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/09 15:32:57 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/09 18:00:21 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 					Connections[pfds[i].fd].readRequest(configFile);
 					if (Connections[pfds[i].fd].closed)
 					{
-						if (Connections[pfds[i].fd]._response.respLength)
-							sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
 						closeConnection(pfds, Connections, i);
 						i--;
 					}
@@ -42,11 +40,10 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 			}
 			if (pfds[i].revents & POLLOUT)
 			{
-				pollout(configFile, pfds, Connections, i);
-				if (Connections[pfds[i].fd].closed || Connections[pfds[i].fd].conType)
+				pollout(pfds, Connections, i);
+				if (Connections[pfds[i].fd].closed || (Connections[pfds[i].fd].conType && \
+					Connections[pfds[i].fd].ReadAvailble))
 				{
-					if (Connections[pfds[i].fd]._response.respLength)
-						sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
             		closeConnection(pfds, Connections, i);
 					i--;
 				}
