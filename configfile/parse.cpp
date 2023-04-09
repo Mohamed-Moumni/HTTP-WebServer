@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/07 18:19:38 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/09 12:29:28 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -509,15 +509,21 @@ void	fill_meme_types(ConfigFile& config)
 		config._mime_types[key] = value;
 		config._content_types.insert(value);
 	}
-	// for (auto it : config._mime_types)
-	// {
-	// 	std::cout << it.first << " " << it.second << std::endl;
-	// }
-	// for (auto &it : config._content_types)
-	// {
-	// 	std::cout << it << std::endl;
-	// }
-	// exit(0);
+}
+
+void	fill_code_status(ConfigFile& config)
+{
+	std::string code_status;
+
+	code_status = read_file("configfile/code_status");
+	std::vector<std::string> list = str_split(code_status, '\n');
+	for (size_t i = 0; i < list.size(); i++)
+	{
+		std::vector<std::string> key_value = str_split(list[i], ' ');
+		std::string key = key_value[0];
+		std::string value = key_value[1];
+		config._code_status[key] = value;
+	}
 }
 
 ConfigFile	start_parse(std::string config_file)
@@ -529,6 +535,7 @@ ConfigFile	start_parse(std::string config_file)
 	errors_handling(conf._servers);
 	// print_servers(conf._servers);
 	fill_meme_types(conf);
+	fill_code_status(conf);
 	// exit(0);
 	return (conf);
 }
