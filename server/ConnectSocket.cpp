@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/09 15:20:09 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/09 16:45:44 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _p
     IpAdress = _IpAdress;
     Port = _port;
     _request.request_string = "";
+    _response.respLength = 0;
     ReadAvailble = true;
     SendAvailble = false;
     Chuncked = false;
@@ -128,6 +129,9 @@ void    ConnectSocket::chunckBody(ConfigFile & _configfile)
     }
     catch(const std::exception& e)
     {
+        _response.response_string.append(respond_error("400", _configfile));
+        _response.respLength = _response.response_string.size();
+        std::cout << "Hello\n";
         closed = true;
         return ;
     }
@@ -188,6 +192,8 @@ void    ConnectSocket::readUnChuncked(ConfigFile & _configfile)
     
     if (_request.ContentLen < _request.BodyReaded)
     {
+        _response.response_string.append(respond_error("400", _configfile));
+        _response.respLength = _response.response_string.size();
         closed = true;
         return ;
     }

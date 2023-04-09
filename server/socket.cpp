@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/08 11:23:53 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/09 15:29:00 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,4 +192,15 @@ long long           getTimeOfNow(void)
 
     gettimeofday(&time, NULL);
     return (time.tv_sec + (time.tv_usec) / 1000000);
+}
+
+void                sendError(int socketId, std::string _Error)
+{
+    int CharSent;
+
+    CharSent = send(socketId, _Error.c_str(), _Error.size(), 0);
+    if (CharSent <= 0)
+    {
+        return ;
+    }
 }
