@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/09 17:53:16 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/09 18:07:06 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,6 +271,7 @@ void    ConnectSocket::sendResponse(void)
         SendAvailble = false;
         ReadAvailble = true;
         _response.respLength = _response.response_string.size();
+        _response.response_string.clear();
         _response.CharSent = 0;
     }
 }
