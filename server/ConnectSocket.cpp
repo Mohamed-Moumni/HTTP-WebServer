@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/09 09:39:23 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/09 15:20:09 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void    ConnectSocket::chunckBody(ConfigFile & _configfile)
     ConnectionType();
 }
 
-void        ConnectSocket::requestType(ConfigFile & _configfile)
+void    ConnectSocket::requestType(ConfigFile & _configfile)
 {
     std::map<std::string, std::string>::iterator Te;
     std::map<std::string, std::string>::iterator Cl;
@@ -213,6 +213,11 @@ void    ConnectSocket::ConnectionType(void)
             conType = true;
             return ;
         }
+        else if (connectType->second == "keep-alive")
+        {
+            conType = false;
+            return ;
+        }
     }
     conType = true;
 }
@@ -220,6 +225,7 @@ void    ConnectSocket::ConnectionType(void)
 std::string ConnectSocket::getChuncked(std::string req)
 {
     std::string body = "";
+    std::string data;
     size_t pos;
     size_t  size = 1;
 
@@ -233,9 +239,10 @@ std::string ConnectSocket::getChuncked(std::string req)
         pos += 2;
         if (pos < req.size())
         {
-            body.append(req.substr(pos, size));
-            if (body.size() != size)
+            data = req.substr(pos, size);
+            if (data.size() != size)
                 throw std::runtime_error("chunk Error"); 
+            body.append(data);
         }
         else
             throw std::runtime_error("chunk Error");
@@ -259,8 +266,7 @@ void    ConnectSocket::sendResponse(void)
         return ;
     }
     _response.CharSent += CharSent;
-    _response.respLength -= CharSent;
-    if (_response.respLength == 0)
+    if (_response.respLength == _response.CharSent)
     {
         SendAvailble = false;
         ReadAvailble = true;
