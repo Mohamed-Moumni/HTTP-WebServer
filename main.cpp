@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/09 15:19:10 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/09 18:00:21 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,9 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 			}
 			if (pfds[i].revents & POLLOUT)
 			{
-				pollout(configFile, pfds, Connections, i);
-				if (Connections[pfds[i].fd].closed || Connections[pfds[i].fd].conType)
+				pollout(pfds, Connections, i);
+				if (Connections[pfds[i].fd].closed || (Connections[pfds[i].fd].conType && \
+					Connections[pfds[i].fd].ReadAvailble))
 				{
             		closeConnection(pfds, Connections, i);
 					i--;

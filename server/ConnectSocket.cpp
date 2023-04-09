@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/09 15:20:09 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/09 17:53:16 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _p
     IpAdress = _IpAdress;
     Port = _port;
     _request.request_string = "";
+    _response.respLength = 0;
     ReadAvailble = true;
     SendAvailble = false;
     Chuncked = false;
@@ -82,6 +83,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
 {
     int         CharRead;
     char        Buffer[BUFFER];
+    int         error;
 
     _request.BodyReaded = 0;
     _response.CharSent = 0;
@@ -94,8 +96,13 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     _request.request_string.append(std::string(Buffer, CharRead));
     if (_request.request_string.find("\r\n\r\n") != std::string::npos)
     {
-        request_handler(*this, _configfile);
+        error = request_handler(*this, _configfile);
         requestType(_configfile);
+        if (!error)
+        {
+            closed = true;
+            return ;
+        }
         _request.BodyReaded += _request.request_body.size();
         ReadFirst = true;
         _request.request_string.clear();
@@ -128,16 +135,14 @@ void    ConnectSocket::chunckBody(ConfigFile & _configfile)
     }
     catch(const std::exception& e)
     {
+        _response.response_string.append(respond_error("400", _configfile));
+        _response.respLength = _response.response_string.size();
         closed = true;
         return ;
     }
     _request.request_body.clear();
     _request.request_body.append(body);
-    respond(*this, _configfile);
-    _response.respLength = _response.response_string.size();
-    ReadAvailble = false;
-    SendAvailble = true;
-    ConnectionType();
+    responding(_configfile);
 }
 
 void    ConnectSocket::requestType(ConfigFile & _configfile)
@@ -156,22 +161,10 @@ void    ConnectSocket::requestType(ConfigFile & _configfile)
     {
         _request.ContentLen = atol(Cl->second.c_str());
         if (_request.ContentLen == _request.request_body.size())
-        {
-            ReadAvailble = false;
-            SendAvailble = true;
-            respond(*this, _configfile);
-            _response.respLength = _response.response_string.size();
-            ConnectionType();
-        }
+            responding(_configfile);
     }
     else
-    {
-        respond(*this, _configfile);
-        _response.respLength = _response.response_string.size();
-        ReadAvailble = false;
-        SendAvailble = true;
-        ConnectionType();
-    }
+        responding(_configfile);
 }
 
 void    HexToDec(const std::string hexValue, size_t & result)
@@ -188,17 +181,13 @@ void    ConnectSocket::readUnChuncked(ConfigFile & _configfile)
     
     if (_request.ContentLen < _request.BodyReaded)
     {
+        _response.response_string.append(respond_error("400", _configfile));
+        _response.respLength = _response.response_string.size();
         closed = true;
         return ;
     }
     if (_request.ContentLen == _request.BodyReaded)
-    {
-        ReadAvailble = false;
-        SendAvailble = true;
-        respond(*this, _configfile);
-        _response.respLength = _response.response_string.size();
-        ConnectionType();
-    }
+        responding(_configfile);
 }
 
 void    ConnectSocket::ConnectionType(void)
@@ -226,8 +215,9 @@ std::string ConnectSocket::getChuncked(std::string req)
 {
     std::string body = "";
     std::string data;
-    size_t pos;
-    size_t  size = 1;
+    size_t      pos;
+    size_t      clrf;
+    size_t      size = 1;
 
     pos = 0;
     while (size > 0)
@@ -239,9 +229,10 @@ std::string ConnectSocket::getChuncked(std::string req)
         pos += 2;
         if (pos < req.size())
         {
-            data = req.substr(pos, size);
-            if (data.size() != size)
-                throw std::runtime_error("chunk Error"); 
+            clrf = req.find("\r\n", pos);
+            if (clrf == std::string::npos || (clrf - pos) != size)
+                throw std::runtime_error("chunk Error");
+            data = req.substr(pos,size);
             body.append(data);
         }
         else
@@ -252,6 +243,15 @@ std::string ConnectSocket::getChuncked(std::string req)
         pos += 2;
     }
     return (body);
+}
+
+void        ConnectSocket::responding(ConfigFile & _configfile)
+{
+    ReadAvailble = false;
+    SendAvailble = true;
+    respond(*this, _configfile);
+    _response.respLength = _response.response_string.size();
+    ConnectionType();
 }
 
 void    ConnectSocket::sendResponse(void)
