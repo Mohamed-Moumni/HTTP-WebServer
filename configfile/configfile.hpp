@@ -27,7 +27,6 @@ class ConfigFile
 		std::map<std::string, std::string>						_mime_types;
 		std::map<std::string, std::string>						_code_status;
 		std::set<std::string>									_content_types;
-		std::map<std::string, std::string>						_error_pages;
 };
 
 ConfigFile		start_parse_config_file(std::string config_file);

@@ -1,5 +1,7 @@
 #include "../INCLUDES/request.hpp"
 #include <dirent.h>
+#include <fcntl.h>
+#include <fstream>
 
 std::string get_contenttype(std::string file, ConfigFile configfile)
 {
@@ -15,13 +17,23 @@ std::string get_contenttype(std::string file, ConfigFile configfile)
     return configfile._mime_types[file.c_str() + i];
 
 }
+std::string		GET_file(std::string file_name)
+{
+    std::ifstream file;
+
+    file.open(file_name, std::ios::binary);
+    std::istreambuf_iterator<char> first(file);
+    std::istreambuf_iterator<char> last;
+    std::string data(first, last);
+	return data;
+}
 
 void file2response(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile)
 {
     (void)server;
     (void)location;
     std::ostringstream response;
-    socket._response.response_string = read_file(socket._request.request_target);
+    socket._response.response_string = GET_file(socket._request.request_target);
 
     response  << "HTTP/1.1 200 OK\r\n";
     response << "Content-Type: " + get_contenttype(socket._request.request_target, configfile) << CRLF ;
@@ -91,8 +103,16 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     
     //static here
     std::cout << socket._request.request_target << std::endl;
-    if(!access(socket._request.request_target.c_str(), F_OK))
-        file2response(socket, server, location, configfile);
+    if(open(socket._request.request_target.c_str(), O_RDONLY) != -1)
+    {
+        if(opendir(socket._request.request_target.c_str()))
+            socket._response.response_string = respond_error("403", configfile);
+        else
+        {
+            std::cout << "here : " << socket._request.request_target << std::endl;
+            file2response(socket, server, location, configfile);
+        }
+    }
     else 
         socket._response.response_string = respond_error("404", configfile); //404 not found 
 }
