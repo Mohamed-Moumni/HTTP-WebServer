@@ -12,18 +12,10 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "./configfile/configfile.hpp"
 #include "./server/socket.hpp"
 #include "./request/INCLUDES/request.hpp"
-
-void set_error_pages(ConfigFile &config)
-{
-	(void)(config);
-	std::map<std::string , std::string> error_pages;
-	error_pages["404"] = "";
-	error_pages[""] = "";
-	//todo
-}
 
 void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigFile & configFile, std::map<int, ConnectSocket> Connections)
 {
@@ -74,7 +66,6 @@ void	start_server(std::string & _config)
 	{
 		_config = read_file(_config);
 		configFile = start_parse_config_file(_config);
-		set_error_pages(configFile);
 		sockets = create_sockets(configFile);
 		listenSocket(sockets);
 		pfds = create_pfd(sockets);

@@ -98,7 +98,7 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     }
     //should be decommanted when switching to the exeternal makefile
     if(socket._request.request_target.find("..") != std::string::npos)
-        return(socket._response.response_string = respond_error("403"), 0);
+        return(socket._response.response_string = respond_error("403", configfile), 0);
     response_generator(socket, server, location, configfile);
     // std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
     // std::cout << "the chosen location is : " << location.path << std::endl;

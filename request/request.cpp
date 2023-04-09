@@ -5,7 +5,7 @@ int request_handler(ConnectSocket & socket, ConfigFile configfile)
 {
     if(!pars_request(socket._request) || !possible_error(socket, configfile))
     {
-        socket._response.response_string = respond_error("400");
+        socket._response.response_string = respond_error("400", configfile);
 		return 0;
     }
     return 1;

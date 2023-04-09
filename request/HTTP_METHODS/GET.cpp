@@ -69,15 +69,15 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     {
     std::cout << socket._request.request_target << std::endl;
         if(!listdir(socket))
-            socket._response.response_string = respond_error("404");
+            socket._response.response_string = respond_error("404", configfile);
         return ;
     }
     else if (socket._request.request_target[socket._request.request_target.size() - 1] == '/')
     {
         if(opendir(socket._request.request_target.c_str()) != NULL)
-            socket._response.response_string = respond_error("403");//responde with 403 forbidden and 
+            socket._response.response_string = respond_error("403", configfile);//responde with 403 forbidden and 
         else
-            socket._response.response_string = respond_error("404");//responde with 404 notfound and
+            socket._response.response_string = respond_error("404", configfile);//responde with 404 notfound and
         return ;
     }
     //check if the content is dynamic or static and server each one separatly
@@ -85,7 +85,7 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     + socket._request.request_target.size() - 4, ".php"))
     {
         // std::cout << "dynamic content detected" << std::endl;
-        socket._response.response_string = respond_error("CGI not working yet");
+        socket._response.response_string = respond_error("CGI not working yet", configfile);
         return;
     }
     
@@ -94,5 +94,5 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     if(!access(socket._request.request_target.c_str(), F_OK))
         file2response(socket, server, location, configfile);
     else 
-        socket._response.response_string = respond_error("404"); //404 not found 
+        socket._response.response_string = respond_error("404", configfile); //404 not found 
 }
