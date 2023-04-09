@@ -41,6 +41,19 @@ void file2response(ConnectSocket &socket, Server &server, location &location, Co
     response << socket._response.response_string;
     socket._response.response_string = response.str();
 }
+int isdirectory(std::string path)
+{
+    DIR *dir;
+    struct dirent *ent;
+
+    dir = opendir(path.c_str());
+    if(dir)
+    {
+        closedir(dir);
+        return 1;
+    }
+    return 0;
+}
 
 int listdir(ConnectSocket &socket)
 {
@@ -53,11 +66,16 @@ int listdir(ConnectSocket &socket)
         return 0;
     while((ent = readdir(dir)))
     {    
+        socket._response.response_string += "<a href=";
         socket._response.response_string += ent->d_name;
-        socket._response.response_string += '\n';
+        if(isdirectory(socket._request.request_target + ent->d_name))
+            socket._response.response_string += "/";
+        socket._response.response_string += ">";
+        socket._response.response_string += ent->d_name;
+        socket._response.response_string += "</a><br>";
     }
     resp << "HTTP/1.1 200 OK\r\n";
-    resp << "Content-Type: text/palin" << CRLF ;
+    resp << "Content-Type: text/html" << CRLF ;
     resp << "Content-Length: " << socket._response.response_string.size() << CRLF << CRLF;
     resp << socket._response.response_string;
     socket._response.response_string = resp.str();
@@ -68,15 +86,15 @@ int listdir(ConnectSocket &socket)
 
 void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile)
 {
-    (void)configfile;
-    if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
+
+    if(opendir(socket._request.request_target.c_str()))
     {
         if(location._index.size())
             socket._request.request_target += location._index[0];
         else if(server._index.size())
             socket._request.request_target += server._index[0];
     }
-    if(socket._request.request_target[socket._request.request_target.size() - 1] == '/' && (location._autoindex == "on"
+    if(opendir(socket._request.request_target.c_str()) && (location._autoindex == "on"
     || (!location._autoindex.size() && server._autoindex == "on")))
     {
     std::cout << socket._request.request_target << std::endl;
@@ -84,7 +102,7 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
             socket._response.response_string = respond_error("404", configfile);
         return ;
     }
-    else if (socket._request.request_target[socket._request.request_target.size() - 1] == '/')
+    else if (opendir(socket._request.request_target.c_str()))
     {
         if(opendir(socket._request.request_target.c_str()) != NULL)
             socket._response.response_string = respond_error("403", configfile);//responde with 403 forbidden and 
@@ -105,13 +123,8 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     std::cout << socket._request.request_target << std::endl;
     if(open(socket._request.request_target.c_str(), O_RDONLY) != -1)
     {
-        if(opendir(socket._request.request_target.c_str()))
-            socket._response.response_string = respond_error("403", configfile);
-        else
-        {
-            std::cout << "here : " << socket._request.request_target << std::endl;
-            file2response(socket, server, location, configfile);
-        }
+        std::cout << "here : " << socket._request.request_target << std::endl;
+        file2response(socket, server, location, configfile);
     }
     else 
         socket._response.response_string = respond_error("404", configfile); //404 not found 

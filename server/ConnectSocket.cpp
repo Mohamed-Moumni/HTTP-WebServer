@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/09 16:45:44 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/09 17:45:34 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
 {
     int         CharRead;
     char        Buffer[BUFFER];
+    int         error;
 
     _request.BodyReaded = 0;
     _response.CharSent = 0;
@@ -95,8 +96,14 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     _request.request_string.append(std::string(Buffer, CharRead));
     if (_request.request_string.find("\r\n\r\n") != std::string::npos)
     {
-        request_handler(*this, _configfile);
+        error = request_handler(*this, _configfile);
         requestType(_configfile);
+        if (!error)
+        {
+            std::cout << "Here\n" << std::endl;
+            closed = true;
+            return ;
+        }
         _request.BodyReaded += _request.request_body.size();
         ReadFirst = true;
         _request.request_string.clear();
@@ -131,7 +138,6 @@ void    ConnectSocket::chunckBody(ConfigFile & _configfile)
     {
         _response.response_string.append(respond_error("400", _configfile));
         _response.respLength = _response.response_string.size();
-        std::cout << "Hello\n";
         closed = true;
         return ;
     }
@@ -232,8 +238,9 @@ std::string ConnectSocket::getChuncked(std::string req)
 {
     std::string body = "";
     std::string data;
-    size_t pos;
-    size_t  size = 1;
+    size_t      pos;
+    size_t      clrf;
+    size_t      size = 1;
 
     pos = 0;
     while (size > 0)
@@ -245,9 +252,10 @@ std::string ConnectSocket::getChuncked(std::string req)
         pos += 2;
         if (pos < req.size())
         {
-            data = req.substr(pos, size);
-            if (data.size() != size)
-                throw std::runtime_error("chunk Error"); 
+            clrf = req.find("\r\n", pos);
+            if (clrf == std::string::npos || (clrf - pos) != size)
+                throw std::runtime_error("chunk Error");
+            data = req.substr(pos,size);
             body.append(data);
         }
         else
