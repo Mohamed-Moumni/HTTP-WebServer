@@ -7,7 +7,7 @@
 // std::string not_allowed = "";
 
 class request
-{
+{ 
     public:
         size_t      ContentLen;
         size_t      BodyReaded;

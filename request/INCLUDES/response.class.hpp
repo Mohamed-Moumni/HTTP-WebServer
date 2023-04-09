@@ -1,6 +1,6 @@
 #ifndef RESPONSE_CLASS_HPP
 #define RESPONSE_CLASS_HPP
-#include <iostream>
+#include <iostream> 
 
 class response
 {

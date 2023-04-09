@@ -14,16 +14,16 @@ int isallowed_method(ConnectSocket &socket, location &location, Server &server)
     return 1;
 }
 
-void response_generator(ConnectSocket &socket, Server &server, location &location)
+void response_generator(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile)
 {
     if(!isallowed_method(socket, location, server))
         return ;
     if(socket._request.method == "GET")
-        GET(socket, server, location);
+        GET(socket, server, location, configfile);
     else if(socket._request.method == "POST")
-        POST();
+        POST(socket, server, location, configfile);
     else if(socket._request.method == "DELETE")
-        DELETE();
+        DELETE(socket, server, location);
     else
         socket._response.response_string = respond_error("501");
 }

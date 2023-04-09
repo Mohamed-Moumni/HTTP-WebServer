@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:52 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/05 11:04:53 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/08 10:28:03 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,3 +57,4 @@ void                pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSoc
 void                closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i);
 void                acceptConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections);
 void                sendError(std::string _Error);
+long long           getTimeOfNow(void);

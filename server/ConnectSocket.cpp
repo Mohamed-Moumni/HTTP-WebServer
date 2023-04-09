@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/07 18:11:36 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/09 09:39:23 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
             {
                 readingChuncked();
                 if (chunck)
-                    chunckBody();
+                    chunckBody(_configfile);
             }
             else
             {
@@ -72,7 +72,7 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
                 }
                 _request.request_body.append(std::string(Buffer, CharRead));
                 _request.BodyReaded += CharRead;
-                readUnChuncked();
+                readUnChuncked(_configfile);
             }
         }
     }
@@ -82,8 +82,9 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
 {
     int         CharRead;
     char        Buffer[BUFFER];
-    std::string body;
 
+    _request.BodyReaded = 0;
+    _response.CharSent = 0;
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
     if (CharRead <= 0)
     {
@@ -94,7 +95,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     if (_request.request_string.find("\r\n\r\n") != std::string::npos)
     {
         request_handler(*this, _configfile);
-        requestType();
+        requestType(_configfile);
         _request.BodyReaded += _request.request_body.size();
         ReadFirst = true;
         _request.request_string.clear();
@@ -117,66 +118,92 @@ void    ConnectSocket::readingChuncked(void)
         chunck = true;
 }
 
-void    ConnectSocket::chunckBody(void)
+void    ConnectSocket::chunckBody(ConfigFile & _configfile)
 {
     std::string body;
 
-    body = getChuncked(_request.request_body);
+    try
+    {
+        body = getChuncked(_request.request_body);
+    }
+    catch(const std::exception& e)
+    {
+        closed = true;
+        return ;
+    }
     _request.request_body.clear();
     _request.request_body.append(body);
+    respond(*this, _configfile);
+    _response.respLength = _response.response_string.size();
     ReadAvailble = false;
     SendAvailble = true;
     ConnectionType();
 }
 
-void        ConnectSocket::requestType(void)
+void        ConnectSocket::requestType(ConfigFile & _configfile)
 {
-    std::map<std::string , std::string>::iterator Te;
-    std::map<std::string , std::string>::iterator Cl;
+    std::map<std::string, std::string>::iterator Te;
+    std::map<std::string, std::string>::iterator Cl;
 
     Te = _request.headers_map.find("Transfer-Encoding");
     Cl = _request.headers_map.find("Content-Length");
     if ( Te != _request.headers_map.end())
     {
         if (Te->second == "Chunked")
-        {
             Chuncked = true;
-        }
     }
     else if (Cl != _request.headers_map.end())
     {
         _request.ContentLen = atol(Cl->second.c_str());
+        if (_request.ContentLen == _request.request_body.size())
+        {
+            ReadAvailble = false;
+            SendAvailble = true;
+            respond(*this, _configfile);
+            _response.respLength = _response.response_string.size();
+            ConnectionType();
+        }
     }
     else
     {
-        _request.ContentLen = std::string::npos;
+        respond(*this, _configfile);
+        _response.respLength = _response.response_string.size();
         ReadAvailble = false;
         SendAvailble = true;
         ConnectionType();
     }
 }
-
 
 void    HexToDec(const std::string hexValue, size_t & result)
 {
     std::stringstream ss;
     ss << std::hex << hexValue;
     ss >> result;
+    if(ss.fail())
+        throw std::runtime_error("chunk Error");
 }
 
-void    ConnectSocket::readUnChuncked(void)
+void    ConnectSocket::readUnChuncked(ConfigFile & _configfile)
 {
+    
+    if (_request.ContentLen < _request.BodyReaded)
+    {
+        closed = true;
+        return ;
+    }
     if (_request.ContentLen == _request.BodyReaded)
     {
         ReadAvailble = false;
         SendAvailble = true;
+        respond(*this, _configfile);
+        _response.respLength = _response.response_string.size();
         ConnectionType();
     }
 }
 
 void    ConnectSocket::ConnectionType(void)
 {
-    std::map<std::string , std::string>::iterator connectType;
+    std::map<std::string, std::string>::iterator connectType;
 
     connectType = _request.headers_map.find("Connection");
     if (connectType != _request.headers_map.end())
@@ -184,8 +211,10 @@ void    ConnectSocket::ConnectionType(void)
         if (connectType->second == "close")
         {
             conType = true;
+            return ;
         }
     }
+    conType = true;
 }
 
 std::string ConnectSocket::getChuncked(std::string req)
@@ -200,13 +229,19 @@ std::string ConnectSocket::getChuncked(std::string req)
         HexToDec(&req[pos], size);
         pos = req.find("\r\n", pos);
         if (pos == std::string::npos)
-            break ;
+            throw std::runtime_error("chunk Error");
         pos += 2;
         if (pos < req.size())
+        {
             body.append(req.substr(pos, size));
+            if (body.size() != size)
+                throw std::runtime_error("chunk Error"); 
+        }
+        else
+            throw std::runtime_error("chunk Error");
         pos = req.find("\r\n", pos);
         if (pos == std::string::npos)
-            break ;
+            throw std::runtime_error("chunk Error");
         pos += 2;
     }
     return (body);

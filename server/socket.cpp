@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/07 13:52:45 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/08 11:23:53 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,13 +162,11 @@ void    pollin(std::vector<pfd> & pfds, std::vector<Socket> & _sockets, std::map
     tmp_pfd.events = (POLLIN | POLLOUT);
     pfds.push_back(tmp_pfd);
     Connections[connection] = ConnectSocket(connection, _sockets[i].getHost(), _sockets[i].getPort());
-    Connections[connection]._response.response_string = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 10\r\n\r\nHelloWorld\r\n";
-    Connections[connection]._response.respLength = Connections[connection]._response.response_string.size();
-    Connections[connection]._response.CharSent = 0;
 }
 
 void    pollout(ConfigFile & _configfile, std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
+    (void)(_configfile);
     if (Connections.find(pfds[i].fd) != Connections.end() && Connections[pfds[i].fd].SendAvailble)
     {
         Connections[pfds[i].fd].sendResponse();
@@ -186,4 +184,12 @@ void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & 
     close(pfds[i].fd);
     Connections.erase(pfds[i].fd);
     pfds.erase(pfds.begin() + i);
+}
+
+long long           getTimeOfNow(void)
+{
+    struct timeval time;
+
+    gettimeofday(&time, NULL);
+    return (time.tv_sec + (time.tv_usec) / 1000000);
 }
