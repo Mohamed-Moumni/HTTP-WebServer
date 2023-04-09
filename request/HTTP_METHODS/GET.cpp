@@ -41,6 +41,19 @@ void file2response(ConnectSocket &socket, Server &server, location &location, Co
     response << socket._response.response_string;
     socket._response.response_string = response.str();
 }
+int isdirectory(std::string path)
+{
+    DIR *dir;
+    struct dirent *ent;
+
+    dir = opendir(path.c_str());
+    if(dir)
+    {
+        closedir(dir);
+        return 1;
+    }
+    return 0;
+}
 
 int listdir(ConnectSocket &socket)
 {
@@ -55,10 +68,11 @@ int listdir(ConnectSocket &socket)
     {    
         socket._response.response_string += "<a href=";
         socket._response.response_string += ent->d_name;
+        if(isdirectory(socket._request.request_target + ent->d_name))
+            socket._response.response_string += "/";
         socket._response.response_string += ">";
         socket._response.response_string += ent->d_name;
         socket._response.response_string += "</a><br>";
-        socket._response.response_string += '\n';
     }
     resp << "HTTP/1.1 200 OK\r\n";
     resp << "Content-Type: text/html" << CRLF ;
