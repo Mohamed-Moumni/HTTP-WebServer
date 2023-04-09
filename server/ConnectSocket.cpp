@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/08 14:27:58 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/09 09:39:23 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,15 @@ void    ConnectSocket::chunckBody(ConfigFile & _configfile)
 {
     std::string body;
 
-    body = getChuncked(_request.request_body);
+    try
+    {
+        body = getChuncked(_request.request_body);
+    }
+    catch(const std::exception& e)
+    {
+        closed = true;
+        return ;
+    }
     _request.request_body.clear();
     _request.request_body.append(body);
     respond(*this, _configfile);
@@ -134,17 +142,15 @@ void    ConnectSocket::chunckBody(ConfigFile & _configfile)
 
 void        ConnectSocket::requestType(ConfigFile & _configfile)
 {
-    std::map<std::string , std::string>::iterator Te;
-    std::map<std::string , std::string>::iterator Cl;
+    std::map<std::string, std::string>::iterator Te;
+    std::map<std::string, std::string>::iterator Cl;
 
     Te = _request.headers_map.find("Transfer-Encoding");
     Cl = _request.headers_map.find("Content-Length");
     if ( Te != _request.headers_map.end())
     {
         if (Te->second == "Chunked")
-        {
             Chuncked = true;
-        }
     }
     else if (Cl != _request.headers_map.end())
     {
@@ -160,7 +166,6 @@ void        ConnectSocket::requestType(ConfigFile & _configfile)
     }
     else
     {
-        _request.ContentLen = std::string::npos;
         respond(*this, _configfile);
         _response.respLength = _response.response_string.size();
         ReadAvailble = false;
@@ -174,6 +179,8 @@ void    HexToDec(const std::string hexValue, size_t & result)
     std::stringstream ss;
     ss << std::hex << hexValue;
     ss >> result;
+    if(ss.fail())
+        throw std::runtime_error("chunk Error");
 }
 
 void    ConnectSocket::readUnChuncked(ConfigFile & _configfile)
@@ -196,7 +203,7 @@ void    ConnectSocket::readUnChuncked(ConfigFile & _configfile)
 
 void    ConnectSocket::ConnectionType(void)
 {
-    std::map<std::string , std::string>::iterator connectType;
+    std::map<std::string, std::string>::iterator connectType;
 
     connectType = _request.headers_map.find("Connection");
     if (connectType != _request.headers_map.end())
@@ -222,13 +229,19 @@ std::string ConnectSocket::getChuncked(std::string req)
         HexToDec(&req[pos], size);
         pos = req.find("\r\n", pos);
         if (pos == std::string::npos)
-            break ;
+            throw std::runtime_error("chunk Error");
         pos += 2;
         if (pos < req.size())
+        {
             body.append(req.substr(pos, size));
+            if (body.size() != size)
+                throw std::runtime_error("chunk Error"); 
+        }
+        else
+            throw std::runtime_error("chunk Error");
         pos = req.find("\r\n", pos);
         if (pos == std::string::npos)
-            break ;
+            throw std::runtime_error("chunk Error");
         pos += 2;
     }
     return (body);
