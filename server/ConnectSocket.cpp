@@ -271,7 +271,7 @@ void    ConnectSocket::sendResponse(void)
         SendAvailble = false;
         ReadAvailble = true;
         _response.respLength = _response.response_string.size();
-        _response.response_string.clear();
+        // _response.response_string.clear();
         _response.CharSent = 0;
     }
 }
