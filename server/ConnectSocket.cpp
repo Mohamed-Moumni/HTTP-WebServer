@@ -197,9 +197,9 @@ void    ConnectSocket::sendResponse(void)
     int CharSent;
 
     CharSent = 0;
-    std::cout << "before send: +++++++++++\n" << _response.response_string << "++++++++++"<< std::endl;
+    // std::cout << "before send: +++++++++++\n" << _response.response_string << "++++++++++"<< std::endl;
     CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
-    std::cout << "after send: +++++++++++\n" << _response.response_string << "++++++++++"<< std::endl;
+    // std::cout << "after send: +++++++++++\n" << _response.response_string << "++++++++++"<< std::endl;
     if (CharSent <= 0)
     {
         closed = true;

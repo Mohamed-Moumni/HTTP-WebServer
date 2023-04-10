@@ -8,7 +8,7 @@ void createfile(ConnectSocket &socket, ConfigFile configfile)
 
     if(configfile._content_types.find(socket._request.headers_map["Content-Type"]) == configfile._content_types.end())
     {
-        socket._response.response_string = respond_error("400", configfile);
+        socket._response.response_string = respond_error("415", configfile);
         return;
     }
     

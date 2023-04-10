@@ -6,15 +6,29 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <iostream>
+#include <fstream> 
 
 #define PORT 8081
+std::string		read_file(std::string file_name)
+{
+	std::string	data;
+	std::string	tmp;
+
+	std::ifstream	file(file_name);
+	while (getline(file, tmp))
+	{
+		data += tmp;
+		data += "\r\n";
+	}
+	return data;
+}
 
 int main(void)
 {
     int sock = 0; long valread;
     struct sockaddr_in serv_addr;
-    char *request = "GET / HTTP/1.1\r\nHost: 127.0.0.1:8081\r\nUpgrade-Insecure-Requests: 1\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\r\nAccept-Encoding: gzip, deflate\r\nAccept-Language: en-US,en;q=0.9\r\nConnection: close\r\n\r\n";
-    std::cout << request << std::endl;
+    std::string request = read_file("./request/LABS/request_exemple.txt");
+    std::cout << "request is: "<<request << std::endl;
     char buffer[1024] = {0};
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
@@ -39,7 +53,7 @@ int main(void)
         printf("\nConnection Failed \n");
         return -1;
     }
-    send(sock , request , strlen(request) , 0 );
+    send(sock , request.c_str() , strlen(request.c_str()) , 0 );
     printf("request message sent\n");
     valread = recv( sock , buffer, 20024, 0);
     std::cout << valread<< " Readed!" << std::endl;
