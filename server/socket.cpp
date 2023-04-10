@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/09 17:59:54 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/10 17:16:33 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,10 +177,6 @@ void    pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Conne
 
 void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
-    if (Connections[pfds[i].fd]._response.response_string.size())
-    {
-        sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
-    }
     shutdown(pfds[i].fd, SHUT_RDWR);
     close(pfds[i].fd);
     Connections.erase(pfds[i].fd);
@@ -199,7 +195,6 @@ void                sendError(int socketId, std::string _Error)
 {
     int CharSent;
 
-    _Error = "sberdila\n";
     CharSent = send(socketId, _Error.c_str(), _Error.size(), 0);
     if (CharSent <= 0)
         return ;
