@@ -177,7 +177,7 @@ void    pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Conne
 
 void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
-    if (Connections[pfds[i].fd]._response.respLength)
+    if (Connections[pfds[i].fd]._response.response_string.size())
     {
         sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
     }
@@ -199,6 +199,7 @@ void                sendError(int socketId, std::string _Error)
 {
     int CharSent;
 
+    _Error = "sberdila\n";
     CharSent = send(socketId, _Error.c_str(), _Error.size(), 0);
     if (CharSent <= 0)
         return ;

@@ -99,11 +99,12 @@ void    ConnectSocket::requestType(ConfigFile & _configfile)
     else if (Cl != _request.headers_map.end())
     {
         _request.ContentLen = atol(Cl->second.c_str());
-        if (_request.ContentLen == _request.request_body.size())
-            responding(_configfile);
+        // if (_request.ContentLen == _request.request_body.size())
+        //     responding(_configfile);
     }
     else
     {
+        std::cout << "Responding\n";
         responding(_configfile);
     }
 }

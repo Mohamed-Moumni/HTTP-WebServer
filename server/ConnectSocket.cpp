@@ -82,6 +82,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     int         error;
 
     reqInit();
+    std::cout << "ReadFirst\n";
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
     if (CharRead <= 0)
     {
@@ -94,8 +95,6 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
         error = request_handler(*this, _configfile);
         if (!error)
         {
-            _response.response_string.append(respond_error("400", _configfile));
-            _response.respLength = _response.response_string.size();
             closed = true;
             return ;
         }
@@ -183,13 +182,12 @@ void    ConnectSocket::ConnectionType(void)
     conType = true;
 }
 
-
-
 void        ConnectSocket::responding(ConfigFile & _configfile)
 {
     ReadAvailble = false;
     SendAvailble = true;
     respond(*this, _configfile);
+    // std::cout << "the response is : +++++++++++\n" << _response.response_string << "\n++++++++++++\n" ; 
     _response.respLength = _response.response_string.size();
     ConnectionType();
 }
@@ -199,13 +197,16 @@ void    ConnectSocket::sendResponse(void)
     int CharSent;
 
     CharSent = 0;
+    std::cout << "before send: +++++++++++\n" << _response.response_string << "++++++++++"<< std::endl;
     CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
+    std::cout << "after send: +++++++++++\n" << _response.response_string << "++++++++++"<< std::endl;
     if (CharSent <= 0)
     {
         closed = true;
         return ;
     }
     _response.CharSent += CharSent;
+    // std::cout << _response.response_string << "---" << CharSent << "----" << _response.respLength << "\n";
     if (_response.respLength == _response.CharSent)
     {
         SendAvailble = false;
