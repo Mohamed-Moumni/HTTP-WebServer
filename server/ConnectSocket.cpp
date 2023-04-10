@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/10 15:56:45 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/10 15:58:00 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     else
     {
         closed = true;        
-        _response.response_string.append(respond_error("400", _configfile));
+        _response.response_string.append(respond_error("413", _configfile));
         _response.respLength = _response.response_string.size();
     }
 }
