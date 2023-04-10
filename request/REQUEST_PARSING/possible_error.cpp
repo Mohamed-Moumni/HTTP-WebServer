@@ -38,9 +38,12 @@ int possible_error(ConnectSocket &socket, ConfigFile configfile)
 {
     //todo
     // (void)socket;
+    std::cout << "http version: " << socket._request.http_version << std::endl;
     if(!get_contentL(socket, configfile))
         return 0;
     if(socket._request.http_version != "HTTP/1.1")
-        return 0; 
+        return 0;
+    if(socket._request.method == "GET" && socket._request.request_body.size())
+        return 0;
     return 1;
 }

@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/10 09:33:04 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/10 14:41:09 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _p
     ConnectSocketId = SocketId;
     IpAdress = _IpAdress;
     Port = _port;
-    _request.request_string = "";
-    _response.respLength = 0;
     ReadAvailble = true;
     SendAvailble = false;
     Chuncked = false;
@@ -52,9 +50,7 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
     if (ReadAvailble)
     {
         if (!ReadFirst)
-        {
             FirstRead(_configfile);
-        }
         else
         {
             if (Chuncked)
@@ -85,12 +81,12 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     char        Buffer[BUFFER];
     int         error;
 
-    _request.BodyReaded = 0;
-    _response.CharSent = 0;
+    reqInit();
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
+    // std::cout << Buffer << std::endl;
     if (CharRead <= 0)
     {
-        std::cout << "close1\n";
+        // std::cout << "close1\n";
         closed = true;
         return ;
     }
@@ -98,16 +94,24 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     if (_request.request_string.find("\r\n\r\n") != std::string::npos)
     {
         error = request_handler(*this, _configfile);
-        requestType(_configfile);
         if (!error)
         {
-            std::cout << "close2\n";
+            // std::cout << "close2\n";
+            _response.response_string.append(respond_error("400", _configfile));
+            _response.respLength = _response.response_string.size();
             closed = true;
             return ;
         }
+        requestType(_configfile);
         _request.BodyReaded += _request.request_body.size();
         ReadFirst = true;
         _request.request_string.clear();
+    }
+    else
+    {
+        closed = true;        
+        _response.response_string.append(respond_error("400", _configfile));
+        _response.respLength = _response.response_string.size();
     }
 }
 
@@ -156,7 +160,6 @@ void    ConnectSocket::requestType(ConfigFile & _configfile)
     Cl = _request.headers_map.find("Content-Length");
     if ( Te != _request.headers_map.end())
     {
-        // case of chunck
         if (Te->second == "Chunked")
         {
             Chuncked = true;
@@ -263,16 +266,34 @@ void        ConnectSocket::responding(ConfigFile & _configfile)
     ConnectionType();
 }
 
+void        ConnectSocket::reqInit(void)
+{
+    _request.BodyReaded = 0;
+    _response.CharSent = 0;
+    _response.respLength = 0;
+    _request.request_string.clear();
+    _response.response_string.clear();
+}
+
+void    ConnectSocket::clearData(void)
+{
+    _request.ContentLen = 0;
+    _request.request_body.clear();
+    _request.headers_map.clear();
+    _request.request_target.clear();
+    _request.http_version.clear();
+    if (!conType)
+        ReadFirst = false;
+}
+
 void    ConnectSocket::sendResponse(void)
 {
     int CharSent;
 
     CharSent = 0;
-    // std::cout << ConnectSocketId << "  sended\n";
     CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
     if (CharSent <= 0)
     {
-        // std::cout << "send: Error\n";
         closed = true;
         return ;
     }
@@ -281,12 +302,6 @@ void    ConnectSocket::sendResponse(void)
     {
         SendAvailble = false;
         ReadAvailble = true;
-        _response.CharSent = 0;
-        _response.respLength = _response.response_string.size();
-        _response.response_string.clear();
-        if (conType)
-        {
-            ReadFirst = false;
-        }
+        clearData();
     }
 }

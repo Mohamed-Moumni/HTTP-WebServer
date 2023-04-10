@@ -177,10 +177,10 @@ void    pollErrHup(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Conne
 
 void    closeConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, size_t i)
 {
-    // if (Connections[pfds[i].fd]._response.respLength)
-    // {
-    //     sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
-    // }
+    if (Connections[pfds[i].fd]._response.respLength)
+    {
+        sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
+    }
     shutdown(pfds[i].fd, SHUT_RDWR);
     close(pfds[i].fd);
     Connections.erase(pfds[i].fd);
