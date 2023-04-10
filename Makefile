@@ -6,7 +6,7 @@
 #    By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
-#    Updated: 2023/04/08 11:02:44 by mmoumni          ###   ########.fr        #
+#    Updated: 2023/04/10 15:57:12 by mmoumni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ CONFIG_SRCS = ./configfile/configfile.cpp ./configfile/server.cpp ./configfile/l
 
 ####		SERVER FILES		#####
 
-SERVER_SRCS = ./server/socket.cpp ./server/ConnectSocket.cpp
+SERVER_SRCS = ./server/socket.cpp ./server/ConnectSocket.cpp ./server/ConnectSocketUtils.cpp
 
 REQUEST_SRCS = ./request/HTTP_METHODS/DELETE.cpp ./request/REQUEST_PARSING/possible_error.cpp \
 				./request/HTTP_METHODS/GET.cpp ./request/REQUEST_PARSING/respond_error.cpp \
