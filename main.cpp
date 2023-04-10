@@ -6,19 +6,24 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/09 18:00:21 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/10 09:42:05 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <signal.h>
 #include "./configfile/configfile.hpp"
 #include "./server/socket.hpp"
 #include "./request/INCLUDES/request.hpp"
 
+void sigpipe_handler(int signum) {
+}
+
 void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigFile & configFile, std::map<int, ConnectSocket> Connections)
 {
+	signal(SIGPIPE, sigpipe_handler);
 	while (1)
 	{
 		poll(&pfds[0], pfds.size(), 0);

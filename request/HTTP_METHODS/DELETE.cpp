@@ -3,7 +3,10 @@
 void deletefile(ConnectSocket &socket)
 {
     remove(socket._request.request_target.c_str());
-    socket._response.response_string = "target deleted";
+    std::string body = "<h1 style=\"color: green\"> Target deleted succesfully!</h1>";
+    std::ostringstream resp;
+    resp << "HTTP/1.1 200 OK\r\n\r\nContent-Length: " << body.size() << "\r\nContent-Type: text/html\r\n\r\n" << body;
+    socket._response.response_string = resp.str();
 }
 
 void DELETE(ConnectSocket &socket, Server server, location location, ConfigFile configfile)
@@ -13,7 +16,7 @@ void DELETE(ConnectSocket &socket, Server server, location location, ConfigFile 
     else
     {
         std::cout << socket._request.request_target << std::endl;
-        if(!access(socket._request.request_target.c_str(), F_OK))
+        if(!access(socket._request.request_target.c_str(), F_OK) && !isdirectory(socket._request.request_target))
             deletefile(socket);
         else
             socket._response.response_string = respond_error("404", configfile);

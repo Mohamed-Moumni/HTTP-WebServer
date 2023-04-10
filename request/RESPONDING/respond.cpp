@@ -86,6 +86,7 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     Server server;
     location location;
 
+    socket._response.response_string.clear();
     find_server(socket, configfile, server);
     find_location(socket, server, location);
     if(!check_max_size(socket, configfile, location))
@@ -99,8 +100,12 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     //should be decommanted when switching to the exeternal makefile
     if(socket._request.request_target.find("..") != std::string::npos)
         return(socket._response.response_string = respond_error("403", configfile), 0);
+
+    std::cout << "target : "<< socket._request.request_target << std::endl;
     response_generator(socket, server, location, configfile);
+    // std::cout << socket._response.response_string << std::endl;
     // std::cout << "the chosen server is : " << server._server_names[0] << std::endl;
     // std::cout << "the chosen location is : " << location.path << std::endl;
+    socket._response.respLength = socket._response.response_string.size();
     return 1;
 }

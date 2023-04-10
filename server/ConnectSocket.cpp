@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/09 18:07:06 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/10 09:33:04 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
     if (CharRead <= 0)
     {
+        std::cout << "close1\n";
         closed = true;
         return ;
     }
@@ -100,6 +101,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
         requestType(_configfile);
         if (!error)
         {
+            std::cout << "close2\n";
             closed = true;
             return ;
         }
@@ -154,8 +156,13 @@ void    ConnectSocket::requestType(ConfigFile & _configfile)
     Cl = _request.headers_map.find("Content-Length");
     if ( Te != _request.headers_map.end())
     {
+        // case of chunck
         if (Te->second == "Chunked")
+        {
             Chuncked = true;
+            if (_request.request_body.find("0\r\n\r\n") != std::string::npos)
+                chunckBody(_configfile);
+        }
     }
     else if (Cl != _request.headers_map.end())
     {
@@ -164,7 +171,9 @@ void    ConnectSocket::requestType(ConfigFile & _configfile)
             responding(_configfile);
     }
     else
+    {
         responding(_configfile);
+    }
 }
 
 void    HexToDec(const std::string hexValue, size_t & result)
@@ -259,9 +268,11 @@ void    ConnectSocket::sendResponse(void)
     int CharSent;
 
     CharSent = 0;
+    // std::cout << ConnectSocketId << "  sended\n";
     CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
     if (CharSent <= 0)
     {
+        // std::cout << "send: Error\n";
         closed = true;
         return ;
     }
@@ -270,8 +281,12 @@ void    ConnectSocket::sendResponse(void)
     {
         SendAvailble = false;
         ReadAvailble = true;
-        _response.respLength = _response.response_string.size();
-        // _response.response_string.clear();
         _response.CharSent = 0;
+        _response.respLength = _response.response_string.size();
+        _response.response_string.clear();
+        if (conType)
+        {
+            ReadFirst = false;
+        }
     }
 }

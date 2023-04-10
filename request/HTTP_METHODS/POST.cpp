@@ -4,19 +4,18 @@
 
 void createfile(ConnectSocket &socket, ConfigFile configfile)
 {
-    // check the content type in the mimetype map
+    std::ofstream targeted_file;
+
     if(configfile._content_types.find(socket._request.headers_map["Content-Type"]) == configfile._content_types.end())
     {
         socket._response.response_string = respond_error("400", configfile);
         return;
     }
     
-    std::ofstream targeted_file;
     targeted_file.open(socket._request.request_target);
     targeted_file << socket._request.request_body;
     targeted_file.close();
-    //todo
-    socket._response.response_string = "201 created\r\n\r\n";
+    socket._response.response_string = "HTTP/1.1 201 Created\r\nLocation: " + socket._request.request_target + "\r\n\r\n";
 }
 
 void POST(ConnectSocket &socket, Server server, location location, ConfigFile configfile)

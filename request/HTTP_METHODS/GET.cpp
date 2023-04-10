@@ -65,13 +65,15 @@ int listdir(ConnectSocket &socket)
         return 0;
     while((ent = readdir(dir)))
     {    
-        socket._response.response_string += "<a href=";
+        socket._response.response_string += "<a href=\"";
         socket._response.response_string += ent->d_name;
         if(isdirectory(socket._request.request_target + ent->d_name))
             socket._response.response_string += "/";
-        socket._response.response_string += ">";
+        socket._response.response_string += "\">";
         socket._response.response_string += ent->d_name;
-        socket._response.response_string += "</a><br>";
+        if(isdirectory(socket._request.request_target + ent->d_name))
+            socket._response.response_string += "/";
+        socket._response.response_string += "</a><br>\n";
     }
     resp << "HTTP/1.1 200 OK\r\n";
     resp << "Content-Type: text/html" << CRLF ;
@@ -85,7 +87,6 @@ int listdir(ConnectSocket &socket)
 
 void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile)
 {
-    (void)configfile;
     if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
     {
         if(location._index.size())
@@ -96,7 +97,6 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     if(socket._request.request_target[socket._request.request_target.size() - 1] == '/' && (location._autoindex == "on"
     || (!location._autoindex.size() && server._autoindex == "on")))
     {
-    std::cout << socket._request.request_target << std::endl;
         if(!listdir(socket))
             socket._response.response_string = respond_error("404", configfile);
         return ;
@@ -119,7 +119,6 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     }
     
     //static here
-    std::cout << socket._request.request_target << std::endl;
     if(open(socket._request.request_target.c_str(), O_RDONLY) != -1)
     {
         if(opendir(socket._request.request_target.c_str()))
