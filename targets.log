@@ -1,0 +1,529 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.81
+# Copyright (C) 2006  Free Software Foundation, Inc.
+# This is free software; see the source for copying conditions.
+# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+# This program built for i386-apple-darwin11.3.0
+ 
+
+# Make data base, printed on Tue Apr 11 12:13:28 2023
+
+# Variables
+
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# makefile (from `Makefile', line 52)
+OBJ = $(SRCS:.cpp=.o)
+# environment
+VSCODE_CRASH_REPORTER_PROCESS_TYPE = extensionHost
+# makefile (from `Makefile', line 33)
+REQUEST_SRCS = ./request/HTTP_METHODS/DELETE.cpp ./request/REQUEST_PARSING/possible_error.cpp ./request/HTTP_METHODS/GET.cpp ./request/REQUEST_PARSING/respond_error.cpp ./request/HTTP_METHODS/POST.cpp ./request/RESPONDING/respond.cpp ./request/RESPONDING/response_generator.cpp ./request/REQUEST_PARSING/pars_request.cpp ./request/request.cpp
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# automatic
+@F = $(notdir $@)
+# makefile
+CURDIR := /Users/ybadaoui/Desktop/HTTP-WebServer
+# makefile
+SHELL = /bin/sh
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","osLocale":"en","availableLanguages":{},"_languagePackSupport":true}
+# environment
+_ = /usr/bin/make
+# makefile (from `Makefile', line 1)
+MAKEFILE_LIST :=  Makefile
+# environment
+VSCODE_CWD = /
+# environment
+Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.SeW7Jr8TmV/Render
+# environment
+PATH = /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
+# makefile (from `Makefile', line 31)
+SERVER_SRCS = ./server/socket.cpp ./server/ConnectSocket.cpp ./server/ConnectSocketUtils.cpp
+# makefile (from `Makefile', line 46)
+CONFIG_HEADERS = ./configfile/configfile.hpp ./configfile/server.hpp ./configfile/location.hpp 
+# environment
+LSCOLORS = Gxfxcxdxbxegedabagacad
+# makefile (from `Makefile', line 21)
+CONFIG_SRCS = ./configfile/configfile.cpp ./configfile/server.cpp ./configfile/location.cpp ./configfile/parse.cpp ./configfile/print_servers.cpp ./configfile/check_errors.cpp ./configfile/preprocessing.cpp ./configfile/errors_handling.cpp 
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# makefile (from `Makefile', line 44)
+REQUEST_HEADER = ./request/INCLUDES/request.hpp ./request/INCLUDES/request.class.hpp ./request/INCLUDES/response.class.hpp 
+# default
+.FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
+# environment
+LS_COLORS = di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+# environment
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.VbAMKG6qiH/Listeners
+# automatic
+%F = $(notdir $%)
+# environment
+PWD = /Users/ybadaoui/Desktop/HTTP-WebServer
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+HOME = /Users/ybadaoui
+# default
+MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
+# environment
+VSCODE_CODE_CACHE_PATH = /Users/ybadaoui/Library/Application Support/Code/CachedData/b7886d7461186a5eac768481578c1d7ca80e2d21
+# environment
+LOGNAME = ybadaoui
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# makefile (from `Makefile', line 48)
+HEADERS = $(CONFIG_HEADERS) $(SERVER_HEADER) $(REQUEST_HEADER)
+# environment
+ZSH = /Users/ybadaoui/.oh-my-zsh
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+XPC_FLAGS = 0x0
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# makefile (from `Makefile', line 50)
+SRCS = main.cpp $(CONFIG_SRCS) $(UTILS_SRC) $(SERVER_SRCS) $(REQUEST_SRCS)
+# makefile (from `Makefile', line 42)
+SERVER_HEADER = ./server/socket.hpp ./server/ConnectSocket.hpp
+# environment
+SHLVL = 1
+# makefile (from `Makefile', line 15)
+CC = c++
+# default
+MAKE_VERSION := 3.81
+# environment
+USER = ybadaoui
+# makefile
+.DEFAULT_GOAL := all
+# makefile (from `Makefile', line 13)
+NAME = webserv
+# environment
+LESS = -R
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# default
+MAKE_COMMAND := /Applications/Xcode.app/Contents/Developer/usr/bin/make
+# default
+.VARIABLES := 
+# environment
+TMPDIR = /var/folders/zz/zyxvpxvq6csfxvn_n000ccj0003348/T/
+# automatic
+*F = $(notdir $*)
+# makefile (from `Makefile', line 38)
+UTILS_SRC = ./utils/str_trim.cpp ./utils/str_split.cpp ./utils/header_spliter.cpp ./utils/remove_side_spaces.cpp ./utils/side_whitespaces.cpp ./utils/str_split.cpp ./utils/str_trim.cpp
+# environment
+VSCODE_IPC_HOOK = /Users/ybadaoui/Library/Application Support/Code/1.77-main.sock
+# environment
+MallocNanoZone = 0
+# makefile
+MAKEFLAGS = Rrqp
+# environment
+MFLAGS = -Rrqp
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+XPC_SERVICE_NAME = com.microsoft.VSCode.3980
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# automatic
++F = $(notdir $+)
+# environment
+__CF_USER_TEXT_ENCODING = 0x18C88:0:0
+# default
+MAKEFILES := 
+# automatic
+<F = $(notdir $<)
+# environment
+PAGER = less
+# environment
+LC_ALL = C
+# automatic
+^F = $(notdir $^)
+# default
+SUFFIXES := 
+# default
+.INCLUDE_DIRS = /usr/local/include
+# environment
+MAKELEVEL := 0
+# environment
+LANG = C
+# environment
+VSCODE_PID = 14554
+# variable set hash-table stats:
+# Load=75/1024=7%, Rehash=0, Collisions=4/115=3%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (device 16777230, inode 6818388): 17 files, no impossibilities.
+# server (device 16777230, inode 6818499): 7 files, no impossibilities so far.
+# request/INCLUDES (device 16777230, inode 6818475): 5 files, no impossibilities so far.
+# configfile (device 16777230, inode 6818456): 15 files, no impossibilities so far.
+
+# 44 files, no impossibilities in 4 directories.
+
+# Implicit Rules
+
+%.o: %.cpp ./configfile/configfile.hpp ./configfile/server.hpp ./configfile/location.hpp  ./server/socket.hpp ./server/ConnectSocket.hpp ./request/INCLUDES/request.hpp ./request/INCLUDES/request.class.hpp ./request/INCLUDES/response.class.hpp
+#  commands to execute (from `Makefile', line 60):
+	$(CC) $(FLAGS) -c $<  -o $@
+	
+
+# 1 implicit rules, 0 (0.0%) terminal.
+
+# Files
+
+# Not a target:
+configfile/parse.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+utils/side_whitespaces.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+request/HTTP_METHODS/DELETE.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+configfile/configfile.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+all: webserv
+#  Command-line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/4=0%
+
+webserv: main.o configfile/configfile.o configfile/server.o configfile/location.o configfile/parse.o configfile/print_servers.o configfile/check_errors.o configfile/preprocessing.o configfile/errors_handling.o utils/str_trim.o utils/str_split.o utils/header_spliter.o utils/remove_side_spaces.o utils/side_whitespaces.o utils/str_split.o utils/str_trim.o server/socket.o server/ConnectSocket.o server/ConnectSocketUtils.o request/HTTP_METHODS/DELETE.o request/REQUEST_PARSING/possible_error.o request/HTTP_METHODS/GET.o request/REQUEST_PARSING/respond_error.o request/HTTP_METHODS/POST.o request/RESPONDING/respond.o request/RESPONDING/response_generator.o request/REQUEST_PARSING/pars_request.o request/request.o
+#  Implicit rule search has not been done.
+#  Last modified 2023-04-10 17:38:42
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/4=0%
+#  commands to execute (from `Makefile', line 57):
+	$(CC) $(FLAGS) $^ -o $(NAME)
+	
+
+# Not a target:
+request/HTTP_METHODS/POST.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+server/ConnectSocket.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+request/INCLUDES/response.class.hpp:
+#  Implicit rule search has been done.
+#  Last modified 2023-04-09 18:09:02
+#  File has been updated.
+ 
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+server/socket.hpp:
+#  Implicit rule search has been done.
+#  Last modified 2023-04-09 18:09:03
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+request/RESPONDING/response_generator.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+configfile/server.hpp:
+#  Implicit rule search has been done.
+#  Last modified 2023-04-08 14:20:26
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+configfile/location.hpp:
+#  Implicit rule search has been done.
+#  Last modified 2023-04-08 14:20:26
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+configfile/check_errors.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+request/REQUEST_PARSING/possible_error.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2023-04-10 15:58:39
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+request/HTTP_METHODS/GET.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+utils/str_trim.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+request/RESPONDING/respond.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+request/request.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+request/REQUEST_PARSING/pars_request.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+main.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2023-04-10 17:23:31
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+configfile/preprocessing.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+server/socket.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+fclean: clean
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 66):
+	rm -rf $(NAME)
+	
+
+# Not a target:
+configfile/server.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+configfile/location.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+utils/header_spliter.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+request/INCLUDES/request.hpp:
+#  Implicit rule search has been done.
+#  Last modified 2023-04-10 10:47:36
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+request/REQUEST_PARSING/respond_error.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+re: fclean all
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 63):
+	rm -rf $(OBJ)
+	
+
+# Not a target:
+request/INCLUDES/request.class.hpp:
+#  Implicit rule search has been done.
+#  Last modified 2023-04-10 15:16:07
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+configfile/configfile.hpp:
+#  Implicit rule search has been done.
+#  Last modified 2023-04-09 18:09:02
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+main.o: main.cpp configfile/configfile.hpp configfile/server.hpp configfile/location.hpp server/socket.hpp server/ConnectSocket.hpp request/INCLUDES/request.hpp request/INCLUDES/request.class.hpp request/INCLUDES/response.class.hpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `main'
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := main.o
+# automatic
+# % := 
+# automatic
+# * := main
+# automatic
+# + := main.cpp configfile/configfile.hpp configfile/server.hpp configfile/location.hpp server/socket.hpp server/ConnectSocket.hpp request/INCLUDES/request.hpp request/INCLUDES/request.class.hpp request/INCLUDES/response.class.hpp
+# automatic
+# | := 
+# automatic
+# < := main.cpp
+# automatic
+# ^ := main.cpp configfile/configfile.hpp configfile/server.hpp configfile/location.hpp server/socket.hpp server/ConnectSocket.hpp request/INCLUDES/request.hpp request/INCLUDES/request.class.hpp request/INCLUDES/response.class.hpp
+# automatic
+# ? := main.cpp configfile/configfile.hpp configfile/server.hpp configfile/location.hpp server/socket.hpp server/ConnectSocket.hpp request/INCLUDES/request.hpp request/INCLUDES/request.class.hpp request/INCLUDES/response.class.hpp
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=1/14=7%
+#  commands to execute (from `Makefile', line 60):
+	$(CC) $(FLAGS) -c $<  -o $@
+	
+
+# Not a target:
+server/ConnectSocket.hpp:
+#  Implicit rule search has been done.
+#  Last modified 2023-04-10 15:16:07
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+utils/remove_side_spaces.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+utils/str_split.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+server/ConnectSocketUtils.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+configfile/print_servers.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+configfile/errors_handling.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=43/1024=4%, Rehash=0, Collisions=0/107=0%
+# VPATH Search Paths
+
+# No `vpath' search paths.
+
+# No general (`VPATH' variable) search path.
+
+# # of strings in strcache: 1
+# # of strcache buffers: 1
+# strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
+# strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
+
+# Finished Make data base on Tue Apr 11 12:13:28 2023
+
+ 

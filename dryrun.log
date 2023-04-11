@@ -1,0 +1,31 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/ybadaoui/Desktop/HTTP-WebServer'
+c++  -c main.cpp  -o main.o
+c++  -c configfile/configfile.cpp  -o configfile/configfile.o
+c++  -c configfile/server.cpp  -o configfile/server.o
+c++  -c configfile/location.cpp  -o configfile/location.o
+c++  -c configfile/parse.cpp  -o configfile/parse.o
+c++  -c configfile/print_servers.cpp  -o configfile/print_servers.o
+c++  -c configfile/check_errors.cpp  -o configfile/check_errors.o
+c++  -c configfile/preprocessing.cpp  -o configfile/preprocessing.o
+c++  -c configfile/errors_handling.cpp  -o configfile/errors_handling.o
+c++  -c utils/str_trim.cpp  -o utils/str_trim.o
+c++  -c utils/str_split.cpp  -o utils/str_split.o
+c++  -c utils/header_spliter.cpp  -o utils/header_spliter.o
+c++  -c utils/remove_side_spaces.cpp  -o utils/remove_side_spaces.o
+c++  -c utils/side_whitespaces.cpp  -o utils/side_whitespaces.o
+c++  -c server/socket.cpp  -o server/socket.o
+c++  -c server/ConnectSocket.cpp  -o server/ConnectSocket.o
+c++  -c server/ConnectSocketUtils.cpp  -o server/ConnectSocketUtils.o
+c++  -c request/HTTP_METHODS/DELETE.cpp  -o request/HTTP_METHODS/DELETE.o
+c++  -c request/REQUEST_PARSING/possible_error.cpp  -o request/REQUEST_PARSING/possible_error.o
+c++  -c request/HTTP_METHODS/GET.cpp  -o request/HTTP_METHODS/GET.o
+c++  -c request/REQUEST_PARSING/respond_error.cpp  -o request/REQUEST_PARSING/respond_error.o
+c++  -c request/HTTP_METHODS/POST.cpp  -o request/HTTP_METHODS/POST.o
+c++  -c request/RESPONDING/respond.cpp  -o request/RESPONDING/respond.o
+c++  -c request/RESPONDING/response_generator.cpp  -o request/RESPONDING/response_generator.o
+c++  -c request/REQUEST_PARSING/pars_request.cpp  -o request/REQUEST_PARSING/pars_request.o
+c++  -c request/request.cpp  -o request/request.o
+c++  main.o configfile/configfile.o configfile/server.o configfile/location.o configfile/parse.o configfile/print_servers.o configfile/check_errors.o configfile/preprocessing.o configfile/errors_handling.o utils/str_trim.o utils/str_split.o utils/header_spliter.o utils/remove_side_spaces.o utils/side_whitespaces.o server/socket.o server/ConnectSocket.o server/ConnectSocketUtils.o request/HTTP_METHODS/DELETE.o request/REQUEST_PARSING/possible_error.o request/HTTP_METHODS/GET.o request/REQUEST_PARSING/respond_error.o request/HTTP_METHODS/POST.o request/RESPONDING/respond.o request/RESPONDING/response_generator.o request/REQUEST_PARSING/pars_request.o request/request.o -o webserv
+make: Leaving directory `/Users/ybadaoui/Desktop/HTTP-WebServer'
+ 
