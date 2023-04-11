@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/11 14:13:40 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/11 15:31:31 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ void	fill_string_attr(Server& serv, std::vector<std::string>& vec)
 			exit_mode("CLIENT MAX BODY SIZE SHOULD BE POSITIVE NUMBER");
 		if (is_body_size_not_valid(vec[1]))
 			exit_mode("CLIENT MAX BODY SIZE SHOULD BE LOWER THAN 2000");
-		serv._client_max_body_size = stoi(vec[1]);
+		serv._client_max_body_size = stoi(vec[1]) * 1000000;
 	}
 	else if (vec[0] == "root")
 		serv._root = vec[1];
