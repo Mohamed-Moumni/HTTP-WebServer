@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/11 13:17:10 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/11 14:13:40 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,12 +133,34 @@ void	fill_allowed_methods(T& fill, std::vector<std::string>& vec)
 	}
 }
 
+bool	is_body_size_not_valid(std::string s)
+{
+	std::string max = "2000";
+
+	if (s[4] != 'm')
+		exit_mode("BODY SIZE SHOULD BE LIKE THIS '0000m'");
+	if (s.length() > 5)
+		return true;
+	for (size_t i = 0; i < 4; i++)
+	{
+		if (s[i] != max[i])
+			return max[i] < s[i];
+	}
+	return false;
+}
+
 void	fill_string_attr(Server& serv, std::vector<std::string>& vec)
 {
 	if (vec.size() != 2)
 		exit_mode("NUM OF ARGS IS NOT VALID CHECK(ROOT/AUTOINDEX/CLIENT__SIZE)");
 	if (vec[0] == "client_max_body_size")
-		serv._client_max_body_size = vec[1];
+	{
+		if (vec[1][0] == '-')
+			exit_mode("CLIENT MAX BODY SIZE SHOULD BE POSITIVE NUMBER");
+		if (is_body_size_not_valid(vec[1]))
+			exit_mode("CLIENT MAX BODY SIZE SHOULD BE LOWER THAN 2000");
+		serv._client_max_body_size = stoi(vec[1]);
+	}
 	else if (vec[0] == "root")
 		serv._root = vec[1];
 	else if (vec[0] == "autoindex")
@@ -553,5 +575,6 @@ ConfigFile	start_parse(std::string config_file)
 	// print_servers(conf._servers);
 	fill_meme_types(conf);
 	fill_code_status(conf);
+	// exit(0);
 	return (conf);
 }
