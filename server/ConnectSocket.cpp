@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/11 14:42:57 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/11 15:39:57 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _p
     closed = false;
     conType = false;
     chunck = false;
+    _request.BodyReaded = 0;
 }
 
 void    ConnectSocket::readRequest(ConfigFile & _configfile)
@@ -62,9 +63,6 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
             }
             else
             {
-                readUnChuncked(_configfile);
-                if (closed)
-                    return ;
                 CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
                 if (CharRead <= 0)
                 {
@@ -73,6 +71,7 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
                 }
                 _request.request_body.append(std::string(Buffer, CharRead));
                 _request.BodyReaded += CharRead;
+                readUnChuncked(_configfile);
             }
         }
     }
@@ -144,7 +143,9 @@ void    ConnectSocket::chunckBody(ConfigFile & _configfile)
 void    ConnectSocket::readUnChuncked(ConfigFile & _configfile)
 {
     if (_request.ContentLen == _request.BodyReaded)
+    {
         responding(_configfile);
+    }
     if (_request.ContentLen < _request.BodyReaded)
     {
         _response.response_string.append(respond_error("400", _configfile));
@@ -179,6 +180,7 @@ void        ConnectSocket::responding(ConfigFile & _configfile)
 {
     ReadAvailble = false;
     SendAvailble = true;
+
     respond(*this, _configfile);
     _response.respLength = _response.response_string.size();
     ConnectionType();

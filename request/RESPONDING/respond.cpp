@@ -30,7 +30,7 @@ void redirect(ConnectSocket &socket,location location, Server server, ConfigFile
     socket._response.response_string = response.str();
 }
 
-int check_max_size(ConnectSocket socket, ConfigFile configfile, Server server)
+int check_max_size(ConnectSocket & socket, ConfigFile configfile, Server server)
 {
     if(socket._request.request_body.size() > server._client_max_body_size)
     {
