@@ -27,7 +27,7 @@ int main(void)
 {
     int sock = 0; long valread;
     struct sockaddr_in serv_addr;
-    std::string request = "POST /file.txt HTTP/1.1\r\nHost: localhost:8081\r\nContent-Length: 3\r\n\r\nabc" ;
+    std::string request = "POST /file.txt HTTP/1.1\r\nHost: localhost:8081\r\nContent-Length: 2\r\n\r\nabc" ;
     std::cout << "request is: "<<request << std::endl;
     char buffer[1024] = {0};
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
