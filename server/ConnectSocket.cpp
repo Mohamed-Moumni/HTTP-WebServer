@@ -86,6 +86,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
 
     reqInit();
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
+    std::cout << "we recive : " << Buffer << " size : " << strlen(Buffer) <<std::endl;
     if (CharRead <= 0)
     {
         closed = true;
