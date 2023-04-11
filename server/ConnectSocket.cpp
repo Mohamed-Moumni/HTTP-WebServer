@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/11 15:39:57 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/11 16:52:42 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _p
     conType = false;
     chunck = false;
     _request.BodyReaded = 0;
+    _response.CharSent = 0;
 }
 
 void    ConnectSocket::readRequest(ConfigFile & _configfile)
@@ -180,7 +181,6 @@ void        ConnectSocket::responding(ConfigFile & _configfile)
 {
     ReadAvailble = false;
     SendAvailble = true;
-
     respond(*this, _configfile);
     _response.respLength = _response.response_string.size();
     ConnectionType();
