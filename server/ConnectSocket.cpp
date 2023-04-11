@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/11 12:00:14 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/11 14:42:57 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     char        Buffer[BUFFER];
     int         error;
 
-    reqInit();
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
-    std::cout << "we recive : " << Buffer << " size : " << strlen(Buffer) <<std::endl;
     if (CharRead <= 0)
     {
         closed = true;
@@ -104,7 +102,6 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
         _request.BodyReaded += _request.request_body.size();
         requestType(_configfile);
         ReadFirst = true;
-        _request.request_string.clear();
     }
 }
 
@@ -146,7 +143,8 @@ void    ConnectSocket::chunckBody(ConfigFile & _configfile)
 
 void    ConnectSocket::readUnChuncked(ConfigFile & _configfile)
 {
-    
+    if (_request.ContentLen == _request.BodyReaded)
+        responding(_configfile);
     if (_request.ContentLen < _request.BodyReaded)
     {
         _response.response_string.append(respond_error("400", _configfile));
@@ -154,8 +152,6 @@ void    ConnectSocket::readUnChuncked(ConfigFile & _configfile)
         closed = true;
         return ;
     }
-    if (_request.ContentLen == _request.BodyReaded)
-        responding(_configfile);
 }
 
 void    ConnectSocket::ConnectionType(void)

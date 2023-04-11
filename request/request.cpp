@@ -1,5 +1,5 @@
 #include "INCLUDES/request.hpp"
-#include <fstream> //for ifstream
+#include <fstream>
 
 int request_handler(ConnectSocket & socket, ConfigFile configfile)
 {
