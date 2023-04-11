@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/10 17:17:47 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/11 11:30:29 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 					pollin(pfds, sockets, Connections, i);
 				else
 				{
+					if (getTimeOfNow() - Connections[pfds[i].fd].timeOut > 10)
+					{
+						Connections[pfds[i].fd]._response.response_string.append(respond_error("400", configFile));
+						sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
+						closeConnection(pfds, Connections, i);
+						i--;
+					}
 					Connections[pfds[i].fd].readRequest(configFile);
 					if (Connections[pfds[i].fd].closed)
 					{

@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/10 17:07:07 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/11 12:00:14 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _p
     ConnectSocketId = SocketId;
     IpAdress = _IpAdress;
     Port = _port;
+    timeOut = getTimeOfNow();
     ReadAvailble = true;
     SendAvailble = false;
     Chuncked = false;
@@ -61,6 +62,9 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
             }
             else
             {
+                readUnChuncked(_configfile);
+                if (closed)
+                    return ;
                 CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
                 if (CharRead <= 0)
                 {
@@ -69,7 +73,6 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
                 }
                 _request.request_body.append(std::string(Buffer, CharRead));
                 _request.BodyReaded += CharRead;
-                readUnChuncked(_configfile);
             }
         }
     }
@@ -97,16 +100,10 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
             closed = true;
             return ;
         }
-        requestType(_configfile);
         _request.BodyReaded += _request.request_body.size();
+        requestType(_configfile);
         ReadFirst = true;
         _request.request_string.clear();
-    }
-    else
-    {
-        closed = true;        
-        _response.response_string.append(respond_error("413", _configfile));
-        _response.respLength = _response.response_string.size();
     }
 }
 
@@ -186,7 +183,6 @@ void        ConnectSocket::responding(ConfigFile & _configfile)
     ReadAvailble = false;
     SendAvailble = true;
     respond(*this, _configfile);
-    // std::cout << "the response is : +++++++++++\n" << _response.response_string << "\n++++++++++++\n" ; 
     _response.respLength = _response.response_string.size();
     ConnectionType();
 }
@@ -196,18 +192,16 @@ void    ConnectSocket::sendResponse(void)
     int CharSent;
 
     CharSent = 0;
-    // std::cout << "before send: +++++++++++\n" << _response.response_string << "++++++++++"<< std::endl;
     CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
-    // std::cout << "after send: +++++++++++\n" << _response.response_string << "++++++++++"<< std::endl;
     if (CharSent <= 0)
     {
         closed = true;
         return ;
     }
     _response.CharSent += CharSent;
-    // std::cout << _response.response_string << "---" << CharSent << "----" << _response.respLength << "\n";
     if (_response.respLength == _response.CharSent)
     {
+        timeOut = getTimeOfNow();
         SendAvailble = false;
         ReadAvailble = true;
         clearData();
