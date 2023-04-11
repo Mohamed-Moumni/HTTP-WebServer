@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/11 11:30:29 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/11 13:48:50 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 {
 	if (argc > 2)
 		return (std::cout << "INVALID ARGUMENTS" << std::endl, 1);
-	std::string config_file = (argc == 2 ? argv[1] : "./tests/def.conf");
+	std::string config_file = (argc == 2 ? argv[1] : "./tests/test.conf");
 	start_server(config_file);	
 	return (0);
 }
