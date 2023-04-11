@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/09 12:44:04 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/11 13:17:10 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,8 @@ void	fill_string_attr(Server& serv, std::vector<std::string>& vec)
 		serv._root = vec[1];
 	else if (vec[0] == "autoindex")
 		serv._autoindex = vec[1];
-	else if (vec[0] == "upload")
-		serv._upload = vec[1];
+	// else if (vec[0] == "upload")
+	// 	serv._upload = vec[1];
 }
 
 void	fill_server_attr(Server& serv, std::vector<std::string>& vec)
@@ -349,12 +349,12 @@ void	fill_location_attr(location& loc, std::string& s)
 		fill_index(loc, vec);
 	else if (vec[0] == "allowed_methods")
 		fill_allowed_methods(loc, vec);
-	else if (vec[0] == "error_pages")
-		fill_error_pages(loc, vec);
 	else if (vec[0] == "return")
 		fill_return(loc, vec);
 	else
 		fill_others(loc, vec);
+	// else if (vec[0] == "error_pages")
+	// 	fill_error_pages(loc, vec);
 }
 
 /* ######## PARSE ONE LOCATION ######## */

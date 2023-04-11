@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:53:14 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/07 18:17:36 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/11 13:16:20 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	print_locations(Server& serv)
 		std::cout << "Root is : " << tmp._root << std::endl;
 		std::cout << "AutoIndex is : " << tmp._autoindex << std::endl;
 		print_index(tmp);
-		print_error_pages(tmp);
+		// print_error_pages(tmp);
 		print_return(tmp);
 		std::map<std::string, std::vector<std::string> >::iterator it = tmp._others.begin();
 		for (; it != tmp._others.end(); it++)
@@ -113,7 +113,7 @@ void	print_servers(std::vector<Server>& vec)
 		std::cout << "_root is : " << vec[i]._root << std::endl;
 		std::cout << "_autoindex is : " << vec[i]._autoindex << std::endl;
 		std::cout << "_client_max_body_size is : " << vec[i]._client_max_body_size << std::endl;
-		std::cout << "_upload is : " << vec[i]._upload << std::endl;
+		// std::cout << "_upload is : " << vec[i]._upload << std::endl;
 		print_listen(vec[i]);
 		print_server_names(vec[i]);
 		print_index(vec[i]);
