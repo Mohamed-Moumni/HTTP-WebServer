@@ -119,12 +119,15 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     }
     
     //static here
-    if(open(socket._request.request_target.c_str(), O_RDONLY) != -1)
+    if(!access(socket._request.request_target.c_str(), F_OK))
     {
         if(opendir(socket._request.request_target.c_str()))
             socket._response.response_string = respond_error("404", configfile);
-        else
+        else if(!access(socket._request.request_target.c_str(), R_OK))
             file2response(socket, server, location, configfile);
+        else
+            socket._response.response_string = respond_error("403", configfile);
+
     }
     else 
         socket._response.response_string = respond_error("404", configfile); //404 not found 
