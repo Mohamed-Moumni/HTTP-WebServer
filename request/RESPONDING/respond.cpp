@@ -30,7 +30,7 @@ void redirect(ConnectSocket &socket,location location, Server server, ConfigFile
     socket._response.response_string = response.str();
 }
 
-int check_max_size(ConnectSocket socket, ConfigFile configfile, Server server)
+int check_max_size(ConnectSocket & socket, ConfigFile configfile, Server server)
 {
     if(socket._request.request_body.size() > server._client_max_body_size)
     {
@@ -105,5 +105,6 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     socket._response.respLength = socket._response.response_string.size();
 
     std::cout << "target : "<< socket._request.request_target << std::endl;
+    // std::cout << "response is : \n+++++++++++++\n" << socket._response.response_string << "\n+++++++++\n" << std::endl;
     return 1;
 }

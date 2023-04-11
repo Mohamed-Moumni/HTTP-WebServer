@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 21:52:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/03/03 21:52:50 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/11 15:31:25 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,9 @@
 
 Server::Server()
 {
-	// std::cout << "Server Default Constructor" << std::endl;
-	_client_max_body_size = 1;
+	_client_max_body_size = 1000000;
 }
 
 Server::~Server()
 {
-	// std::cout << "Server Destrucotr" << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 15:52:11 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/11 14:15:29 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/11 15:28:05 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,10 @@ void    ConnectSocket::requestType(ConfigFile & _configfile)
     else if (Cl != _request.headers_map.end())
     {
         _request.ContentLen = atol(Cl->second.c_str());
+        if (_request.ContentLen == _request.BodyReaded)
+        {
+            responding(_configfile);
+        }
     }
     else
         responding(_configfile);
