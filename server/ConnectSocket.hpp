@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:30:26 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/08 10:39:39 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/10 14:33:30 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class ConnectSocket
         std::string     Port;
         request         _request;
         response        _response;
+
         ~ConnectSocket();
         ConnectSocket();
         ConnectSocket(int SocketId, std::string _IpAdress, std::string _port);
@@ -56,6 +57,9 @@ class ConnectSocket
         void        requestType(ConfigFile & _configfile);
         void        ConnectionType(void);
         void        readingChuncked(void);
+        void        responding(ConfigFile & _configfile);
+        void        reqInit(void);
+        void        clearData(void);
         std::string getChuncked(std::string req);
 };
 

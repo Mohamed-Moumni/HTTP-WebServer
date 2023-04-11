@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HTTP Webserver Test Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+    }
+    
+    .container {
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+      max-width: 600px;
+      text-align: center;
+    }
+    
+    h1, h2 {
+      text-align: center;
+    }
+    
+    button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background-color: #3e8e41;
+    }
+    
+    input[type=text] {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    
+    p {
+      margin: 10px 0;
+      line-height: 1.5em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>HTTP Webserver Test Page</h1>
+
+    <h2>GET Request</h2>
+    <p>To test the GET method, click the button below:</p>
+    <button onclick="sendGetRequest()">Send GET Request</button>
+
+    <h2>POST Request</h2>
+    <p>To test the POST method, enter some data in the input field below and click the button:</p>
+    <input type="text" id="postData">
+    <button onclick="sendPostRequest()">Send POST Request</button>
+
+    <h2>DELETE Request</h2>
+    <p>To test the DELETE method, enter the ID of the data you want to delete in the input field below and click the button:</p>
+    <input type="text" id="deleteData">
+    <button onclick="sendDeleteRequest()">Send DELETE Request</button>
+  </div>
+
+  <script>
+    // Send GET Request
+    function sendGetRequest() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "/");
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var responseWindow = window.open("");
+          responseWindow.document.write(xhr.responseText);
+        }
+      };
+      xhr.send();
+    }
+
+    // Send POST Request
+    function sendPostRequest() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/");
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var responseWindow = window.open("");
+          responseWindow.document.write(xhr.responseText);
+        }
+      };
+      var data = {
+        "data": document.getElementById("postData").value
+      };
+      xhr.send(JSON.stringify(data));
+    }
+
+    // Send DELETE Request
+    function sendDeleteRequest() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("DELETE", "/");
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onload = function() {
+        if (xhr.status === 200){
+        var responseWindow = window.open("");
+      responseWindow.document.write(xhr.responseText);
+    }
+  };
+  var data = {
+    "id": document.getElementById("deleteData").value
+  };
+  xhr.send(JSON.stringify(data));
+}
+</script>
+</body>
+</html>

@@ -499,7 +499,7 @@ void	fill_meme_types(ConfigFile& config)
 {
 	std::string meme_types;
 
-	meme_types = read_file("../configfile/MIME_TYPES");
+	meme_types = read_file("./configfile/MIME_TYPES");
 	std::vector<std::string> list = str_split(meme_types, '\n');
 	for (size_t i = 0; i < list.size(); i++)
 	{

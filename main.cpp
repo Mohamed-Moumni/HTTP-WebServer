@@ -6,27 +6,24 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/10 18:08:50 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/11 13:23:17 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <signal.h>
 #include "./configfile/configfile.hpp"
 #include "./server/socket.hpp"
 #include "./request/INCLUDES/request.hpp"
 
-void set_error_pages(ConfigFile &config)
-{
-	(void)(config);
-	std::map<std::string , std::string> error_pages;
-	error_pages["404"] = "";
-	error_pages[""] = "";
-	//todo
+void sigpipe_handler(int signum) {
 }
 
 void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigFile & configFile, std::map<int, ConnectSocket> Connections)
 {
+	signal(SIGPIPE, sigpipe_handler);
 	while (1)
 	{
 		poll(&pfds[0], pfds.size(), 0);
@@ -38,9 +35,18 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 					pollin(pfds, sockets, Connections, i);
 				else
 				{
+					if (getTimeOfNow() - Connections[pfds[i].fd].timeOut > 10)
+					{
+						Connections[pfds[i].fd]._response.response_string.append(respond_error("400", configFile));
+						sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
+						closeConnection(pfds, Connections, i);
+						i--;
+					}
 					Connections[pfds[i].fd].readRequest(configFile);
 					if (Connections[pfds[i].fd].closed)
 					{
+						if (Connections[pfds[i].fd]._response.response_string.size())
+							sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
 						closeConnection(pfds, Connections, i);
 						i--;
 					}
@@ -48,8 +54,15 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 			}
 			if (pfds[i].revents & POLLOUT)
 			{
-				pollout(configFile, pfds, Connections, i);
-				if (Connections[pfds[i].fd].closed || Connections[pfds[i].fd].conType)
+				pollout(pfds, Connections, i);
+				if (Connections[pfds[i].fd].closed)
+				{
+					if (Connections[pfds[i].fd]._response.response_string.size())
+						sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
+            		closeConnection(pfds, Connections, i);
+					i--;
+				}
+				else if ((Connections[pfds[i].fd].conType && Connections[pfds[i].fd].ReadAvailble))
 				{
             		closeConnection(pfds, Connections, i);
 					i--;
@@ -74,7 +87,6 @@ void	start_server(std::string & _config)
 	{
 		_config = read_file(_config);
 		configFile = start_parse_config_file(_config);
-		set_error_pages(configFile);
 		sockets = create_sockets(configFile);
 		listenSocket(sockets);
 		pfds = create_pfd(sockets);

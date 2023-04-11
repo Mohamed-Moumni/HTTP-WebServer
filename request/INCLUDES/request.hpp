@@ -15,11 +15,13 @@ int possible_error(ConnectSocket &socket, ConfigFile configfile);
 /////////////RESPONSE////////////
 int respond(ConnectSocket &socket, ConfigFile configfile);
 void response_generator(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile);
-std::string respond_error(std::string error);
+std::string respond_error(std::string error, ConfigFile configfile);
+void file2response(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile);
+int isdirectory(std::string path);
 
 /////////////METHODS/////////////
 void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile);
 void POST(ConnectSocket &socket, Server server, location location, ConfigFile configfile);
-void DELETE(ConnectSocket &socket, Server server, location location);
+void DELETE(ConnectSocket &socket, Server server, location location, ConfigFile configfile);
 
 #endif

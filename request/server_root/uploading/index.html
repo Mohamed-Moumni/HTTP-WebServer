@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>File Upload</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Upload a File</h1>
+		<form>
+			<div class="form-group">
+				<label for="file">Choose a file:</label>
+				<input type="file" name="file" id="file">
+			</div>
+			<div class="form-group">
+				<input type="button" value="Upload" onclick="uploadFile()">
+			</div>
+		</form>
+		<div class="progress-bar-container">
+			<div class="progress-bar" id="progress-bar"></div>
+		</div>
+		<div id="message"></div>
+	</div>
+	<script src="script.js"></script>
+</body>
+</html>
