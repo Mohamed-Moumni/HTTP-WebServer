@@ -29,7 +29,7 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
         std::cout << socket._request.request_target << std::endl;
         if(!access(socket._request.request_target.c_str(), F_OK))
             socket._response.response_string = respond_error("409", configfile);
-        else
+        else if(!access(socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')).c_str(), W_OK))
         {
             if((dir = opendir(socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')).c_str())))
             {
@@ -39,5 +39,8 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
             else
                 socket._response.response_string = respond_error("404", configfile);
         }
+        else
+            socket._response.response_string = respond_error("403", configfile);
+
     }
 }

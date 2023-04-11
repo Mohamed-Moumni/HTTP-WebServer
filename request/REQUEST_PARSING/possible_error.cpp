@@ -44,6 +44,13 @@ int possible_error(ConnectSocket &socket, ConfigFile configfile)
         return 0;
     if(socket._request.method == "POST" && socket._request.headers_map.find("Content-Type") == socket._request.headers_map.end())
     {
+        socket._response.response_string = respond_error("400", configfile);
+        socket._response.respLength = socket._response.response_string.size();
+        return 2;
+    }
+
+    if(socket._request.method == "POST" && socket._request.headers_map.find("Content-Length") == socket._request.headers_map.end())
+    {
         socket._response.response_string = respond_error("411", configfile);
         socket._response.respLength = socket._response.response_string.size();
         return 2;
