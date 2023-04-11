@@ -37,13 +37,13 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 				else
 				{
 					
-					if (getTimeOfNow() - Connections[pfds[i].fd].timeOut > 10)
-					{
-						Connections[pfds[i].fd]._response.response_string.append(respond_error("408", configFile));
-						sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
-						closeConnection(pfds, Connections, i);
-						i--;
-					}
+					// if (getTimeOfNow() - Connections[pfds[i].fd].timeOut > 10)
+					// {
+					// 	Connections[pfds[i].fd]._response.response_string.append(respond_error("408", configFile));
+					// 	sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
+					// 	closeConnection(pfds, Connections, i);
+					// 	i--;
+					// }
 					Connections[pfds[i].fd].timeOut = getTimeOfNow();
 					Connections[pfds[i].fd].readRequest(configFile);
 					if (Connections[pfds[i].fd].closed)

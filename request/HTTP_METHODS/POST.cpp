@@ -13,6 +13,11 @@ void createfile(ConnectSocket &socket, ConfigFile configfile)
     }
     
     targeted_file.open(socket._request.request_target);
+    if(targeted_file.failbit)
+    {
+        socket._response.response_string = respond_error("403", configfile);
+        return ;
+    }
     targeted_file << socket._request.request_body;
     targeted_file.close();
     socket._response.response_string = "HTTP/1.1 201 Created\r\nLocation: " + socket._request.request_target + "\r\n\r\n";
@@ -27,10 +32,12 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
     else
     {
         std::cout << socket._request.request_target << std::endl;
+        // std::cout << "check for : " << socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')) << std::endl;
         if(!access(socket._request.request_target.c_str(), F_OK))
             socket._response.response_string = respond_error("409", configfile);
-        else if(!access(socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')).c_str(), W_OK))
+        else
         {
+            std::cout << "checking for : "<< socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')).c_str() << std::endl;
             if((dir = opendir(socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')).c_str())))
             {
                 closedir(dir);
@@ -39,8 +46,6 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
             else
                 socket._response.response_string = respond_error("404", configfile);
         }
-        else
-            socket._response.response_string = respond_error("403", configfile);
 
     }
 }

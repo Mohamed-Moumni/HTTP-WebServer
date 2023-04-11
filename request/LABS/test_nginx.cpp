@@ -25,14 +25,14 @@ std::string		read_file(std::string file_name)
 
 int main(void)
 {
-    int sock = 0; long valread;
+   a: int sock = 0; long valread;
     struct sockaddr_in serv_addr;
-    std::string request = "POST /file.txt HTTP/1.1\r\nHost: localhost:8081\r\nContent-Length: 3\r\nContent-Type: text/plain\r\n\r\nabc" ;
-    std::cout << "request is: "<<request << std::endl;
+    std::string request = "GET /server_root/help.html HTTP/1.1\r\nHost: localhost:8081\r\n\r\n" ;
+    // std::cout << "request is: "<<request << std::endl;
     char buffer[1024] = {0};
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-        printf("\n Socket creation error \n");
+        // printf("\n Socket creation error \n");
         return -1;
     }
     
@@ -53,12 +53,13 @@ int main(void)
         printf("\nConnection Failed \n");
         return -1;
     }
-    send(sock , request.c_str() , strlen(request.c_str()) , 0 );
-    printf("request message sent\n");
-    valread = recv( sock , buffer, 20024, 0);
-    std::cout << valread<< " Readed!" << std::endl;
+        send(sock , request.c_str() , strlen(request.c_str()) , 0);
+        goto a;
+    // printf("request message sent\n");
+    // valread = recv( sock , buffer, 20024, 0);
+    // std::cout << valread<< " Readed!" << std::endl;
     std::cout << "+++++++++++++++++++++++++++++++++\n";
-    printf("%s\n",buffer );
+    // printf("%s\n",buffer );
     std::cout << "\n+++++++++++++++++++++++++++++++++\n";
     return 0;
 }

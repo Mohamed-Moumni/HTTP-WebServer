@@ -35,7 +35,6 @@ int get_contentL(ConnectSocket &socket, ConfigFile configfile)
 
 int possible_error(ConnectSocket &socket, ConfigFile configfile)
 {
-    std::cout << "http version: " << socket._request.http_version << std::endl;
     if(!get_contentL(socket, configfile))
         return 0;
     if(socket._request.http_version != "HTTP/1.1")

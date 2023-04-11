@@ -87,7 +87,10 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
 {
     Server server;
     location location;
+    static int rn;
 
+    printf("%d\n" , rn);
+    rn ++;
     socket._response.response_string.clear();
     find_server(socket, configfile, server);
     find_location(socket, server, location);
@@ -104,7 +107,7 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     response_generator(socket, server, location, configfile);
     socket._response.respLength = socket._response.response_string.size();
 
-    std::cout << "target : "<< socket._request.request_target << std::endl;
+    // std::cout << "target : "<< socket._request.request_target << std::endl;
     // std::cout << "response is : \n+++++++++++++\n" << socket._response.response_string << "\n+++++++++\n" << std::endl;
     return 1;
 }
