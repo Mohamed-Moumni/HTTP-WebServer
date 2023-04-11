@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 15:52:11 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/11 11:51:59 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/11 14:15:29 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,14 @@
 #include "../request/INCLUDES/request.class.hpp"
 #include "../request/INCLUDES/request.hpp"
 
-void        ConnectSocket::reqInit(void)
-{
-    _request.BodyReaded = 0;
-    _response.CharSent = 0;
-    _response.respLength = 0;
-    _request.request_string.clear();
-    _response.response_string.clear();
-}
-
 void    ConnectSocket::clearData(void)
 {
+    _response.CharSent = 0;
+    _response.respLength = 0;
+    _response.response_string.clear();
+    _request.BodyReaded = 0;
     _request.ContentLen = 0;
+    _request.request_string.clear();
     _request.request_body.clear();
     _request.headers_map.clear();
     _request.request_target.clear();

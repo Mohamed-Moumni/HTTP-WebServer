@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/11 13:48:50 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/11 14:44:35 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 #include "./server/socket.hpp"
 #include "./request/INCLUDES/request.hpp"
 
-void sigpipe_handler(int signum) {
+void sigpipe_handler(int signum)
+{
 }
 
 void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigFile & configFile, std::map<int, ConnectSocket> Connections)
@@ -35,13 +36,15 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 					pollin(pfds, sockets, Connections, i);
 				else
 				{
+					
 					if (getTimeOfNow() - Connections[pfds[i].fd].timeOut > 10)
 					{
-						Connections[pfds[i].fd]._response.response_string.append(respond_error("400", configFile));
+						Connections[pfds[i].fd]._response.response_string.append(respond_error("408", configFile));
 						sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
 						closeConnection(pfds, Connections, i);
 						i--;
 					}
+					Connections[pfds[i].fd].timeOut = getTimeOfNow();
 					Connections[pfds[i].fd].readRequest(configFile);
 					if (Connections[pfds[i].fd].closed)
 					{

@@ -25,7 +25,6 @@ class Server
 		std::string											_root;
 		std::string											_autoindex;
 		size_t												_client_max_body_size;
-		// std::string											_upload;
 		std::vector<std::string>							_server_names;
 		std::vector<std::string>							_index;
 		std::vector<std::string>							_allowed_methods;
