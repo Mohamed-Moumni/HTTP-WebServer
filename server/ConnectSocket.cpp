@@ -32,6 +32,7 @@ ConnectSocket::ConnectSocket(int SocketId, std::string _IpAdress, std::string _p
     ConnectSocketId = SocketId;
     IpAdress = _IpAdress;
     Port = _port;
+    timeOut = getTimeOfNow();
     ReadAvailble = true;
     SendAvailble = false;
     Chuncked = false;
@@ -51,6 +52,7 @@ void    ConnectSocket::readRequest(ConfigFile & _configfile)
     CharRead = 0;
     if (ReadAvailble)
     {
+        timeOut = getTimeOfNow();
         if (!ReadFirst)
             FirstRead(_configfile);
         else
@@ -83,7 +85,6 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     char        Buffer[BUFFER];
     int         error;
 
-    // timeOut = getTimeOfNow();
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
     if (CharRead <= 0)
     {
