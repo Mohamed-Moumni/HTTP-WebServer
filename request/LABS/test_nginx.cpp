@@ -27,7 +27,7 @@ int main(void)
 {
    a: int sock = 0; long valread;
     struct sockaddr_in serv_addr;
-    std::string request = "GET /server_root/help.html HTTP/1.1\r\nHost: localhost:8081\r\n\r\n" ;
+    std::string request = "POST /file.txt HTTP/1.1\r\nHost: localhost:8081\r\nContent-Type: text/plain\r\nContent-Length: 20\n\r\n\rasdfghjkloasdfghjklp" ;
     // std::cout << "request is: "<<request << std::endl;
     char buffer[1024] = {0};
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
@@ -53,14 +53,15 @@ int main(void)
         printf("\nConnection Failed \n");
         return -1;
     }
-        send(sock , request.c_str() , strlen(request.c_str()) , 0);
+    send(sock , request.c_str() , strlen(request.c_str()) , 0);
+    printf("request message sent\n");
         goto a;
-    // printf("request message sent\n");
-    recv( sock , buffer, 20024, 0);
+    // read(sock , buffer, 1024);
     // std::cout << valread<< " Readed!" << std::endl;
     std::cout << "+++++++++++++++++++++++++++++++++\n";
     // printf("%s\n",buffer );
     std::cout << "\n+++++++++++++++++++++++++++++++++\n";
+    sleep(1);
     return 0;
 }
 

@@ -86,6 +86,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     int         error;
 
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
+    // std::cout << "\n+++++++++\n" << Buffer << "\n+++++++++\n" << std::endl;
     if (CharRead <= 0)
     {
         closed = true;

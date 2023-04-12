@@ -20,7 +20,10 @@ void createfile(ConnectSocket &socket, ConfigFile configfile)
     }
     targeted_file << socket._request.request_body;
     targeted_file.close();
-    socket._response.response_string = "HTTP/1.1 201 Created\r\nLocation: " + socket._request.request_target + "\r\n\r\n";
+    socket._response.response_string = "HTTP/1.1 201 Created\r\nLocation: " + socket._request.request_target;
+    socket._response.response_string += "\n\rContent-Length: 29\r\n\r\n<h1>Created successfully!<h1>";
+    // std::cout << socket._response.response_string << std::endl;
+    remove(socket._request.request_target.c_str());
 }
 
 void POST(ConnectSocket &socket, Server server, location location, ConfigFile configfile)
@@ -38,9 +41,9 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
         else
         {
             // std::cout << "checking for : "<< socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')).c_str() << std::endl;
-            if((dir = opendir(socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')).c_str())))
+            if((!access(socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')).c_str(), F_OK)))
             {
-                closedir(dir);
+                // closedir(dir);
                 createfile(socket, configfile);
             }
             else
