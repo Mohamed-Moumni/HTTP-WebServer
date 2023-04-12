@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/11 17:27:23 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/12 14:25:18 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,6 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 					pollin(pfds, sockets, Connections, i);
 				else
 				{
-<<<<<<< HEAD
-					
-					// if (getTimeOfNow() - Connections[pfds[i].fd].timeOut > 10)
-					// {
-					// 	Connections[pfds[i].fd]._response.response_string.append(respond_error("408", configFile));
-					// 	sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
-					// 	closeConnection(pfds, Connections, i);
-					// 	i--;
-					// }
-					Connections[pfds[i].fd].timeOut = getTimeOfNow();
-					Connections[pfds[i].fd].readRequest(configFile);
-					if (Connections[pfds[i].fd].closed)
-=======
 					if (getTimeOfNow() - Connections[pfds[i].fd].timeOut > 10)
 					{
 						Connections[pfds[i].fd]._response.response_string.append(respond_error("408", configFile));
@@ -57,7 +44,6 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 						i--;
 					}
 					else
->>>>>>> 621997bc733cb5ad1886931253986ec1177121bb
 					{
 						Connections[pfds[i].fd].timeOut = getTimeOfNow();
 						Connections[pfds[i].fd].readRequest(configFile);
