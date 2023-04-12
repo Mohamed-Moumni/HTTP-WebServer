@@ -56,7 +56,7 @@ int main(void)
         send(sock , request.c_str() , strlen(request.c_str()) , 0);
         goto a;
     // printf("request message sent\n");
-    // valread = recv( sock , buffer, 20024, 0);
+    recv( sock , buffer, 20024, 0);
     // std::cout << valread<< " Readed!" << std::endl;
     std::cout << "+++++++++++++++++++++++++++++++++\n";
     // printf("%s\n",buffer );
