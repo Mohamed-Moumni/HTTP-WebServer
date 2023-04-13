@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/11 13:56:28 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/13 14:30:22 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "ConnectSocket.hpp"
 #include "../configfile/configfile.hpp"
 #include "../configfile/server.hpp"
+#include "../request/INCLUDES/request.hpp"
 
 Socket::Socket()
 {
@@ -198,4 +199,11 @@ void                sendError(int socketId, std::string _Error)
     CharSent = send(socketId, _Error.c_str(), _Error.size(), 0);
     if (CharSent <= 0)
         return ;
+}
+
+void    checkTimeOut(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, ConfigFile & _configfile, size_t i)
+{
+        Connections[pfds[i].fd]._response.response_string.append(respond_error("408", _configfile));
+        sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
+        closeConnection(pfds, Connections, i);
 }

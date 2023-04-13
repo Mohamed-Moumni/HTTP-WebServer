@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/12 14:25:18 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/13 14:33:14 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,30 +30,25 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 		poll(&pfds[0], pfds.size(), 0);
 		for (size_t i = 0; i < pfds.size(); i++)
 		{
+			if (i >= sockets.size() && i < pfds.size() && getTimeOfNow() - Connections[pfds[i].fd].timeOut > 10)
+			{
+				checkTimeOut(pfds, Connections, configFile, i);
+				i--;
+			}
 			if (pfds[i].revents & POLLIN)
 			{
 				if (i < sockets.size() && pfds[i].fd == sockets[i].getSocketId())
 					pollin(pfds, sockets, Connections, i);
 				else
 				{
-					if (getTimeOfNow() - Connections[pfds[i].fd].timeOut > 10)
+					Connections[pfds[i].fd].timeOut = getTimeOfNow();
+					Connections[pfds[i].fd].readRequest(configFile);
+					if (Connections[pfds[i].fd].closed)
 					{
-						Connections[pfds[i].fd]._response.response_string.append(respond_error("408", configFile));
-						sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
+						if (Connections[pfds[i].fd]._response.response_string.size())
+							sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
 						closeConnection(pfds, Connections, i);
 						i--;
-					}
-					else
-					{
-						Connections[pfds[i].fd].timeOut = getTimeOfNow();
-						Connections[pfds[i].fd].readRequest(configFile);
-						if (Connections[pfds[i].fd].closed)
-						{
-							if (Connections[pfds[i].fd]._response.response_string.size())
-								sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
-							closeConnection(pfds, Connections, i);
-							i--;
-						}
 					}
 				}
 			}
