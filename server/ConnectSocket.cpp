@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/12 16:44:13 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/13 14:34:12 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void    ConnectSocket::FirstRead(ConfigFile & _configfile)
     int         error;
 
     CharRead = recv(ConnectSocketId, Buffer, BUFFER, 0);
-    std::cout << Buffer << std::endl;
+    // std::cout << "\n+++++++++\n" << Buffer << "\n+++++++++\n" << std::endl;
     if (CharRead <= 0)
     {
         closed = true;
