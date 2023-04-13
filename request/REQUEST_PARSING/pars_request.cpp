@@ -14,6 +14,7 @@ int get_request_line(request &request)
         request.request_string = request.request_string.substr(i + 2, request.request_string.size() - 1);
     request.method = start_line[0];
     request.request_target = start_line[1];
+    request.original_request_target = start_line[1];
     request.http_version = start_line[2];
     return 1;
 }

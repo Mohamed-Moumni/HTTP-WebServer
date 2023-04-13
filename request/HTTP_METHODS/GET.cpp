@@ -87,6 +87,7 @@ int listdir(ConnectSocket &socket)
 
 void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile)
 {
+    DIR *dir;
     if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
     {
         if(location._index.size())
@@ -121,8 +122,12 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     //static here
     if(!access(socket._request.request_target.c_str(), F_OK))
     {
-        if(opendir(socket._request.request_target.c_str()))
-            socket._response.response_string = respond_error("404", configfile);
+        if((dir = opendir(socket._request.request_target.c_str())))
+        {
+            closedir(dir);
+            location._return =  socket._request.original_request_target + '/';
+            redirect(socket, location, server, configfile);
+        }
         else if(!access(socket._request.request_target.c_str(), R_OK))
             file2response(socket, server, location, configfile);
         else

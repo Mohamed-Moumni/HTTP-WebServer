@@ -18,6 +18,7 @@ void response_generator(ConnectSocket &socket, Server &server, location &locatio
 std::string respond_error(std::string error, ConfigFile configfile);
 void file2response(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile);
 int isdirectory(std::string path);
+void redirect(ConnectSocket &socket,location location, Server server, ConfigFile configfile);
 
 /////////////METHODS/////////////
 void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile);

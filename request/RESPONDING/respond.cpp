@@ -25,6 +25,7 @@ void redirect(ConnectSocket &socket,location location, Server server, ConfigFile
     std::string loca;
 
     loca = location._return;
+    std::cout << loca << std::endl;
     response << "HTTP/1.1 301 Moved Permanently\r\n";
     response << "Location: " << loca << CRLF << CRLF;
     socket._response.response_string = response.str();
