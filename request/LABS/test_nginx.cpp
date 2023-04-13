@@ -27,7 +27,7 @@ int main(void)
 {
    a: int sock = 0; long valread;
     struct sockaddr_in serv_addr;
-    std::string request = "POST /file.txt HTTP/1.1\r\nHost: localhost:8081\r\nContent-Type: text/plain\r\nContent-Length: 20\n\r\n\rasdfghjkloasdfghjklp" ;
+    std::string request = "DELETE /file.txt HTTP/1.1\r\nHost: localhost:8081\n\r\n\r" ;
     // std::cout << "request is: "<<request << std::endl;
     char buffer[1024] = {0};
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
