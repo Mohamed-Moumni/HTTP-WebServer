@@ -123,9 +123,9 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     if(socket._request.request_target.size() >= 4 && (get_extention(socket._request.request_target) == ".php"))
     {
         // std::cout << "dynamic content detected" << std::endl;
+        socket._response.response_string = respond_error("CGI not working yet", configfile);
         cgi_handler(socket, location, server, configfile);
         // execve("cgi-bin/php-cgi")
-        socket._response.response_string = respond_error("CGI not working yet", configfile);
         return;
     }
     
