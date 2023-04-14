@@ -93,6 +93,10 @@ int listdir(ConnectSocket &socket)
 void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile)
 {
     DIR *dir;
+
+    if(socket._request.request_target.find(".php") != std::string::npos)
+        socket._request.request_target = socket._request.request_target.substr(0, socket._request.request_target.find(".php") + 4);
+    // std::cout << "new url" << std::endl;
     if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
     {
         if(location._index.size())

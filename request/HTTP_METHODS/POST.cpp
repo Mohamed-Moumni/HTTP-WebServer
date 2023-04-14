@@ -38,22 +38,23 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
 
     if(socket._request.request_target.find('?') != std::string::npos)
     {
-        socket._response.response_string = respond_error("404", configfile);
+        socket._response.response_string = respond_error("400", configfile);
         return ;
     }
     if(socket._request.request_target.find(".php") != std::string::npos)
         socket._request.request_target = socket._request.request_target.substr(0, socket._request.request_target.find(".php") + 4);
+
     std::cout << "New URI : " << socket._request.request_target << std::endl;
 
     if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
         socket._response.response_string = respond_error("403", configfile);
     else
     {
-        // std::cout << socket._request.request_target << std::endl;
+        std::cout << socket._request.request_target << std::endl;
         // std::cout << "check for : " << socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')) << std::endl;
         if(!access((socket._request.request_target + location._upload).c_str(), F_OK))
         {
-            if(socket._request.request_target.size() >= 4 && (get_extention(socket._request.request_target) == ".php"))
+            if(socket._request.request_target.size() >= 4 && get_extention(socket._request.request_target) == ".php")
             {
                 socket._response.response_string = respond_error("CGI not working yet", configfile);
                 cgi_handler(socket, location, server, configfile);
