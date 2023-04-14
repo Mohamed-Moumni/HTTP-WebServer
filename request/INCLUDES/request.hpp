@@ -19,7 +19,7 @@ std::string respond_error(std::string error, ConfigFile configfile);
 void file2response(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile);
 int isdirectory(std::string path);
 void redirect(ConnectSocket &socket,location location, Server server, ConfigFile configfile);
-void cgi_handler();
+void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigFile configfile);
 std::string                 get_extention(std::string str);
 
 /////////////METHODS/////////////
