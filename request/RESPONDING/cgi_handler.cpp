@@ -72,20 +72,28 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         char *args[2];
 
         set_env(socket, location, server, configfile, env);
-        args[0] = strdup("cgi-bin/php-cgi");
+        args[0] = strdup("/bin/echo");
         args[1] = strdup(socket._request.request_target.c_str());
-        dup2(tmpfile, STDIN_FILENO);
-        close(tmpfile);
-        dup2(fds[1], STDOUT_FILENO);
-        close(fds[0]);
-        close(fds[1]);
-        std::cout << args[1] << std::endl;
-         execve("./cgi-bin/php-cgi", args, env);
+        // dup2(tmpfile, STDIN_FILENO);
+        // std::cout << "path to script : " << args[1] << std::endl;
+        // close(tmpfile);
+        // dup2(fds[1], STDOUT_FILENO);
+        // close(fds[0]);
+        // close(fds[1]);
+        // std::ofstream file;
+        // file.open("cgi-bin/php-cgi");
+        std::cout << "before execve" << std::endl;
+        if(execve(args[0],args, NULL) == -1)
+            std::cout << errno << std::endl;
     }
+    waitpid(pid, NULL, 0);
     // read data written from the pipe
-    body = readFromPipe(fds[0]);
-    std::cout << "body : "<< body << std::endl;
-    close(fds[0]);
-    close(fds[1]);
+    // char buffer[30];
+    // read(fds[0], buffer, 30);
+    // std::cout << buffer << std::endl;
+    // body = readFromPipe(fds[0]);
+    // std::cout << "body : "<< body << std::endl;
+    // close(fds[0]);
+    // close(fds[1]);
     unlink("/tmp/tempfd");
 }
