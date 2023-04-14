@@ -25,7 +25,7 @@ void redirect(ConnectSocket &socket,location location, Server server, ConfigFile
     std::string loca;
 
     loca = location._return;
-    std::cout << loca << std::endl;
+    // std::cout << loca << std::endl;
     response << "HTTP/1.1 301 Moved Permanently\r\n";
     response << "Location: " << loca << CRLF << CRLF;
     socket._response.response_string = response.str();
@@ -90,7 +90,7 @@ int respond(ConnectSocket &socket, ConfigFile configfile)
     location location;
     static int rn;
 
-    printf("%d\n" , rn);
+    // printf("%d\n" , rn);
     rn ++;
     socket._response.response_string.clear();
     find_server(socket, configfile, server);

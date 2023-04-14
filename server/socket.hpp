@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:52 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/09 18:00:05 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/13 14:29:47 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,3 +57,4 @@ void                closeConnection(std::vector<pfd> & pfds, std::map<int, Conne
 void                acceptConnection(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections);
 void                sendError(int socketId, std::string _Error);
 long long           getTimeOfNow(void);
+void                checkTimeOut(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, ConfigFile & _configfile, size_t i);

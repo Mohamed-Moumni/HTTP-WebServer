@@ -33,7 +33,7 @@ SERVER_SRCS = ./server/socket.cpp ./server/ConnectSocket.cpp ./server/ConnectSoc
 REQUEST_SRCS = ./request/HTTP_METHODS/DELETE.cpp ./request/REQUEST_PARSING/possible_error.cpp \
 				./request/HTTP_METHODS/GET.cpp ./request/REQUEST_PARSING/respond_error.cpp \
 				./request/HTTP_METHODS/POST.cpp ./request/RESPONDING/respond.cpp ./request/RESPONDING/response_generator.cpp \
-               ./request/REQUEST_PARSING/pars_request.cpp ./request/request.cpp
+               ./request/REQUEST_PARSING/pars_request.cpp ./request/request.cpp ./request/RESPONDING/cgi_handler.cpp
 
 UTILS_SRC = ./utils/str_trim.cpp ./utils/str_split.cpp ./utils/header_spliter.cpp ./utils/remove_side_spaces.cpp \
 			./utils/side_whitespaces.cpp ./utils/str_split.cpp ./utils/str_trim.cpp

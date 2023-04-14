@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/11 16:52:42 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/13 14:34:12 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,8 +191,13 @@ void        ConnectSocket::responding(ConfigFile & _configfile)
 void    ConnectSocket::sendResponse(void)
 {
     int CharSent;
+    // int pos;
 
     CharSent = 0;
+    // pos = _response.response_string.find("\r\n");
+    // _response.response_string.insert(pos + 2, "Set-Cookie: id=a3fWa; Expires=Thu, 13 Apr 2023 07:28:00 GMT\r\n");
+    // _response.respLength = _response.response_string.size();
+    // std::cout << _response.response_string << std::endl;
     CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
     if (CharSent <= 0)
     {

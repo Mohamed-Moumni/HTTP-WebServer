@@ -43,7 +43,14 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
         // std::cout << socket._request.request_target << std::endl;
         // std::cout << "check for : " << socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')) << std::endl;
         if(!access((socket._request.request_target + location._upload).c_str(), F_OK))
-            socket._response.response_string = respond_error("409", configfile);
+        {
+            if(socket._request.request_target.size() >= 4 && (get_extention(socket._request.request_target) == ".php"))
+            {
+                cgi_handler()
+            }
+            else
+                socket._response.response_string = respond_error("409", configfile);
+        }
         else
         {
             // std::cout << "checking for : "<< (socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/'))+ '/' + location._upload).c_str() << std::endl;

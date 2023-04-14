@@ -3,6 +3,11 @@
 #include <fcntl.h>
 #include <fstream>
 
+std::string                 get_extention(std::string str)
+{
+    return str.substr(str.find_last_of('.'));
+}
+
 std::string get_contenttype(std::string file, ConfigFile configfile)
 {
     int i = file.size();
@@ -111,10 +116,11 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
         return ;
     }
     //check if the content is dynamic or static and server each one separatly
-    if(socket._request.request_target.size() >= 4 && !strcmp(socket._request.request_target.c_str() 
-    + socket._request.request_target.size() - 4, ".php"))
+    if(socket._request.request_target.size() >= 4 && (get_extention(socket._request.request_target) == ".php"))
     {
         // std::cout << "dynamic content detected" << std::endl;
+        cgi_handler(socket, location, configfile);
+        // execve("cgi-bin/php-cgi")
         socket._response.response_string = respond_error("CGI not working yet", configfile);
         return;
     }
@@ -125,7 +131,7 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
         if((dir = opendir(socket._request.request_target.c_str())))
         {
             closedir(dir);
-            location._return =  socket._request.original_request_target + '/';
+            location._return = "http://" + socket._request.headers_map["Host"] + socket._request.original_request_target + '/';
             redirect(socket, location, server, configfile);
         }
         else if(!access(socket._request.request_target.c_str(), R_OK))
