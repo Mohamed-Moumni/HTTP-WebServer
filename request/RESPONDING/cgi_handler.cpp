@@ -32,7 +32,8 @@ void set_env(ConnectSocket &socket, location location,Server server, ConfigFile 
     (socket._request.original_request_target.find('?') ) - (socket._request.original_request_target.find(".php") + 4));
 
     //setting SCRIPTNAME
-    std::string script_name = socket._request.request_target.substr(socket._request.request_target.find_last_of('/') + 1, socket._request.request_target.find(".php") + 4);
+    std::string script_name = socket._request.request_target.substr(socket._request.request_target.find_last_of('/')\
+    + 1, socket._request.request_target.find(".php") + 4);
 
     //setting QUERYSTRING
     std::string querystring;

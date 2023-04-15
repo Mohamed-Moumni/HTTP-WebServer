@@ -8,6 +8,7 @@ void createfile(ConnectSocket &socket, ConfigFile configfile, location location)
     std::string filepath;
 
     filepath = socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/'));
+    std::cout << "Creating : "<< filepath << std::endl;
     if(location._upload.size())
         filepath += '/' +location._upload;
     filepath += socket._request.request_target.substr(socket._request.request_target.find_last_of('/'));
@@ -41,38 +42,47 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
         socket._response.response_string = respond_error("400", configfile);
         return ;
     }
+
+    //remove the path_info from the uri
     if(socket._request.request_target.find(".php") != std::string::npos)
         socket._request.request_target = socket._request.request_target.substr(0, socket._request.request_target.find(".php") + 4);
 
-    std::cout << "New URI : " << socket._request.request_target << std::endl;
-
     if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
-        socket._response.response_string = respond_error("403", configfile);
-    else
     {
-        std::cout << socket._request.request_target << std::endl;
-        // std::cout << "check for : " << socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')) << std::endl;
-        if(!access((socket._request.request_target + location._upload).c_str(), F_OK))
+        DIR *dir;
+        if((dir = opendir(socket._request.request_target.c_str())))
         {
-            if(socket._request.request_target.size() >= 4 && get_extention(socket._request.request_target) == ".php")
-            {
-                socket._response.response_string = respond_error("CGI not working yet", configfile);
-                cgi_handler(socket, location, server, configfile);
-            }
-            else
-                socket._response.response_string = respond_error("409", configfile);
+            closedir(dir);
+            socket._response.response_string = respond_error("403", configfile);
+            return;
         }
         else
         {
-            // std::cout << "checking for : "<< (socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/'))+ '/' + location._upload).c_str() << std::endl;
-            if((!access((socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/'))+ '/' + location._upload).c_str(), F_OK)))
-            {
-                // closedir(dir);
-                createfile(socket, configfile, location);
-            }
-            else
-                socket._response.response_string = respond_error("404", configfile);
+            socket._request.request_target[socket._request.request_target.size() - 1] = 0;
         }
-
+        std::cout << "uri target : " << socket._request.request_target << std::endl;
     }
+
+    if(!access((socket._request.request_target + location._upload).c_str(), F_OK))
+    {
+        if(socket._request.request_target.size() >= 4 && get_extention(socket._request.request_target) == ".php")
+        {
+            socket._response.response_string = respond_error("CGI not working yet", configfile);
+            cgi_handler(socket, location, server, configfile);
+        }
+        else
+            socket._response.response_string = respond_error("409", configfile);
+    }
+    else
+    {
+        // std::cout << "checking for : "<< (socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/'))+ '/' + location._upload).c_str() << std::endl;
+        if((!access((socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/'))+ '/' + location._upload).c_str(), F_OK)))
+        {
+            // closedir(dir);
+            createfile(socket, configfile, location);
+        }
+        else
+            socket._response.response_string = respond_error("404", configfile);
+    }
+
 }
