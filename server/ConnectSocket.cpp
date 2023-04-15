@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConnectSocket.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 13:31:00 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/15 16:54:39 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/15 18:11:32 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,12 +193,6 @@ void    ConnectSocket::sendResponse(void)
     int pos;
 
     CharSent = 0;
-<<<<<<< HEAD
-    // pos = _response.response_string.find("\r\n");
-    // _response.response_string.insert(pos + 2, "Set-Cookie: id=a3fWa; Expires=Thu, 13 Apr 2023 07:28:00 GMT\r\n");
-    // _response.respLength = _response.response_string.size();
-=======
->>>>>>> 06eef66abd82d6601314318d97af76830ea97f27
     CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
     if (CharSent <= 0)
     {
