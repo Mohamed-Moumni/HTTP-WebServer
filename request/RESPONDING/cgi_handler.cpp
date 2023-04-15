@@ -89,7 +89,7 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
             env[11] = NULL;
         else
             env[9] = NULL;
-        args[0] = strdup(location.);
+        // args[0] = strdup(location.);add cgi path here
         args[1] = strdup(socket._request.request_target.c_str());
         args[2] = NULL;
         dup2(tmpfile, STDIN_FILENO);
