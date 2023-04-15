@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/13 14:33:14 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/15 11:32:04 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 		poll(&pfds[0], pfds.size(), 0);
 		for (size_t i = 0; i < pfds.size(); i++)
 		{
-			if (i >= sockets.size() && i < pfds.size() && getTimeOfNow() - Connections[pfds[i].fd].timeOut > 10)
+			if (i >= sockets.size() && i < pfds.size() && getTimeOfNow() - Connections[pfds[i].fd].timeOut > 5)
 			{
 				checkTimeOut(pfds, Connections, configFile, i);
 				i--;

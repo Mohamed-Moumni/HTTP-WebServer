@@ -4,6 +4,7 @@
 #define CRLF "\r\n"
 
 #include "../../server/ConnectSocket.hpp"
+#include "../../server/socket.hpp"
 #include "../../utils/utils.hpp" 
 
 /////////////PARSING RE////////////
