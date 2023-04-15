@@ -19,4 +19,8 @@ header('Content-Type: text/plain');
 
 // Print the sum of the two numbers
 echo "The sum of $num1 and $num2 is: $sum\n";
+// while (1)
+// {
+
+// }
 ?>
