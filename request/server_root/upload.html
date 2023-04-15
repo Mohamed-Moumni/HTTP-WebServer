@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload</title>
+</head>
+<body>
+    <h1>File Upload</h1>
+    <form id="uploadForm">
+        <input type="file" id="fileInput" name="file">
+        <button type="button" onclick="uploadFile()">Upload</button>
+    </form>
+    <div id="responseContainer"></div>
+    <script>
+        function uploadFile() {
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+            reader.onload = function() {
+                var fileData = reader.result;
+                var filename = file.name;
+                
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/php/' + filename, true);
+                xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            console.log('File uploaded successfully');
+                            document.getElementById('responseContainer').innerText = 'Server Response: ' + xhr.responseText;
+                        } else {
+                            console.log('File upload failed');
+                            document.getElementById('responseContainer').innerText = 'Server Response: ' + xhr.responseText;
+                        }
+                    }
+                };
+                xhr.send(fileData);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    </script>
+</body>
+</html>

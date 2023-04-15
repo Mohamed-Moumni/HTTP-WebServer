@@ -1,5 +1,6 @@
 #include "../INCLUDES/request.hpp"
 #include <fcntl.h>
+#include <signal.h>
 
 std::string conc(std::string s1, std::string s2)
 {
@@ -12,7 +13,6 @@ std::string  readFromPipe(int PipeId)
     std::string     data;
     char            buffer[BUFFER] = {0};
 
-    int i = 0;
     readedChar = read(PipeId, buffer, BUFFER);
     while (readedChar > 0)
     {
@@ -101,7 +101,8 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         if(execve(args[0], args, env) == -1)
             std::cout << errno << std::endl;
     }
-    while ((getTimeOfNow() - timeOut) < 5)
+    long long rest = getTimeOfNow() - timeOut;
+    while (rest < 5)
     {
         if (waitpid(pid, NULL, WNOHANG) == pid)
         {
@@ -109,14 +110,19 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
             socket._response.response_string = readFromPipe(fds[0]);
             std::cout << "body: +++++++++++++++++\n" << body << "+++++++++++++++++++++\n";
             close(fds[0]);
+            std::ostringstream out;
+            out << "HTTP/1.1 200 OK\r\nContent-Length: " << socket._response.response_string.substr(socket._response.response_string.find("\r\n\r\n") + 4).size() << "\r\n" << socket._response.response_string;
+            socket._response.response_string = out.str();
             unlink("/tmp/tempfd");
             return ;
         }
+        else
+            rest = getTimeOfNow() - timeOut;
     }
+    kill(pid, SIGKILL);
     close(fds[1]);
     close(fds[0]);
     unlink("/tmp/tempfd");
-    std::ostringstream out;
-    out << "HTTP/1.1 200 OK\r\nContent-Length: " << socket._response.response_string.substr(socket._response.response_string.find("\r\n\r\n") + 4).size() << "\r\n" << socket._response.response_string;
-    socket._response.response_string = out.str();
+    socket._response.response_string = respond_error("504", configfile);
+    socket.closed = true;
 }
