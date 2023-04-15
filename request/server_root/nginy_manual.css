@@ -13,7 +13,7 @@
 
 body {
 	background-color: var(--main-background-color);
-	/* font-family: 'Space Ranger', sans-serif; */
+	color: var(--main-color);
 	font-family: 'Pistoleer', sans-serif;
 }
 
