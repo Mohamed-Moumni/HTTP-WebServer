@@ -85,12 +85,11 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         char *args[3];
 
         set_env(socket, location, server, configfile, env);
-        std::cout << "querystring: " << env[7] << std::endl;
         if(socket._request.method == "POST")
             env[11] = NULL;
         else
             env[9] = NULL;
-        args[0] = strdup("./cgi-bin/php-cgi");
+        args[0] = strdup(location.);
         args[1] = strdup(socket._request.request_target.c_str());
         args[2] = NULL;
         dup2(tmpfile, STDIN_FILENO);
@@ -108,7 +107,7 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         {
             close(fds[1]);
             socket._response.response_string = readFromPipe(fds[0]);
-            std::cout << "body: +++++++++++++++++\n" << body << "+++++++++++++++++++++\n";
+            // std::cout << "body: +++++++++++++++++\n" << body << "+++++++++++++++++++++\n";
             close(fds[0]);
             std::ostringstream out;
             out << "HTTP/1.1 200 OK\r\nContent-Length: " << socket._response.response_string.substr(socket._response.response_string.find("\r\n\r\n") + 4).size() << "\r\n" << socket._response.response_string;
