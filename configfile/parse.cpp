@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/11 15:31:31 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/15 15:08:01 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,17 +135,14 @@ void	fill_allowed_methods(T& fill, std::vector<std::string>& vec)
 
 bool	is_body_size_not_valid(std::string s)
 {
-	std::string max = "2000";
+	// std::string max = "2000";
 
-	if (s[4] != 'm')
+	if (s[s.length() - 1] != 'm')
 		exit_mode("BODY SIZE SHOULD BE LIKE THIS '0000m'");
 	if (s.length() > 5)
 		return true;
-	for (size_t i = 0; i < 4; i++)
-	{
-		if (s[i] != max[i])
-			return max[i] < s[i];
-	}
+	if (stoi(s) > 2000 || stoi(s) < 1)
+		exit_mode("BODY_SIZE SHOULD BE BETWEEN 1-2000");
 	return false;
 }
 

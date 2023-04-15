@@ -1,0 +1,68 @@
+@import url('https://fonts.cdnfonts.com/css/pistoleer');
+@import url('https://fonts.cdnfonts.com/css/space-ranger');
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+:root {
+	--main-background-color: #dedede;
+	--main-color: #333;
+}
+
+body {
+	background-color: var(--main-background-color);
+	/* font-family: 'Space Ranger', sans-serif; */
+	font-family: 'Pistoleer', sans-serif;
+}
+
+h1 {
+	/* font-family: 'Pistoleer', sans-serif; */
+	margin-top: 100px;
+	font-size: 100px;
+	text-align: center;
+}
+
+.intro {
+	font-size: 30px;
+	margin-top: 50px;
+	margin-left: 20px;
+}
+
+.intro::first-letter {
+	font-size: 50px;
+}
+
+h2 {
+	font-size: 30px;
+	margin-top: 50px;
+	font-style: italic;
+}
+
+h2::before {
+	content: '>>';
+	display: inline-block;
+	width: 50px;
+	height: 10px;
+	line-height: 30px;
+	margin-left: 30px;
+	margin-bottom: 30px;
+}
+
+ul {
+	font-family: 'Space Ranger', sans-serif;
+	letter-spacing: 3px;
+}
+
+li {
+	margin-left: 60px;
+	font-size: 1.5em;
+}
+
+.desc {
+	margin-left: 100px;
+	display: inline-block;
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
