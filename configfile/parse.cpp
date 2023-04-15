@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/15 17:47:27 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/15 18:24:57 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -362,11 +362,27 @@ void	fill_others(location& loc, std::vector<std::string>& vec)
 	loc._others.insert(std::make_pair(vec[0], v));
 }
 
+void	fill_cgi_attr(location& loc, std::vector<std::string>& vec)
+{
+	if (vec.size() != 2)
+		exit_mode("INVALID ARGUMENT OF CGI ATTRIBUTES");
+	if (vec[0] == "cgiPath")
+		loc._cgiPath = vec[1];
+	else if (vec[0] == "cgiExt")
+	{
+		if (vec[1] != ".php" && vec[1] != ".py")
+			exit_mode("INVALID EXTENSION");
+		loc._cgiExt = vec[1];
+	}
+}
+
 void	fill_location_attr(location& loc, std::string& s)
 {
 	std::vector<std::string> vec = str_split(s, ' ');
 	if (vec[0] == "root" || vec[0] == "autoindex" || vec[0] == "upload")
 		fill_root_autoindex_upload(loc, vec);
+	else if (vec[0] == "cgiPath" || vec[0] == "cgiExt")
+		fill_cgi_attr(loc, vec);
 	else if (vec[0] == "index")
 		fill_index(loc, vec);
 	else if (vec[0] == "allowed_methods")
