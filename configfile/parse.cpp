@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/15 15:08:01 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/15 17:47:27 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void	fill_listen(Server& serv, std::vector<std::string>& vec)
 			exit_mode("INVALID LISTEN ARGS");
 		if (serv._listen.count(host_port[0]))
 		{
+			if (serv._listen[host_port[0]].count(host_port[1]))
+				exit_mode("DON'T REPEAT THE SAME HOST:PORT");
 			serv._listen[host_port[0]].insert(host_port[1]);
 		}
 		else
