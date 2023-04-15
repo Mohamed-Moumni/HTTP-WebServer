@@ -24,13 +24,26 @@ std::string  readFromPipe(int PipeId)
 
 void set_env(ConnectSocket &socket, location location,Server server, ConfigFile configfile, char **env)
 {
+    //setting SERVER_NAME
     std::string server_name = socket.IpAdress + ":" + socket.Port;
+
+    //setting PATH_INFO
     std::string path_info = socket._request.original_request_target.substr(socket._request.original_request_target.find(".php") + 4,\
     (socket._request.original_request_target.find('?') ) - (socket._request.original_request_target.find(".php") + 4));
+
+    //setting SCRIPTNAME
     std::string script_name = socket._request.request_target.substr(socket._request.request_target.find_last_of('/') + 1, socket._request.request_target.find(".php") + 4);
+
+    //setting QUERYSTRING
     std::string querystring;
-    if(socket._request.original_request_target.find('?') != std::string::npos)
-        querystring = socket._request.original_request_target.substr(socket._request.original_request_target.find('?') + 1);
+    if(socket._request.method == "GET")
+    {
+        if(socket._request.original_request_target.find('?') != std::string::npos)
+            querystring = socket._request.original_request_target.substr(socket._request.original_request_target.find('?') + 1);
+    }
+    else
+        querystring = socket._request.request_body;
+
     env[0] = strdup("SERVER_SOFTWARE=NGINY/0.1");
     env[1] = strdup(conc("SERVER_NAME", server_name).c_str());
     env[2] = strdup(conc("SERVER_PROTOCOL", "HTTP/1.1").c_str());
@@ -69,6 +82,7 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         char *args[3];
 
         set_env(socket, location, server, configfile, env);
+        std::cout << "querystring: " << env[7] << std::endl;
         if(socket._request.method == "POST")
             env[11] = NULL;
         else
@@ -84,11 +98,13 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         if(execve(args[0], args, env) == -1)
             std::cout << errno << std::endl;
     }
-    
     waitpid(pid, NULL, 0);
     close(fds[1]);
     socket._response.response_string = readFromPipe(fds[0]);
     std::cout << "body: +++++++++++++++++\n" << body << "+++++++++++++++++++++\n";
     close(fds[0]);
     unlink("/tmp/tempfd");
+    std::ostringstream out;
+    out << "HTTP/1.1 200 OK\r\nContent-Length: " << socket._response.response_string.substr(socket._response.response_string.find("\r\n\r\n") + 4).size() << "\r\n" << socket._response.response_string;
+    socket._response.response_string = out.str();
 }
