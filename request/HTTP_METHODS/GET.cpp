@@ -95,8 +95,13 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
 {
     DIR *dir;
     ///////////////////////////////////REMOVE PATH INFO IN CASE OF DYNAMIC
-    if(socket._request.request_target.find(".php") != std::string::npos)
-        socket._request.request_target = socket._request.request_target.substr(0, socket._request.request_target.find(".php") + 4);
+    std::cout << "before removing the path info : " << socket._request.request_target << std::endl;
+    if(location._cgiExt.size())
+    {
+        if(socket._request.request_target.find(location._cgiExt) != std::string::npos)
+            socket._request.request_target = socket._request.request_target.substr(0, socket._request.request_target.find(location._cgiExt) + location._cgiExt.size());
+    }
+    std::cout << "after removing the path info : " << socket._request.request_target << std::endl;
     ///////////////////////////////////CHECK for slash at the end of files and dirs
     // std::cout << "before : " << socket._request.request_target << std::endl;
     if((dir = opendir(socket._request.request_target.c_str())))
@@ -133,7 +138,7 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     }
     //////////////////////////////////////check for dynamic or static content
     //dynamic here
-    if(socket._request.request_target.size() >= 4 && (get_extention(socket._request.request_target) == ".php"))
+    if(socket._request.request_target.size() >= 4 && (get_extention(socket._request.request_target) ==location._cgiExt))
     {
         cgi_handler(socket, location, server, configfile);
         return;

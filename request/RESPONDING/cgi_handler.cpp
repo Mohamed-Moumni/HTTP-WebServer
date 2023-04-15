@@ -45,12 +45,13 @@ void set_env(ConnectSocket &socket, location location,Server server, ConfigFile 
     std::string server_name = socket.IpAdress + ":" + socket.Port;
 
     //setting PATH_INFO
-    std::string path_info = socket._request.original_request_target.substr(socket._request.original_request_target.find(".php") + 4,\
-    (socket._request.original_request_target.find('?') ) - (socket._request.original_request_target.find(".php") + 4));
+    std::string path_info = socket._request.original_request_target.substr(socket._request.original_request_target.find(location._cgiExt) + location._cgiExt.size(),\
+    (socket._request.original_request_target.find('?') ) - (socket._request.original_request_target.find(location._cgiExt) + location._cgiExt.size()));
 
+    // std::cout << "ext: " << location._cgiExt << std::endl;
     //setting SCRIPTNAME
     std::string script_name = socket._request.request_target.substr(socket._request.request_target.find_last_of('/')\
-    + 1, socket._request.request_target.find(".php") + 4);
+    + 1, socket._request.request_target.find(location._cgiExt) + location._cgiExt.size());
 
     //setting QUERYSTRING
     std::string querystring;
@@ -69,11 +70,12 @@ void set_env(ConnectSocket &socket, location location,Server server, ConfigFile 
     env[4] = strdup(conc("REQUEST_METHOD", socket._request.method).c_str());
     env[5] = strdup(conc("PATH_INFO", path_info).c_str());
     env[6] = strdup(conc("SCRIPT_FILENAME", socket._request.request_target).c_str());
+    std::cout << "script_file_name: " << env[6] << std::endl;
     env[7] = strdup(conc("QUERY_STRING", querystring).c_str());
     env[8] = strdup(conc("REDIRECT_STATUS", "301").c_str());
     if(socket._request.method == "POST")
     {
-        env[9] = strdup(conc("CONTENT_TYPE", socket._request.headers_map["Content-type"]).c_str());
+        env[9] = strdup(conc("CONTENT_TYPE", socket._request.headers_map["Content-Type"]).c_str());
         env[10] = strdup(conc("CONTENT_LENGTH", socket._request.headers_map["Content-Length"]).c_str());
     }
 }
@@ -106,16 +108,22 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
             env[11] = NULL;
         else
             env[9] = NULL;
-        // args[0] = strdup(location.);add cgi path here
+        // args[0] = strdup(location._cgiPath.c_str());
+        args[0] = strdup("./php-cgi");
+        std::cout << args[0] << std::endl;
         args[1] = strdup(socket._request.request_target.c_str());
         args[2] = NULL;
-        dup2(tmpfile, STDIN_FILENO);
-        close(tmpfile);
-        dup2(fds[1], STDOUT_FILENO);
-        close(fds[0]);
-        close(fds[1]);
+        // dup2(tmpfile, STDIN_FILENO);
+        // close(tmpfile);
+        // dup2(fds[1], STDOUT_FILENO);
+        // close(fds[0]);
+        // close(fds[1]);
+        for(int i = 0; i < 12; i++)
+            std::cout << env[i] << std::endl;
+        std::cout << "before execve\n";
         if(execve(args[0], args, env) == -1)
             std::cout << errno << std::endl;
+        std::cout << "after execve\n";
     }
     long long rest = getTimeOfNow() - timeOut;
     while (rest < 5)
@@ -136,7 +144,7 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         else
             rest = getTimeOfNow() - timeOut;
     }
-    kill(pid, SIGKILL);
+    // kill(pid, SIGKILL);
     close(fds[1]);
     close(fds[0]);
     unlink("/tmp/tempfd");

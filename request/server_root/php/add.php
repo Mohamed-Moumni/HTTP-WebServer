@@ -1,6 +1,6 @@
 #!/usr/bin/php-cgi
 <?php
-
+echo "cgi script called";
 // Retrieve the query parameters from the URL
 $queryString = getenv('QUERY_STRING');
 
