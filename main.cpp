@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/15 16:54:42 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/15 17:58:08 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 		poll(&pfds[0], pfds.size(), 0);
 		for (size_t i = 0; i < pfds.size(); i++)
 		{
-			// if (i >= sockets.size() && i < pfds.size() && getTimeOfNow() - Connections[pfds[i].fd].timeOut > 5)
-			// {
-			// 	checkTimeOut(pfds, Connections, configFile, i);
-			// 	i--;
-			// }
+			if (i >= sockets.size() && i < pfds.size() && getTimeOfNow() - Connections[pfds[i].fd].timeOut > 5)
+			{
+				checkTimeOut(pfds, Connections, configFile, i);
+				i--;
+			}
 			if (pfds[i].revents & POLLIN)
 			{
 				if (i < sockets.size() && pfds[i].fd == sockets[i].getSocketId())
@@ -83,6 +83,7 @@ void	start_server(std::string & _config)
 	std::vector<Socket>				sockets;
 	std::vector<pfd>				pfds;
 	std::map<int, ConnectSocket>	Connections;
+
 	try
 	{
 		_config = read_file(_config);

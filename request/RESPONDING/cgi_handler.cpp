@@ -1,13 +1,30 @@
 #include "../INCLUDES/request.hpp"
 #include <fcntl.h>
 #include <signal.h>
+#include <cstdlib>
+#include <ctime>
 
 std::string conc(std::string s1, std::string s2)
 {
     return s1 + '=' + s2;
 }
 
-std::string  readFromPipe(int PipeId)
+static std::string  generateToken(int length)
+{
+    std::string token = "";
+    static const char charset[] =
+        "0123456789"
+        "abcdefghijklmnopqrstuvwxyz"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    srand(time(nullptr));
+    for (int i = 0; i < length; i++)
+    {
+        token += charset[rand() % (sizeof(charset) - 1)];
+    }
+    return token;
+}
+
+static std::string  readFromPipe(int PipeId)
 {
     int             readedChar;
     std::string     data;
@@ -111,8 +128,9 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
             std::cout << "body: +++++++++++++++++\n" << body << "+++++++++++++++++++++\n";
             close(fds[0]);
             std::ostringstream out;
-            out << "HTTP/1.1 200 OK\r\nContent-Length: " << socket._response.response_string.substr(socket._response.response_string.find("\r\n\r\n") + 4).size() << "\r\n" << socket._response.response_string;
+            out << "HTTP/1.1 200 OK\r\nSet-Cookie: NginY=" << generateToken(10) << ";Max-Age=30"<< "\r\nContent-Length: " << socket._response.response_string.substr(socket._response.response_string.find("\r\n\r\n") + 4).size() << "\r\n" << socket._response.response_string;
             socket._response.response_string = out.str();
+            std::cout << socket._response.response_string << std::endl;
             unlink("/tmp/tempfd");
             return ;
         }
