@@ -14,28 +14,50 @@
         function uploadFile() {
             var fileInput = document.getElementById('fileInput');
             var file = fileInput.files[0];
-            var reader = new FileReader();
-            reader.onload = function() {
-                var fileData = reader.result;
-                var filename = file.name;
-                
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', '/php/' + filename, true);
+            var filename = file.name;
+            var fileSize = file.size;
+            var chunkSize = 1024 * 1024; // 1MB chunk size
+            var chunks = Math.ceil(fileSize / chunkSize);
+            var currentChunk = 0;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/php/' + filename, true);
+
+            xhr.onload = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        console.log('File uploaded successfully');
+                        document.getElementById('responseContainer').innerText = 'Server Response: ' + xhr.responseText;
+                    } else {
+                        console.log('File upload failed');
+                        document.getElementById('responseContainer').innerText = 'Server Response: ' + xhr.responseText;
+                    }
+                }
+            };
+
+            function uploadChunk() {
+                var start = currentChunk * chunkSize;
+                var end = Math.min(fileSize, start + chunkSize);
+                var chunk = file.slice(start, end);
                 xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+                xhr.setRequestHeader('X-File-Name', encodeURIComponent(filename));
+                xhr.setRequestHeader('X-File-Size', fileSize);
+                xhr.setRequestHeader('X-File-Chunk', currentChunk + 1);
+                xhr.setRequestHeader('X-File-Chunks', chunks);
+
                 xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {
-                            console.log('File uploaded successfully');
-                            document.getElementById('responseContainer').innerText = 'Server Response: ' + xhr.responseText;
-                        } else {
-                            console.log('File upload failed');
-                            document.getElementById('responseContainer').innerText = 'Server Response: ' + xhr.responseText;
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        // Upload next chunk
+                        currentChunk++;
+                        if (currentChunk < chunks) {
+                            uploadChunk();
                         }
                     }
                 };
-                xhr.send(fileData);
-            };
-            reader.readAsArrayBuffer(file);
+                xhr.send(chunk);
+            }
+
+            uploadChunk();
         }
     </script>
 </body>

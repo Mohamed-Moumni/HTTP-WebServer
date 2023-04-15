@@ -34,7 +34,7 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
 {
     DIR * dir;
 
-    
+    std::cout << "enter to post " << std::endl;
     if(socket._request.request_target.find('?') != std::string::npos)
     {
         socket._response.response_string = respond_error("400", configfile);
@@ -80,4 +80,5 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
             socket._response.response_string = respond_error("404", configfile);
     }
 
+    std::cout << "end of post " << std::endl;
 }

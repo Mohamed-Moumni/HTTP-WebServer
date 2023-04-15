@@ -27,7 +27,8 @@ std::string		GET_file(std::string file_name)
     std::ifstream file;
     std::ostringstream data;
 
-    file.open(file_name);
+    std::cout << "here" << std::endl;
+    file.open(file_name, std::ios::binary);
     data << file.rdbuf();
     return data.str();
 }
@@ -97,7 +98,7 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     if(socket._request.request_target.find(".php") != std::string::npos)
         socket._request.request_target = socket._request.request_target.substr(0, socket._request.request_target.find(".php") + 4);
     ///////////////////////////////////CHECK for slash at the end of files and dirs
-    std::cout << "before : " << socket._request.request_target << std::endl;
+    // std::cout << "before : " << socket._request.request_target << std::endl;
     if((dir = opendir(socket._request.request_target.c_str())))
     {
         if (socket._request.request_target[socket._request.request_target.size() - 1] != '/')
@@ -108,7 +109,7 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
     {
         socket._request.request_target[socket._request.request_target.size() - 1] = 0;
     }
-    std::cout << "after : " << socket._request.request_target << std::endl;
+    // std::cout << "after : " << socket._request.request_target << std::endl;
     /////////////////////////////////////add index directive
     if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
     {

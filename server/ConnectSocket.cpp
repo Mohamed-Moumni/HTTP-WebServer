@@ -198,16 +198,15 @@ void    ConnectSocket::sendResponse(void)
     // _response.response_string.insert(pos + 2, "Set-Cookie: id=a3fWa; Expires=Thu, 13 Apr 2023 07:28:00 GMT\r\n");
     // _response.respLength = _response.response_string.size();
     CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
-    std::cout << _response.response_string << std::endl;
     if (CharSent <= 0)
     {
         closed = true;
         return ;
     }
     _response.CharSent += CharSent;
+    timeOut = getTimeOfNow();
     if (_response.respLength == _response.CharSent)
     {
-        timeOut = getTimeOfNow();
         SendAvailble = false;
         ReadAvailble = true;
         clearData();
