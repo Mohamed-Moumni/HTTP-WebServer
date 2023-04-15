@@ -53,6 +53,7 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
     int         fds[2];
     std::string body;
     int         tmpfile;
+    long long timeOut;
 
     if (pipe(fds) < 0)
     {
@@ -62,6 +63,7 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
     tmpfile = open("/tmp/tempfd", O_CREAT | O_RDWR , 0644);
     write(tmpfile, socket._request.request_body.c_str(), socket._request.request_body.size());
     lseek(tmpfile, 0, SEEK_SET);
+    timeOut = getTimeOfNow();
     pid = fork();
     if (pid == 0)
     {
@@ -84,11 +86,19 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         if(execve(args[0], args, env) == -1)
             std::cout << errno << std::endl;
     }
-    
-    waitpid(pid, NULL, 0);
+    while ((getTimeOfNow() - timeOut) < 5)
+    {
+        if (waitpid(pid, NULL, WNOHANG) == pid)
+        {
+            close(fds[1]);
+            socket._response.response_string = readFromPipe(fds[0]);
+            std::cout << "body: +++++++++++++++++\n" << body << "+++++++++++++++++++++\n";
+            close(fds[0]);
+            unlink("/tmp/tempfd");
+            return ;
+        }
+    }
     close(fds[1]);
-    socket._response.response_string = readFromPipe(fds[0]);
-    std::cout << "body: +++++++++++++++++\n" << body << "+++++++++++++++++++++\n";
     close(fds[0]);
     unlink("/tmp/tempfd");
 }
