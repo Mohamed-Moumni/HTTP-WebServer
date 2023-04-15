@@ -32,7 +32,8 @@ void set_env(ConnectSocket &socket, location location,Server server, ConfigFile 
     (socket._request.original_request_target.find('?') ) - (socket._request.original_request_target.find(".php") + 4));
 
     //setting SCRIPTNAME
-    std::string script_name = socket._request.request_target.substr(socket._request.request_target.find_last_of('/') + 1, socket._request.request_target.find(".php") + 4);
+    std::string script_name = socket._request.request_target.substr(socket._request.request_target.find_last_of('/')\
+    + 1, socket._request.request_target.find(".php") + 4);
 
     //setting QUERYSTRING
     std::string querystring;
@@ -122,4 +123,6 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
     close(fds[1]);
     close(fds[0]);
     unlink("/tmp/tempfd");
+    socket._response.response_string = respond_error("504", configfile);
+    socket.closed = true;
 }

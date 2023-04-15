@@ -30,11 +30,11 @@ void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigF
 		poll(&pfds[0], pfds.size(), 0);
 		for (size_t i = 0; i < pfds.size(); i++)
 		{
-			if (i >= sockets.size() && i < pfds.size() && getTimeOfNow() - Connections[pfds[i].fd].timeOut > 5)
-			{
-				checkTimeOut(pfds, Connections, configFile, i);
-				i--;
-			}
+			// if (i >= sockets.size() && i < pfds.size() && getTimeOfNow() - Connections[pfds[i].fd].timeOut > 5)
+			// {
+			// 	checkTimeOut(pfds, Connections, configFile, i);
+			// 	i--;
+			// }
 			if (pfds[i].revents & POLLIN)
 			{
 				if (i < sockets.size() && pfds[i].fd == sockets[i].getSocketId())

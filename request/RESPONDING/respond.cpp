@@ -33,8 +33,10 @@ void redirect(ConnectSocket &socket,location location, Server server, ConfigFile
 
 int check_max_size(ConnectSocket & socket, ConfigFile configfile, Server server)
 {
+    std::cout << server._client_max_body_size << "vs" <<  socket._request.headers_map["Content-Length"] << std::endl;
     if(socket._request.request_body.size() > server._client_max_body_size)
     {
+
         socket._response.response_string = respond_error("413", configfile);
         return 0;
     }

@@ -27,7 +27,8 @@ std::string		GET_file(std::string file_name)
     std::ifstream file;
     std::ostringstream data;
 
-    file.open(file_name);
+    std::cout << "here" << std::endl;
+    file.open(file_name, std::ios::binary);
     data << file.rdbuf();
     return data.str();
 }
@@ -93,10 +94,23 @@ int listdir(ConnectSocket &socket)
 void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile)
 {
     DIR *dir;
-
+    ///////////////////////////////////REMOVE PATH INFO IN CASE OF DYNAMIC
     if(socket._request.request_target.find(".php") != std::string::npos)
         socket._request.request_target = socket._request.request_target.substr(0, socket._request.request_target.find(".php") + 4);
-    // std::cout << "new url" << std::endl;
+    ///////////////////////////////////CHECK for slash at the end of files and dirs
+    // std::cout << "before : " << socket._request.request_target << std::endl;
+    if((dir = opendir(socket._request.request_target.c_str())))
+    {
+        if (socket._request.request_target[socket._request.request_target.size() - 1] != '/')
+            socket._request.request_target += '/';
+        closedir(dir);
+    }
+    else if (socket._request.request_target[socket._request.request_target.size() - 1] == '/')
+    {
+        socket._request.request_target[socket._request.request_target.size() - 1] = 0;
+    }
+    // std::cout << "after : " << socket._request.request_target << std::endl;
+    /////////////////////////////////////add index directive
     if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
     {
         if(location._index.size())
@@ -104,6 +118,7 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
         else if(server._index.size())
             socket._request.request_target += server._index[0];
     }
+    /////////////////////////////////////// check for directory listing
     if(socket._request.request_target[socket._request.request_target.size() - 1] == '/' && (location._autoindex == "on"
     || (!location._autoindex.size() && server._autoindex == "on")))
     {
@@ -111,39 +126,27 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
             socket._response.response_string = respond_error("404", configfile);
         return ;
     }
-    else if (socket._request.request_target[socket._request.request_target.size() - 1] == '/')
+    else if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
     {
-        if(opendir(socket._request.request_target.c_str()) != NULL)
-            socket._response.response_string = respond_error("403", configfile);//responde with 403 forbidden and 
-        else
-            socket._response.response_string = respond_error("404", configfile);//responde with 404 notfound and
-        return ;
+        socket._response.response_string = respond_error("403", configfile);
+        return;
     }
-    //check if the content is dynamic or static and server each one separatly
+    //////////////////////////////////////check for dynamic or static content
+    //dynamic here
     if(socket._request.request_target.size() >= 4 && (get_extention(socket._request.request_target) == ".php"))
     {
-        // std::cout << "dynamic content detected" << std::endl;
-        // socket._response.response_string = respond_error("CGI not working yet", configfile);
         cgi_handler(socket, location, server, configfile);
-        // execve("cgi-bin/php-cgi")
         return;
     }
     
     //static here
     if(!access(socket._request.request_target.c_str(), F_OK))
     {
-        if((dir = opendir(socket._request.request_target.c_str())))
-        {
-            closedir(dir);
-            location._return = "http://" + socket._request.headers_map["Host"] + socket._request.original_request_target + '/';
-            redirect(socket, location, server, configfile);
-        }
-        else if(!access(socket._request.request_target.c_str(), R_OK))
+        if(!access(socket._request.request_target.c_str(), R_OK))
             file2response(socket, server, location, configfile);
         else
             socket._response.response_string = respond_error("403", configfile);
-
     }
     else 
-        socket._response.response_string = respond_error("404", configfile); //404 not found 
+        socket._response.response_string = respond_error("404", configfile);
 }

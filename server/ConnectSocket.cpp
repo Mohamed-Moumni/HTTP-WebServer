@@ -193,6 +193,12 @@ void    ConnectSocket::sendResponse(void)
     int pos;
 
     CharSent = 0;
+<<<<<<< HEAD
+    // pos = _response.response_string.find("\r\n");
+    // _response.response_string.insert(pos + 2, "Set-Cookie: id=a3fWa; Expires=Thu, 13 Apr 2023 07:28:00 GMT\r\n");
+    // _response.respLength = _response.response_string.size();
+=======
+>>>>>>> 06eef66abd82d6601314318d97af76830ea97f27
     CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);
     if (CharSent <= 0)
     {
@@ -201,6 +207,7 @@ void    ConnectSocket::sendResponse(void)
     }
     timeOut = getTimeOfNow();
     _response.CharSent += CharSent;
+    timeOut = getTimeOfNow();
     if (_response.respLength == _response.CharSent)
     {
         SendAvailble = false;

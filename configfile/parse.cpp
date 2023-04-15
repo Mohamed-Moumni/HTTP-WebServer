@@ -155,6 +155,7 @@ void	fill_string_attr(Server& serv, std::vector<std::string>& vec)
 		exit_mode("NUM OF ARGS IS NOT VALID CHECK(ROOT/AUTOINDEX/CLIENT__SIZE)");
 	if (vec[0] == "client_max_body_size")
 	{
+		std::cout << serv._client_max_body_size << std::endl;
 		if (vec[1][0] == '-')
 			exit_mode("CLIENT MAX BODY SIZE SHOULD BE POSITIVE NUMBER");
 		if (is_body_size_not_valid(vec[1]))
