@@ -1,27 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login Page</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function redirectToLogin() {
-            // Send request to server with cookie header
-            $.ajax({
-                url: "login.html",
-                type: "GET",
-                xhrFields: {
-                    withCredentials: true
-                },
-                success: function (response) {
-                    // Redirect to login.html page
-                    window.location.href = "login.html";
-                }
-            });
+    <title>Redirect to TEST_CGI</title>
+    <style>
+        /* Center the button on the page */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-    </script>
+
+        /* Style for the button */
+        .button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #ffffff;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 18px;
+            border: none;
+        }
+
+        /* Style for the button on hover */
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h1>Login Page</h1>
-    <button onclick="redirectToLogin()">Login</button>
+    <button class="button" onclick="redirectToTestCGI()">TEST CGI</button>
+
+    <script>
+        // Function to redirect to TEST_CGI.html
+        function redirectToTestCGI() {
+            window.location.href = "TEST_CGI.html";
+        }
+    </script>
 </body>
 </html>
