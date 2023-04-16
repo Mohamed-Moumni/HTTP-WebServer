@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/16 17:24:19 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/16 18:47:30 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -529,13 +529,13 @@ void	move_offset_to_next_server_block(std::string str, size_t &offset)
 	}
 	if (bracket < 0)
 		exit_mode("FOUND CLOSE BRACKET");
-	while (str[++i])
+	while (str[++i + offset])
 	{
 		if (bracket == 0)
 			break;
-		if (str[i] == '{')
+		if (str[offset + i] == '{')
 			bracket++;
-		else if (str[i] == '}')
+		else if (str[offset + i] == '}')
 			bracket--;
 	}
 	offset += i;
@@ -556,6 +556,7 @@ std::vector<Server>	parse_servers(std::string str)
 		{
 			_vec_serv.push_back(parse_one_server(str, offset));
 			move_offset_to_next_server_block(str, offset);
+			// std::cout << "Line.. \n" << data_from_pos(str, offset) << std::endl;
 		}
 		offset = str.find("server", offset + 1);
 	}
