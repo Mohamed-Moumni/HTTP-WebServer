@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/16 13:32:00 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/16 13:58:46 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,33 @@ void	fill_index(T& fill, std::vector<std::string>& vec)
 		fill._index.push_back(vec[i]);
 }
 
+std::string	read_ifstream(std::ifstream& file)
+{
+	std::string	data = "";
+	std::string tmp = "";
+	
+	while (getline(file, tmp))
+	{
+		data += tmp;
+		data += '\n';
+	}
+	return data;
+}
+
 template <typename T>
 void	fill_error_pages(T& fill, std::vector<std::string>& vec)
 {
+	std::ifstream file;
+
 	if (vec.size() < 3)
 		exit_mode("LESS ERROR PAGES ARGS");
 	for (size_t i = 1; i < vec.size() - 1; i++)
 	{
+		file.clear();
+		file.open(vec[vec.size() - 1]);
+		if (!file)
+			exit_mode("FILE OF ERROR PAGE DOESN'T EXIST");
+		fill._custom_error_pages.insert(std::make_pair(vec[i], read_ifstream(file)));
 		fill._error_pages.insert(std::make_pair(vec[i], vec[vec.size() - 1]));
 	}
 }
