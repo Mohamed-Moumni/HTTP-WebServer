@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/16 13:58:46 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/16 17:24:19 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -502,12 +502,17 @@ Server		parse_one_server(std::string str, size_t pos)
 bool	is_server_block(std::string str, size_t pos)
 {
 	str = data_from_pos(str, pos + 6);
+	std::cout << "str is : " << str << std::endl;
+				// std::cout <<"line       ###############\n"<< str << std::endl;
 	for (size_t i = 0; i < str.length(); i++)
 	{
 		if (!isspace(str[i]))
 		{
+			// std::cout << str << std::endl;
 			if (str[i] != '{')
+			{
 				exit_mode("AGAIN DAKHAL SERVER BLOCK M9AD AWELD NAS");
+			}
 			return true;
 		}
 	}
@@ -516,9 +521,11 @@ bool	is_server_block(std::string str, size_t pos)
 
 void	move_offset_to_next_server_block(std::string str, size_t &offset)
 {
-	size_t i = -1;
+	size_t i = 0;
 	size_t bracket = 0;
-	while (str[++i])
+	std::cout << "string to move offset on : \n\n\n\n" << str << std::endl;
+
+	while (str[i])
 	{
 		if (bracket != 0)
 			break;
@@ -526,10 +533,13 @@ void	move_offset_to_next_server_block(std::string str, size_t &offset)
 			bracket++;
 		else if (str[i] == '}')
 			bracket--;
+		i++;
 	}
+
 	if (bracket < 0)
 		exit_mode("FOUND CLOSE BRACKET");
-	while (str[++i])
+
+	while (str[i])
 	{
 		if (bracket == 0)
 			break;
@@ -537,6 +547,7 @@ void	move_offset_to_next_server_block(std::string str, size_t &offset)
 			bracket++;
 		else if (str[i] == '}')
 			bracket--;
+		i++;
 	}
 	offset += i;
 }
@@ -555,7 +566,10 @@ std::vector<Server>	parse_servers(std::string str)
 		if (is_server_block(str, offset))
 		{
 			_vec_serv.push_back(parse_one_server(str, offset));
+			std::cout << "before++++++++\n" << data_from_pos(str, offset) << std::endl; 
 			move_offset_to_next_server_block(str, offset);
+			std::cout << "after++++++++\n" << data_from_pos(str, offset) << std::endl; 
+			// std::cout << "##########\n" << data_from_pos(str, offset) << std::endl;
 		}
 		offset = str.find("server", offset + 1);
 	}
@@ -604,10 +618,21 @@ void	fill_code_status(ConfigFile& config)
 		std::string value = str_join_status_def(key_value);
 		config._code_status[key] = value;
 	}
-	// for (auto &it : config._code_status)
-	// {
-	// 	std::cout << it.first << " " << it.second << std::endl;
-	// }
+}
+
+void	fill_conf_custom_error_page(ConfigFile& conf, std::vector<Server>& servers)
+{
+	for (size_t i = 0; i < servers.size(); i++)
+	{
+		std::map<std::string, std::string>::iterator beg, end;
+		beg = servers[i]._custom_error_pages.begin();
+		end = servers[i]._custom_error_pages.end();
+		while (beg != end)
+		{
+			conf._custom_error_pages.insert(std::make_pair(beg->first, beg->second));
+			beg++;
+		}
+	}
 }
 
 ConfigFile	start_parse(std::string config_file)
@@ -616,10 +641,10 @@ ConfigFile	start_parse(std::string config_file)
 	std::string		serv;
 
 	conf._servers = parse_servers(config_file);
+	fill_conf_custom_error_page(conf, conf._servers);
 	errors_handling(conf._servers);
-	// print_servers(conf._servers);
+	print_servers(conf._servers);
 	fill_meme_types(conf);
 	fill_code_status(conf);
-	// exit(0);
 	return (conf);
 }

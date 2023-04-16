@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 21:09:49 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/09 12:26:34 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/16 17:15:51 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class ConfigFile
 		std::map<std::string, std::string>						_mime_types;
 		std::map<std::string, std::string>						_code_status;
 		std::set<std::string>									_content_types;
+		std::map<std::string, std::string>						_custom_error_pages;
 };
 
 ConfigFile		start_parse_config_file(std::string config_file);
