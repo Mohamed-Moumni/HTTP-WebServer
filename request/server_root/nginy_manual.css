@@ -17,7 +17,51 @@ body {
 	font-family: 'Pistoleer', sans-serif;
 }
 
-h1 {
+.container {
+	width: 80vw;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+nav {
+	background-color: #b9beb7;
+}
+
+nav .container {
+	display: flex;
+	justify-content: space-between;
+	height: 80px;
+}
+
+nav h1 {
+	font-size: 3em;
+	line-height: 80px;
+}
+
+nav ul {
+	width: 30vw;
+	display: flex;
+	justify-content: space-evenly;
+	line-height: 80px;
+	font-size: 25px;
+}
+
+nav ul li {
+	list-style: none;
+}
+
+nav ul li a {
+	text-decoration: none;
+	color: var(--main-color);
+	transition: all ease .3s;
+}
+
+nav ul li a:hover {
+	color: var(--main-color);
+	opacity: .6;
+}
+
+h2 {
 	/* font-family: 'Pistoleer', sans-serif; */
 	margin-top: 100px;
 	font-size: 100px;
@@ -41,14 +85,21 @@ h1 {
 	position: relative;
 }
 
-a {
+.checkout a,
+.home a {
 	text-decoration: none;
+	font-family: 'Pistoleer', sans-serif;
 	font-size: 50px;
 	color: #333;
 	transition: all .3s ease-in-out;
 }
 
-a::after {
+.home {
+	text-align: center;
+	margin: 50px;
+}
+
+.config-file::after {
 	content: '';
 	width: 0px;
 	height: 4px;
@@ -61,43 +112,52 @@ a::after {
 	transition: all .3s ease-in-out;
 }
 
-a:hover {
+.home a:hover {
 	color: #826a6a
 }
 
-a:hover::after {
+.config-file:hover::after {
 	width: 222px;
 }
 
-h2 {
+.config-info h3 {
 	font-size: 30px;
 	margin-top: 50px;
 	font-style: italic;
 }
 
-h2::before {
+.config-info h3::before {
 	content: '>>';
 	display: inline-block;
 	width: 50px;
 	height: 10px;
 	line-height: 30px;
-	margin-left: 30px;
 	margin-bottom: 30px;
 }
 
-ul {
+.config-info h3:hover {
+	color: green;
+}
+
+.config-info ul {
 	font-family: 'Space Ranger', sans-serif;
 	letter-spacing: 3px;
 }
 
-li {
+.config-info li {
 	margin-left: 60px;
 	font-size: 1.5em;
 }
 
-.desc {
+.config-info .desc {
 	margin-left: 100px;
 	display: inline-block;
 	margin-top: 10px;
 	margin-bottom: 20px;
+}
+
+@media (max-width: 900px){
+	.container {
+		width: 95vw;
+	}
 }

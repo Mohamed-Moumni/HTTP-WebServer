@@ -1,0 +1,65 @@
+.team .container {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 50px;
+}
+
+.team .name {
+	text-align: center;
+	margin: 10px;
+	font-size: 20px;
+	letter-spacing: 1px;
+}
+
+.team .profile .pic img{
+	width: 200px;
+	height: 200px;
+	border-radius: 50%;
+	transition: .5s ease;
+}
+
+.team .profile:hover img,
+.team .profile:hover .name {
+	opacity: .8;
+	color: #6983ce;
+}
+
+.links {
+	display: flex;
+	justify-content: space-around;
+	flex-direction: column;
+}
+
+.links > div {
+	display: flex;
+	color: #333;
+}
+
+.links li {
+	list-style: none;
+}
+
+.links li a {
+	color: #333;
+	text-decoration: none;
+	font-size: 18px;
+	line-height: 1.7;
+	transition: .3s ease all;
+}
+
+ion-icon {
+	font-size: 20px;
+	margin-right: 15px;
+	margin-top: 5px;
+	transition: .3s ease all;
+}
+
+.linkedin-link:hover li a,
+.linkedin-link:hover ion-icon {
+	color: #0e76a8;
+}
+
+.github-link:hover li a,
+.github-link:hover ion-icon {
+	color: #AD5C51;
+}
