@@ -11,6 +11,8 @@ void deletefile(ConnectSocket &socket)
 
 void DELETE(ConnectSocket &socket, Server server, location location, ConfigFile configfile)
 {
+    (void)location;
+    (void)server;
     if(socket._request.request_target[socket._request.request_target.size() - 1] == '/')
         socket._response.response_string = respond_error("403", configfile);
     else

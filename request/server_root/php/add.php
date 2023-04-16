@@ -30,4 +30,8 @@ $sum = intval($num1) + intval($num2);
 
 // Print the result
 echo "Sum of $num1 and $num2 is: $sum";
+// while(1)
+// {
+
+// }
 ?>

@@ -2,10 +2,11 @@
 #include <dirent.h>
 #include <fstream>
 
-void createfile(ConnectSocket &socket, ConfigFile configfile, location location)
+void createfile(ConnectSocket &socket, ConfigFile configfile, location location, Server server)
 {
     std::ofstream targeted_file;
     std::string filepath;
+    (void)server;
 
     filepath = socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/'));
     if(location._upload.size())
@@ -75,7 +76,7 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
     else
     {
         if((!access((socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')) + '/' + location._upload).c_str(), F_OK)))
-            createfile(socket, configfile, location);
+            createfile(socket, configfile, location, server);
         else
             socket._response.response_string = respond_error("404", configfile);
     }

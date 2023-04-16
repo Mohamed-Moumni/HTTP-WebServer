@@ -23,6 +23,8 @@ void redirect(ConnectSocket &socket,location location, Server server, ConfigFile
 {
     std::ostringstream response;
     std::string loca;
+    (void)server;
+    (void)configfile;
 
     loca = location._return;
     // std::cout << loca << std::endl;
