@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/15 18:24:57 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/16 13:32:00 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,6 @@ void	fill_string_attr(Server& serv, std::vector<std::string>& vec)
 		exit_mode("NUM OF ARGS IS NOT VALID CHECK(ROOT/AUTOINDEX/CLIENT__SIZE)");
 	if (vec[0] == "client_max_body_size")
 	{
-		std::cout << serv._client_max_body_size << std::endl;
 		if (vec[1][0] == '-')
 			exit_mode("CLIENT MAX BODY SIZE SHOULD BE POSITIVE NUMBER");
 		if (is_body_size_not_valid(vec[1]))
@@ -362,12 +361,22 @@ void	fill_others(location& loc, std::vector<std::string>& vec)
 	loc._others.insert(std::make_pair(vec[0], v));
 }
 
+void	check_and_set_cgi_path(location& loc, std::string s)
+{
+	std::ifstream file;
+
+	file.open(s);
+	if (!file)
+		exit_mode("CGI PATH DOESN'T EXIST");
+	loc._cgiPath = s;
+}
+
 void	fill_cgi_attr(location& loc, std::vector<std::string>& vec)
 {
 	if (vec.size() != 2)
 		exit_mode("INVALID ARGUMENT OF CGI ATTRIBUTES");
 	if (vec[0] == "cgiPath")
-		loc._cgiPath = vec[1];
+		check_and_set_cgi_path(loc, vec[1]);
 	else if (vec[0] == "cgiExt")
 	{
 		if (vec[1] != ".php" && vec[1] != ".py")
