@@ -9,7 +9,7 @@ std::string conc(std::string s1, std::string s2)
     return s1 + '=' + s2;
 }
 
-static std::string  generateToken(int length)
+std::string  generateToken(int length)
 {
     std::string token = "";
     static const char charset[] =
@@ -45,12 +45,12 @@ void set_env(ConnectSocket &socket, location location,Server server, ConfigFile 
     std::string server_name = socket.IpAdress + ":" + socket.Port;
 
     //setting PATH_INFO
-    std::string path_info = socket._request.original_request_target.substr(socket._request.original_request_target.find(".php") + 4,\
-    (socket._request.original_request_target.find('?') ) - (socket._request.original_request_target.find(".php") + 4));
+    std::string path_info = socket._request.original_request_target.substr(socket._request.original_request_target.find(location._cgiExt) + location._cgiExt.size(),\
+    (socket._request.original_request_target.find('?') ) - (socket._request.original_request_target.find(location._cgiExt) + location._cgiExt.size()));
 
     //setting SCRIPTNAME
     std::string script_name = socket._request.request_target.substr(socket._request.request_target.find_last_of('/')\
-    + 1, socket._request.request_target.find(".php") + 4);
+    + 1, socket._request.request_target.find(location._cgiExt) + location._cgiExt.size());
 
     //setting QUERYSTRING
     std::string querystring;
@@ -73,7 +73,7 @@ void set_env(ConnectSocket &socket, location location,Server server, ConfigFile 
     env[8] = strdup(conc("REDIRECT_STATUS", "301").c_str());
     if(socket._request.method == "POST")
     {
-        env[9] = strdup(conc("CONTENT_TYPE", socket._request.headers_map["Content-type"]).c_str());
+        env[9] = strdup(conc("CONTENT_TYPE", socket._request.headers_map["Content-Type"]).c_str());
         env[10] = strdup(conc("CONTENT_LENGTH", socket._request.headers_map["Content-Length"]).c_str());
     }
 }
@@ -102,12 +102,12 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         char *args[3];
 
         set_env(socket, location, server, configfile, env);
-        std::cout << "querystring: " << env[7] << std::endl;
         if(socket._request.method == "POST")
             env[11] = NULL;
         else
             env[9] = NULL;
-        args[0] = strdup("./cgi-bin/php-cgi");
+
+        args[0] = strdup(('.' + location._cgiPath).c_str());
         args[1] = strdup(socket._request.request_target.c_str());
         args[2] = NULL;
         dup2(tmpfile, STDIN_FILENO);
@@ -116,8 +116,11 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         close(fds[0]);
         close(fds[1]);
         if(execve(args[0], args, env) == -1)
-            std::cout << errno << std::endl;
+        {
+            std::cout << "execve: "<< errno << std::endl;
+        }
     }
+
     long long rest = getTimeOfNow() - timeOut;
     while (rest < 5)
     {
@@ -128,7 +131,7 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
             std::cout << "body: +++++++++++++++++\n" << body << "+++++++++++++++++++++\n";
             close(fds[0]);
             std::ostringstream out;
-            out << "HTTP/1.1 200 OK\r\nSet-Cookie: NginY=" << generateToken(10) << ";Max-Age=30"<< "\r\nContent-Length: " << socket._response.response_string.substr(socket._response.response_string.find("\r\n\r\n") + 4).size() << "\r\n" << socket._response.response_string;
+            out << "HTTP/1.1 200 OK\r\nContent-Length: " << socket._response.response_string.substr(socket._response.response_string.find("\r\n\r\n") + 4).size() << "\r\n" << socket._response.response_string;
             socket._response.response_string = out.str();
             std::cout << socket._response.response_string << std::endl;
             unlink("/tmp/tempfd");
