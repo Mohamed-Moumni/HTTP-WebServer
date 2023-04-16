@@ -48,7 +48,9 @@ nav ul {
 
 nav ul li {
 	list-style: none;
+	/* color: green; */
 }
+
 
 nav ul li a {
 	text-decoration: none;
@@ -154,6 +156,15 @@ h2 {
 	display: inline-block;
 	margin-top: 10px;
 	margin-bottom: 20px;
+}
+
+.aboutdesc {
+	margin-top: 50px;
+	width: 70vw;
+	font-size: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	line-height: 1.7;
 }
 
 @media (max-width: 900px){
