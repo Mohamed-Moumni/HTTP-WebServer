@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/16 17:16:26 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/16 17:24:19 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -606,13 +606,28 @@ void	fill_code_status(ConfigFile& config)
 	}
 }
 
+void	fill_conf_custom_error_page(ConfigFile& conf, std::vector<Server>& servers)
+{
+	for (size_t i = 0; i < servers.size(); i++)
+	{
+		std::map<std::string, std::string>::iterator beg, end;
+		beg = servers[i]._custom_error_pages.begin();
+		end = servers[i]._custom_error_pages.end();
+		while (beg != end)
+		{
+			conf._custom_error_pages.insert(std::make_pair(beg->first, beg->second));
+			beg++;
+		}
+	}
+}
+
 ConfigFile	start_parse(std::string config_file)
 {
 	ConfigFile		conf;
 	std::string		serv;
 
 	conf._servers = parse_servers(config_file);
-	conf._custom_error_pages = conf._servers[0]._custom_error_pages;
+	fill_conf_custom_error_page(conf, conf._servers);
 	errors_handling(conf._servers);
 	fill_meme_types(conf);
 	fill_code_status(conf);
