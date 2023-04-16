@@ -30,7 +30,6 @@ class Server
 		std::vector<std::string>							_allowed_methods;
 		std::vector<location>								_locations;
 		std::map<std::string, std::string>					_error_pages;
-
 	public:
 		Server();
 		~Server();

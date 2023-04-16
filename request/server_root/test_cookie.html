@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function redirectToLogin() {
+            // Send request to server with cookie header
+            $.ajax({
+                url: "login.html",
+                type: "GET",
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (response) {
+                    // Redirect to login.html page
+                    window.location.href = "login.html";
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Login Page</h1>
+    <button onclick="redirectToLogin()">Login</button>
+</body>
+</html>
