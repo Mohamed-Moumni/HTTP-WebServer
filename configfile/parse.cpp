@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/16 13:58:46 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/16 17:16:26 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -604,10 +604,6 @@ void	fill_code_status(ConfigFile& config)
 		std::string value = str_join_status_def(key_value);
 		config._code_status[key] = value;
 	}
-	// for (auto &it : config._code_status)
-	// {
-	// 	std::cout << it.first << " " << it.second << std::endl;
-	// }
 }
 
 ConfigFile	start_parse(std::string config_file)
@@ -616,10 +612,9 @@ ConfigFile	start_parse(std::string config_file)
 	std::string		serv;
 
 	conf._servers = parse_servers(config_file);
+	conf._custom_error_pages = conf._servers[0]._custom_error_pages;
 	errors_handling(conf._servers);
-	// print_servers(conf._servers);
 	fill_meme_types(conf);
 	fill_code_status(conf);
-	// exit(0);
 	return (conf);
 }
