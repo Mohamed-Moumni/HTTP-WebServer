@@ -6,7 +6,7 @@
 /*   By: mkarim <mkarim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:51:19 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/16 18:47:30 by mkarim           ###   ########.fr       */
+/*   Updated: 2023/04/16 20:17:56 by mkarim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,7 +327,7 @@ void	check_path_validity(std::string data, std::string path)
 		s += data[i];
 	}
 	if (!str_split(str_trim(s), ' ').size())
-		exit_mode("DIR PATH M9AD MN ZAMLA");
+		exit_mode("SORRY! INVALID PATH");
 	if (path[0] != '/')
 		exit_mode("THE PATH OF LOCATION SHOULD START WITH '/'");
 }
@@ -388,6 +388,8 @@ void	check_and_set_cgi_path(location& loc, std::string s)
 	file.open(s);
 	if (!file)
 		exit_mode("CGI PATH DOESN'T EXIST");
+	if (access(s.c_str(), X_OK))
+		exit_mode("UN-EXECUTABLE FILE");
 	loc._cgiPath = s;
 }
 
@@ -510,9 +512,7 @@ bool	is_server_block(std::string str, size_t pos)
 		{
 			// std::cout << str << std::endl;
 			if (str[i] != '{')
-			{
-				exit_mode("AGAIN DAKHAL SERVER BLOCK M9AD AWELD NAS");
-			}
+				exit_mode("INVALID SERVER BLOCK...");
 			return true;
 		}
 	}
@@ -558,7 +558,7 @@ std::vector<Server>	parse_servers(std::string str)
 
 	offset = str.find("server");
 	if (offset)
-		exit_mode("DAKHAL SERVER M9AD MN ZAMLA DYAL WALOU");
+		exit_mode("SORRY! INVALID SERVER...");
 	while (offset != std::string::npos)
 	{
 		if (is_server_block(str, offset))
