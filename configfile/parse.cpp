@@ -502,7 +502,7 @@ Server		parse_one_server(std::string str, size_t pos)
 bool	is_server_block(std::string str, size_t pos)
 {
 	str = data_from_pos(str, pos + 6);
-	std::cout << "str is : " << str << std::endl;
+	// std::cout << "str is : " << str << std::endl;
 				// std::cout <<"line       ###############\n"<< str << std::endl;
 	for (size_t i = 0; i < str.length(); i++)
 	{
@@ -523,7 +523,7 @@ void	move_offset_to_next_server_block(std::string str, size_t &offset)
 {
 	size_t i = 0;
 	size_t bracket = 0;
-	std::cout << "string to move offset on : \n\n\n\n" << str << std::endl;
+	// std::cout << "string to move offset on : \n\n\n\n" << str << std::endl;
 
 	while (str[i])
 	{
@@ -546,7 +546,6 @@ void	move_offset_to_next_server_block(std::string str, size_t &offset)
 			bracket++;
 		else if (str[offset + i] == '}')
 			bracket--;
-		i++;
 	}
 	offset += i;
 }
@@ -565,7 +564,7 @@ std::vector<Server>	parse_servers(std::string str)
 		if (is_server_block(str, offset))
 		{
 			_vec_serv.push_back(parse_one_server(str, offset));
-			std::cout << "before++++++++\n" << data_from_pos(str, offset) << std::endl; 
+			// std::cout << "before++++++++\n" << data_from_pos(str, offset) << std::endl; 
 			move_offset_to_next_server_block(str, offset);
 			// std::cout << "Line.. \n" << data_from_pos(str, offset) << std::endl;
 		}
@@ -641,7 +640,7 @@ ConfigFile	start_parse(std::string config_file)
 	conf._servers = parse_servers(config_file);
 	fill_conf_custom_error_page(conf, conf._servers);
 	errors_handling(conf._servers);
-	print_servers(conf._servers);
+	// print_servers(conf._servers);
 	fill_meme_types(conf);
 	fill_code_status(conf);
 	return (conf);
