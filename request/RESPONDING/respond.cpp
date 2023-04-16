@@ -23,6 +23,8 @@ void redirect(ConnectSocket &socket,location location, Server server, ConfigFile
 {
     std::ostringstream response;
     std::string loca;
+    (void)server;
+    (void)configfile;
 
     loca = location._return;
     // std::cout << loca << std::endl;
@@ -45,7 +47,9 @@ int check_max_size(ConnectSocket & socket, ConfigFile configfile, Server server)
 
 int find_server(ConnectSocket socket, ConfigFile configfile, Server & server)
 {
-    std::deque<Server> possible_servers;
+    std::vector<Server> possible_servers;
+    std::vector<Server> removed_servers;
+
 
     for(size_t i = 0; i < configfile._servers.size(); i++)
     {
@@ -53,18 +57,26 @@ int find_server(ConnectSocket socket, ConfigFile configfile, Server & server)
         && (configfile._servers[i]._listen[socket.IpAdress]).find(socket.Port) != (configfile._servers[i]._listen[socket.IpAdress]).end())
             possible_servers.push_back(configfile._servers[i]);
     }
+    // std::cout << "size = " << possible_servers.size() << std::endl;
     for(size_t i = 0; i < possible_servers.size(); i++)
     {
+        // std::cout << i << " : "<< possible_servers[i]._server_names[0] << std::endl;
         if(std::find(possible_servers[i]._server_names.begin(), possible_servers[i]._server_names.end(), socket._request.headers_map["Host"]) 
         == possible_servers[i]._server_names.end())
+        {
+            removed_servers.push_back(possible_servers[i]);
             possible_servers.erase(possible_servers.begin() + i);
+            i--;
+        }
     }
+    // std::cout << possible_servers[0]._server_names[0] << std::endl;
     if(!possible_servers.size())
     {
+        std::cout << "here\n" << std::endl;
         if(!configfile._servers.size())
             return 0;
         else
-            server = configfile._servers[0];
+            server = removed_servers[0];
     }
     else
         server = possible_servers[0];

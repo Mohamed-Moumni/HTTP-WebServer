@@ -7,6 +7,7 @@
 #include "../../server/socket.hpp"
 #include "../../utils/utils.hpp" 
 
+
 /////////////PARSING RE////////////
 std::string		read_file(std::string file_name);
 int request_handler(ConnectSocket & socket, ConfigFile configfile);
@@ -23,6 +24,7 @@ void redirect(ConnectSocket &socket,location location, Server server, ConfigFile
 void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigFile configfile);
 std::string                 get_extention(std::string str);
 std::string  generateToken(int length);
+int find_server(ConnectSocket socket, ConfigFile configfile, Server & server);
 
 /////////////METHODS/////////////
 void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile);

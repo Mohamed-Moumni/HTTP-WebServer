@@ -41,6 +41,8 @@ static std::string  readFromPipe(int PipeId)
 
 void set_env(ConnectSocket &socket, location location,Server server, ConfigFile configfile, char **env)
 {
+    (void)server;
+    (void)configfile;
     //setting SERVER_NAME
     std::string server_name = socket.IpAdress + ":" + socket.Port;
 
@@ -98,6 +100,7 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
     pid = fork();
     if (pid == 0)
     {
+        std::cout << location._cgiPath << std::endl;
         char *env[12];
         char *args[3];
 
@@ -107,7 +110,8 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         else
             env[9] = NULL;
 
-        args[0] = strdup(('.' + location._cgiPath).c_str());
+        args[0] = strdup((location._cgiPath).c_str());
+        // args[0] = "dshfsjlfjlsdlj";
         args[1] = strdup(socket._request.request_target.c_str());
         args[2] = NULL;
         dup2(tmpfile, STDIN_FILENO);
@@ -140,7 +144,8 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         else
             rest = getTimeOfNow() - timeOut;
     }
-    kill(pid, SIGKILL);
+    if(!errno)
+        kill(pid, SIGKILL);
     close(fds[1]);
     close(fds[0]);
     unlink("/tmp/tempfd");

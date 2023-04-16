@@ -1,8 +1,10 @@
 NAME = NGINY	
-CC = c++
+CC = c++ -Wall -Wextra -Werror -std=c++98
 
-# FLAGS = -Wall -Wextra -Werror -std=c++98
-FLAGS = -std=c++98 
+
+fdsjfsdlfs
+FLAGS = -Wall -Wextra -Werror -std=c++98
+
 
 HEADERS = INCLUDES/request.class.hpp  INCLUDES/request.hpp        INCLUDES/response.class.hpp
 
@@ -20,7 +22,7 @@ $(NAME): $(OBJECTS) $(HEADERS)
 	$(CC) $(FLAGS) $(OBJECTS) -o $(NAME)
 
 %.o: %.cpp $(HEADERS)
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(FLAGS) -c  $< -o $@
 
 clean:
 	rm -f $(OBJECTS)

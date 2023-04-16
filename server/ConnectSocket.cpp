@@ -190,7 +190,7 @@ void        ConnectSocket::responding(ConfigFile & _configfile)
 void    ConnectSocket::sendResponse(void)
 {
     int CharSent;
-    int pos;
+
 
     CharSent = 0;
     CharSent = send(ConnectSocketId, _response.response_string.c_str() + _response.CharSent, _response.respLength, 0);

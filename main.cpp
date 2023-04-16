@@ -20,6 +20,7 @@
 
 void sigpipe_handler(int signum)
 {
+	(void)signum;
 }
 
 void	server_loop(std::vector<Socket> & sockets, std::vector<pfd> & pfds, ConfigFile & configFile, std::map<int, ConnectSocket> Connections)

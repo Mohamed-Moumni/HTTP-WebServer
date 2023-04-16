@@ -42,10 +42,11 @@ std::vector<std::string> pars_cookies(std::string str)
 
 int check_cookies(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile, std::string &cookie)
 {
-    // (void)server;
+    (void)server;
     (void)location;
+    (void)configfile;
     std::vector<std::string> cookies;
-    int i = 0;
+    // size_t i = 0;
 
     if(socket._request.original_request_target.find('?') != std::string::npos)
     {
@@ -59,9 +60,9 @@ int check_cookies(ConnectSocket &socket, Server &server, location &location, Con
     else if(socket._request.headers_map.find("Cookie") != socket._request.headers_map.end())
     {
         cookies = pars_cookies(socket._request.headers_map["Cookie"]);
-        for(int i = 0; i < cookies.size(); i++)
+        for(size_t i = 0; i < cookies.size(); i++)
         {
-            for(int j = 0; j < sessions.size(); j++)
+            for(size_t j = 0; j < sessions.size(); j++)
             {
                 if(sessions[j] == cookies[i])
                     return 1;
@@ -101,7 +102,7 @@ void file2response(ConnectSocket &socket, Server &server, location &location, Co
 int isdirectory(std::string path)
 {
     DIR *dir;
-    struct dirent *ent;
+    // struct dirent *ent;
 
     dir = opendir(path.c_str());
     if(dir)
