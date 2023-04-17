@@ -6,7 +6,7 @@
 #    By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
-#    Updated: 2023/04/10 15:57:12 by mmoumni          ###   ########.fr        #
+#    Updated: 2023/04/17 00:31:39 by mmoumni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = webserv
 
 CC = c++
 
-FLAGS = -Wall -Wextra -Werror --std=c++98 -fsanitize=address
+FLAGS = -Wall -Wextra -Werror --std=c++98
 
 #####		CONFIG FILES		#####
 
