@@ -72,7 +72,7 @@ int find_server(ConnectSocket socket, ConfigFile configfile, Server & server)
     // std::cout << possible_servers[0]._server_names[0] << std::endl;
     if(!possible_servers.size())
     {
-        std::cout << "here\n" << std::endl;
+        // std::cout << "here\n" << std::endl;
         if(!configfile._servers.size())
             return 0;
         else

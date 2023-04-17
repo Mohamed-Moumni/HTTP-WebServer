@@ -58,9 +58,9 @@ int main(void)
         goto a;
     // read(sock , buffer, 1024);
     // std::cout << valread<< " Readed!" << std::endl;
-    std::cout << "+++++++++++++++++++++++++++++++++\n";
+    // std::cout << "+++++++++++++++++++++++++++++++++\n";
     // printf("%s\n",buffer );
-    std::cout << "\n+++++++++++++++++++++++++++++++++\n";
+    // std::cout << "\n+++++++++++++++++++++++++++++++++\n";
     sleep(1);
     return 0;
 }

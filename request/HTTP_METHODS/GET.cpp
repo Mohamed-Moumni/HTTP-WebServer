@@ -29,7 +29,7 @@ std::string		GET_file(std::string file_name)
     std::ifstream file;
     std::ostringstream data;
 
-    std::cout << "here" << std::endl;
+    // std::cout << "here" << std::endl;
     file.open(file_name, std::ios::binary);
     data << file.rdbuf();
     return data.str();
@@ -148,13 +148,13 @@ void GET(ConnectSocket &socket, Server &server, location &location, ConfigFile c
 {
     DIR *dir;
     ///////////////////////////////////REMOVE PATH INFO IN CASE OF DYNAMIC
-    std::cout << "before removing the path info : " << socket._request.request_target << std::endl;
+    // std::cout << "before removing the path info : " << socket._request.request_target << std::endl;
     if(location._cgiExt.size())
     {
         if(socket._request.request_target.find(location._cgiExt) != std::string::npos)
             socket._request.request_target = socket._request.request_target.substr(0, socket._request.request_target.find(location._cgiExt) + location._cgiExt.size());
     }
-    std::cout << "after removing the path info : " << socket._request.request_target << std::endl;
+    // std::cout << "after removing the path info : " << socket._request.request_target << std::endl;
     ///////////////////////////////////CHECK for slash at the end of files and dirs
     // std::cout << "before : " << socket._request.request_target << std::endl;
     if((dir = opendir(socket._request.request_target.c_str())))

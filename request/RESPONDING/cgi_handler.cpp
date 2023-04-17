@@ -62,7 +62,10 @@ void set_env(ConnectSocket &socket, location location,Server server, ConfigFile 
             querystring = socket._request.original_request_target.substr(socket._request.original_request_target.find('?') + 1);
     }
     else
+    {
         querystring = socket._request.request_body;
+        // std::cout << querystring << std::endl;
+    }
 
     env[0] = strdup("SERVER_SOFTWARE=NGINY/0.1");
     env[1] = strdup(conc("SERVER_NAME", server_name).c_str());
@@ -100,7 +103,7 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
     pid = fork();
     if (pid == 0)
     {
-        std::cout << location._cgiPath << std::endl;
+        // std::cout << location._cgiPath << std::endl;
         char *env[12];
         char *args[3];
 
@@ -111,7 +114,6 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
             env[9] = NULL;
 
         args[0] = strdup((location._cgiPath).c_str());
-        // args[0] = "dshfsjlfjlsdlj";
         args[1] = strdup(socket._request.request_target.c_str());
         args[2] = NULL;
         dup2(tmpfile, STDIN_FILENO);
@@ -132,12 +134,15 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
         {
             close(fds[1]);
             socket._response.response_string = readFromPipe(fds[0]);
-            std::cout << "body: +++++++++++++++++\n" << body << "+++++++++++++++++++++\n";
+            // std::cout << "body: +++++++++++++++++\n" << body << "+++++++++++++++++++++\n";
             close(fds[0]);
             std::ostringstream out;
-            out << "HTTP/1.1 200 OK\r\nContent-Length: " << socket._response.response_string.substr(socket._response.response_string.find("\r\n\r\n") + 4).size() << "\r\n" << socket._response.response_string;
+            if(location._cgiExt == ".php")
+                out << "HTTP/1.1 200 OK\r\nContent-Length: " << socket._response.response_string.substr(socket._response.response_string.find("\r\n\r\n") + 4).size() << "\r\n" << socket._response.response_string;
+            else
+                out << "HTTP/1.1 200 OK\r\nContent-Length: " << socket._response.response_string.size() <<"\r\n" << socket._response.response_string ;
             socket._response.response_string = out.str();
-            std::cout << socket._response.response_string << std::endl;
+            // std::cout << socket._response.response_string << std::endl;
             unlink("/tmp/tempfd");
             return ;
         }

@@ -35,7 +35,7 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
 {
     DIR * dir;
 
-    std::cout << "enter to post " << std::endl;
+    // std::cout << "enter to post " << std::endl;
     if(socket._request.request_target.find('?') != std::string::npos)
     {
         socket._response.response_string = respond_error("400", configfile);
@@ -43,8 +43,8 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
     }
 
     //remove the path_info from the uri
-    if(socket._request.request_target.find(".php") != std::string::npos)
-        socket._request.request_target = socket._request.request_target.substr(0, socket._request.request_target.find(".php") + 4);
+    if(socket._request.request_target.find(location._cgiExt) != std::string::npos)
+        socket._request.request_target = socket._request.request_target.substr(0, socket._request.request_target.find(location._cgiExt) + location._cgiExt.size());
 
     //////////////////////check if post for directory
     if((dir = opendir(socket._request.request_target.c_str())))
@@ -61,7 +61,7 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
     /////////////////////////Dynamic here
     if(!access(socket._request.request_target.c_str(), F_OK))
     {
-        if(socket._request.request_target.size() >= 4 && get_extention(socket._request.request_target) == ".php")
+        if(socket._request.request_target.size() >= 4 && get_extention(socket._request.request_target) == location._cgiExt)
         {
             cgi_handler(socket, location, server, configfile);
             return ;
@@ -69,7 +69,8 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
     }
 
     //////////////////////Static here
-    if(!access((socket._request.request_target + location._upload).c_str(), F_OK))
+    if(!access(( socket._request.request_target.substr(0, socket._request.request_target.find_last_of('/')) + '/' + \
+    location._upload +  socket._request.request_target.substr(socket._request.request_target.find_last_of('/'))).c_str(), F_OK))
     {
         socket._response.response_string = respond_error("409", configfile);
     }
@@ -81,5 +82,5 @@ void POST(ConnectSocket &socket, Server server, location location, ConfigFile co
             socket._response.response_string = respond_error("404", configfile);
     }
 
-    std::cout << "end of post " << std::endl;
+    // std::cout << "end of post " << std::endl;
 }

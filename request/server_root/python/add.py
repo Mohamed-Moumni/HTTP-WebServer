@@ -1,45 +1,19 @@
 #!/usr/bin/env python
+import os
+from urllib.parse import parse_qs
 
-import cgi
+# get the values of num1 and num2 from the query string
+query_string = os.environ.get('QUERY_STRING', '')
+query_params = parse_qs(query_string)
+num1 = int(query_params.get('num1', [''])[0])
+num2 = int(query_params.get('num2', [''])[0])
 
-# Read input from query string (GET) or from standard input (POST)
-form = cgi.FieldStorage()
-if os.environ['REQUEST_METHOD'] == 'GET':
-    # Read input from query string
-    if 'num1' in form and 'num2' in form:
-        num1 = form['num1'].value
-        num2 = form['num2'].value
-    else:
-        # Handle missing input
-        print("Content-type: text/html\n")
-        print("Error: num1 and num2 must be provided in the query string.")
-        exit(1)
-elif os.environ['REQUEST_METHOD'] == 'POST':
-    # Read input from standard input (POST)
-    if 'num1' in form and 'num2' in form:
-        num1 = form['num1'].value
-        num2 = form['num2'].value
-    else:
-        # Handle missing input
-        print("Content-type: text/html\n")
-        print("Error: num1 and num2 must be provided in the request body.")
-        exit(1)
-else:
-    # Handle unsupported request methods
-    print("Content-type: text/html\n")
-    print("Error: Unsupported request method.")
-    exit(1)
+# calculate the sum
+sum = num1 + num2
 
-# Calculate sum
-try:
-    num1 = int(num1)
-    num2 = int(num2)
-    sum = num1 + num2
-    # Print the result
-    print("Content-type: text/html\n")
-    print(f"Sum of {num1} and {num2} is: {sum}")
-except ValueError:
-    # Handle invalid input
-    print("Content-type: text/html\n")
-    print("Error: Invalid input. Please provide valid integer values for num1 and num2.")
-    exit(1)
+# output the result
+print("Content-Type: text/html")
+print("")
+print("<html><body>")
+print("<h1>Sum of %d and %d is %d</h1>" % (num1, num2, sum))
+print("</body></html>")

@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/18 18:23:49 by mmoumni           #+#    #+#             */
-/*   Updated: 2023/04/13 14:30:22 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/04/17 00:23:10 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,7 @@ void                sendError(int socketId, std::string _Error)
 
 void    checkTimeOut(std::vector<pfd> & pfds, std::map<int, ConnectSocket> & Connections, ConfigFile & _configfile, size_t i)
 {
-        Connections[pfds[i].fd]._response.response_string.append(respond_error("408", _configfile));
+        Connections[pfds[i].fd]._response.response_string = respond_error("408", _configfile);
         sendError(pfds[i].fd, Connections[pfds[i].fd]._response.response_string);
         closeConnection(pfds, Connections, i);
 }

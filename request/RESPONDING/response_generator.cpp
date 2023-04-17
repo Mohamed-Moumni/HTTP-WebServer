@@ -2,8 +2,10 @@
 
 int isallowed_method(ConnectSocket &socket, location &location, Server &server, ConfigFile configfile)
 {
+    // std::cout << location._allowed_methods[0] << std::endl;
     if(location._allowed_methods.size() || server._allowed_methods.size())
     {
+        // std::cout << "is allowed method: " << location.path <<std::endl;
         if((location._allowed_methods.size() && !std::count(location._allowed_methods.begin(), location._allowed_methods.end(), socket._request.method))
         || (!location._allowed_methods.size() && !std::count(server._allowed_methods.begin(), server._allowed_methods.end(), socket._request.method)))
         {
