@@ -6,6 +6,9 @@
 #include "../../server/ConnectSocket.hpp"
 #include "../../server/socket.hpp"
 #include "../../utils/utils.hpp" 
+#include <algorithm>
+#include <string.h>
+#include <sys/wait.h>
 
 
 /////////////PARSING RE////////////

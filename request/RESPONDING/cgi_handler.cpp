@@ -128,7 +128,7 @@ void cgi_handler(ConnectSocket &socket, location location,Server server, ConfigF
     }
 
     long long rest = getTimeOfNow() - timeOut;
-    while (rest < 5)
+    while (rest < 10)
     {
         if (waitpid(pid, NULL, WNOHANG) == pid)
         {

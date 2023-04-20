@@ -3,7 +3,6 @@
 #include <fcntl.h>
 #include <fstream>
 
-std::vector<std::string> sessions;
 
 std::string                 get_extention(std::string str)
 {
@@ -35,47 +34,6 @@ std::string		GET_file(std::string file_name)
     return data.str();
 }
 
-std::vector<std::string> pars_cookies(std::string str)
-{
-    return str_split(str, ';');
-}
-
-int check_cookies(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile, std::string &cookie)
-{
-    (void)server;
-    (void)location;
-    (void)configfile;
-    std::vector<std::string> cookies;
-    // size_t i = 0;
-
-    if(socket._request.original_request_target.find('?') != std::string::npos)
-    {
-        if(socket._request.original_request_target.substr(socket._request.original_request_target.find('?')) == "?username=admin&password=admin")
-        {
-            cookie = "SESSIONID=" + generateToken(20);
-            sessions.push_back(cookie);
-            return 2;
-        }
-    }
-    else if(socket._request.headers_map.find("Cookie") != socket._request.headers_map.end())
-    {
-        cookies = pars_cookies(socket._request.headers_map["Cookie"]);
-        for(size_t i = 0; i < cookies.size(); i++)
-        {
-            for(size_t j = 0; j < sessions.size(); j++)
-            {
-                if(sessions[j] == cookies[i])
-                    return 1;
-            }
-        }
-    }
-    // location._return = "login.html";
-    // redirect(socket, location, server, configfile);
-    socket._request.request_target = "./request/server_root/login.html";
-    return 1;
-    
-}
-
 void file2response(ConnectSocket &socket, Server &server, location &location, ConfigFile configfile)
 {
     (void)server;
@@ -84,17 +42,10 @@ void file2response(ConnectSocket &socket, Server &server, location &location, Co
     int ret = 0;
     std::string cookie;
 
-    if(socket._request.request_target.find("TEST_CGI.html") != std::string::npos)
-    {
-        if(!(ret = check_cookies(socket, server, location, configfile, cookie)))
-            return ;
-    }
+
     socket._response.response_string = GET_file(socket._request.request_target);
     response  << "HTTP/1.1 200 OK\r\n"; 
     response << "Content-Type: " + get_contenttype(socket._request.request_target, configfile) << CRLF ;
-    if(ret == 2)
-        response << "Set-Cookie: " << cookie << CRLF;
-    response << "Set-Cookie: CookieID=" << generateToken(10)<< "; Max-Age=10" << CRLF;
     response << "Content-Length: " << socket._response.response_string.size() << CRLF << CRLF;
     response << socket._response.response_string;
     socket._response.response_string = response.str();

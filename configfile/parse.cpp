@@ -13,6 +13,7 @@
 #include "configfile.hpp"
 #include "../request/INCLUDES/request.hpp"
 #include <string>
+#include <algorithm>
 
 size_t		exclude_bracket(std::string str, size_t pos)
 {

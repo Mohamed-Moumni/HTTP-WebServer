@@ -16,7 +16,7 @@
 #include "../configfile/configfile.hpp"
 #include "../configfile/server.hpp"
 #include "../request/INCLUDES/request.hpp"
-
+#include <cstring>
 Socket::Socket()
 {
     

@@ -4,7 +4,7 @@
 int request_handler(ConnectSocket & socket, ConfigFile configfile)
 {
 	int ret;
-	// std::cout << "target: " <<socket._request.request_string << std::endl;
+	std::cout << "target: add.php" <<socket._request.request_string << std::endl;
 
     if(!pars_request(socket._request) || !(ret = possible_error(socket, configfile)))
     {
