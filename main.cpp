@@ -6,7 +6,7 @@
 /*   By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:35:36 by mkarim            #+#    #+#             */
-/*   Updated: 2023/04/17 00:56:11 by mmoumni          ###   ########.fr       */
+/*   Updated: 2023/09/26 09:05:59 by mmoumni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include <fstream>
 #include <string>
 #include <signal.h>
-#include "./configfile/configfile.hpp"
-#include "./server/socket.hpp"
-#include "./request/INCLUDES/request.hpp"
+#include "./includes/configfile.hpp"
+#include "./includes/socket.hpp"
+#include "./includes/request.hpp"
 
 void sigpipe_handler(int signum)
 {

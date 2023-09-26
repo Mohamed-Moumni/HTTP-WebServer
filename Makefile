@@ -6,7 +6,7 @@
 #    By: mmoumni <mmoumni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/24 08:55:26 by mkarim            #+#    #+#              #
-#    Updated: 2023/04/17 00:31:39 by mmoumni          ###   ########.fr        #
+#    Updated: 2023/09/26 09:05:09 by mmoumni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,36 +16,23 @@ CC = c++
 
 FLAGS = --std=c++11
 
-#####		CONFIG FILES		#####
-
-CONFIG_SRCS = ./configfile/configfile.cpp ./configfile/server.cpp ./configfile/location.cpp \
-			./configfile/parse.cpp ./configfile/print_servers.cpp ./configfile/check_errors.cpp \
-			./configfile/preprocessing.cpp ./configfile/errors_handling.cpp \
-
-#####		CONFIG FILES		#####
-
-#####		UTILS FILES			#####
-
-####		SERVER FILES		#####
-
-SERVER_SRCS = ./server/socket.cpp ./server/ConnectSocket.cpp ./server/ConnectSocketUtils.cpp
-
-REQUEST_SRCS = ./request/HTTP_METHODS/DELETE.cpp ./request/REQUEST_PARSING/possible_error.cpp \
-				./request/HTTP_METHODS/GET.cpp ./request/REQUEST_PARSING/respond_error.cpp \
-				./request/HTTP_METHODS/POST.cpp ./request/RESPONDING/respond.cpp ./request/RESPONDING/response_generator.cpp \
-               ./request/REQUEST_PARSING/pars_request.cpp ./request/request.cpp ./request/RESPONDING/cgi_handler.cpp
-
-UTILS_SRC = ./utils/str_trim.cpp ./utils/str_split.cpp ./utils/header_spliter.cpp ./utils/remove_side_spaces.cpp \
-			./utils/side_whitespaces.cpp ./utils/str_split.cpp ./utils/str_trim.cpp
+CONFIG_SRCS = ./src/configfile/configfile.cpp ./src/configfile/server.cpp ./src/configfile/location.cpp \
+			./src/configfile/parse.cpp ./src/configfile/print_servers.cpp ./src/configfile/check_errors.cpp \
+			./src/configfile/preprocessing.cpp ./src/configfile/errors_handling.cpp \
 
 
-SERVER_HEADER = ./server/socket.hpp ./server/ConnectSocket.hpp
+INCLUDES = ./includes/request.hpp ./includes/request.class.hpp ./includes/response.class.hpp ./includes/socket.hpp ./includes/ConnectSocket.hpp \
+			./includes/configfile.hpp ./includes/server.hpp ./includes/location.hpp
 
-REQUEST_HEADER = ./request/INCLUDES/request.hpp ./request/INCLUDES/request.class.hpp ./request/INCLUDES/response.class.hpp 
+SERVER_SRCS = ./src/server/socket.cpp ./src/server/ConnectSocket.cpp ./src/server/ConnectSocketUtils.cpp
 
-CONFIG_HEADERS = ./configfile/configfile.hpp ./configfile/server.hpp ./configfile/location.hpp 
+REQUEST_SRCS = ./src/request/HTTP_METHODS/DELETE.cpp ./src/request/REQUEST_PARSING/possible_error.cpp \
+				./src/request/HTTP_METHODS/GET.cpp ./src/request/REQUEST_PARSING/respond_error.cpp \
+				./src/request/HTTP_METHODS/POST.cpp ./src/request/RESPONDING/respond.cpp ./src/request/RESPONDING/response_generator.cpp \
+               ./src/request/REQUEST_PARSING/pars_request.cpp ./src/request/request.cpp ./src/request/RESPONDING/cgi_handler.cpp
 
-HEADERS = $(CONFIG_HEADERS) $(SERVER_HEADER) $(REQUEST_HEADER)
+UTILS_SRC = ./src/utils/str_trim.cpp ./src/utils/str_split.cpp ./src/utils/header_spliter.cpp ./src/utils/remove_side_spaces.cpp \
+			./src/utils/side_whitespaces.cpp ./src/utils/str_split.cpp ./src/utils/str_trim.cpp
 
 SRCS = main.cpp $(CONFIG_SRCS) $(UTILS_SRC) $(SERVER_SRCS) $(REQUEST_SRCS)
 
@@ -56,7 +43,7 @@ all : $(NAME)
 $(NAME) : $(OBJ)
 	$(CC) $(FLAGS) $^ -o $(NAME)
 
-%.o : %.cpp $(HEADERS)
+%.o : %.cpp $(INCLUDES)
 	$(CC) $(FLAGS) -c $<  -o $@
 
 clean :
